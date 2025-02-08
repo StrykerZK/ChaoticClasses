@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj1u1l2gmtbga"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_uioiv"]
+[ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://main.tscn" id="2_eagnm"]
+
+[node name="Main Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uioiv")
+main_game = ExtResource("2_eagnm")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 278.0
+offset_top = 272.0
+offset_right = 1017.0
+offset_bottom = 454.0
+text = "Start"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
