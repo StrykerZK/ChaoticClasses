@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://ggc1ugsf42y5"]
+[gd_scene load_steps=7 format=4 uid="uid://ggc1ugsf42y5"]
 
 [ext_resource type="Texture2D" uid="uid://dxjiws2ai34r3" path="res://art/tiles/tilemap_32.png" id="1_kqhmq"]
 [ext_resource type="PackedScene" uid="uid://cuw7fymmodn3b" path="res://player.tscn" id="2_lxg2x"]
 [ext_resource type="PackedScene" uid="uid://dyuactdutwld2" path="res://dummy.tscn" id="3_5j8nl"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="4_n6uag"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dkp5t"]
 texture = ExtResource("1_kqhmq")
@@ -127,5 +128,7 @@ position = Vector2(239, 257)
 position = Vector2(239, 330)
 
 [node name="GameManager" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("4_n6uag")
 
 [node name="UI" type="Node" parent="."]

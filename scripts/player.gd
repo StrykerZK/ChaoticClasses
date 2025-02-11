@@ -16,9 +16,12 @@ var combo_timer = 1.5
 
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
+@onready var game_manager: Node
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
+var changing_class = false
+var is_paused = false
 var is_dodging = false
 var can_dodge = true
 var is_attacking = false
@@ -28,6 +31,9 @@ var ready_attack_3 = false
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
+
+func _enter_tree() -> void:
+	game_manager = get_node("/root/Main/GameManager")
 
 func _ready() -> void:
 	anim_tree = get_node(current_class).get_node("AnimationTree")
@@ -180,6 +186,10 @@ func update_stats(stats: Array):
 	speed =  stats[2]
 	dodge_speed_mult = stats[3]
 	dodge_duration = stats[4]
+
+func toggle_pause(state):
+	is_paused = state
+	print("Paused" + str(is_paused))
 
 func _on_combo_timer_timeout() -> void:
 	is_attacking = false

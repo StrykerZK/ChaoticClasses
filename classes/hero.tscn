@@ -1,5 +1,6 @@
-[gd_scene load_steps=55 format=3 uid="uid://cxeud2sgthd17"]
+[gd_scene load_steps=56 format=3 uid="uid://cxeud2sgthd17"]
 
+[ext_resource type="Script" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bb3xku23khouf" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i36nm"]
@@ -218,10 +219,10 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [34, 35, 0]
+"values": [34, 35]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -410,10 +411,10 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [34, 35, 0]
+"values": [34, 35]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -819,13 +820,14 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(-77, 16)
 
 [node name="hero" type="Node2D"]
+script = ExtResource("1_1fpu4")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("1_psyiu")
 hframes = 10
 vframes = 4
-frame = 5
+frame = 2
 
 [node name="Hitbox" type="Area2D" parent="."]
 
