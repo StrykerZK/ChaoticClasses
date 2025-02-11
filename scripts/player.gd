@@ -17,6 +17,7 @@ var combo_timer = 1.5
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var game_manager: Node
+@onready var class_node: Node2D
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
@@ -25,9 +26,7 @@ var is_paused = false
 var is_dodging = false
 var can_dodge = true
 var is_attacking = false
-var ready_attack_1 = true
-var ready_attack_2 = false
-var ready_attack_3 = false
+var attack_index = 1
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
@@ -41,7 +40,6 @@ func _ready() -> void:
 	anim_player = get_node(current_class).get_node("AnimationPlayer")
 	
 	$DodgeTimer.wait_time = dodge_duration
-	$ComboTimer.wait_time = combo_timer
 	dodge_speed = speed * dodge_speed_mult
 	current_health = max_health
 
@@ -76,7 +74,7 @@ func handle_input():
 	
 	if Input.is_action_just_pressed("attack"):
 		if current_class != "Base" and !is_attacking:
-			attack()
+			attack(attack_index)
 		else:
 			pass
 
@@ -117,19 +115,17 @@ func update_animation_parameters():
 	
 	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
 	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
-	anim_tree.set("parameters/attack/conditions/ready_attack_1", ready_attack_1)
-	anim_tree.set("parameters/attack/conditions/ready_attack_2", ready_attack_2)
-	anim_tree.set("parameters/attack/conditions/ready_attack_3", ready_attack_3)
-	
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction
 		anim_tree["parameters/run/blend_position"] = last_input_direction
-		anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
-		if current_class != "Base":
-			anim_tree["parameters/attack/attack 1/blend_position"] = last_input_direction.x
-			anim_tree["parameters/attack/attack 2/blend_position"] = last_input_direction.x
-			anim_tree["parameters/attack/attack 3/blend_position"] = last_input_direction.x
+		if current_class == "Base":
+			anim_tree["parameters/dodge/blend_position"] = last_input_direction
+		else:
+			anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
+	
+	if current_class != "Base":
+		anim_tree["parameters/attack/blend_position"] = Vector2(last_input_direction.x, attack_index)
 
 func class_change(class_title: String):
 	if is_instance_valid(get_node(current_class)):
@@ -144,10 +140,11 @@ func class_change(class_title: String):
 	
 	if !has_node(current_class):
 		add_child(class_node)
-		move_child(get_node(class_title),0)
+		class_node = get_node(class_title)
+		move_child(class_node,0)
 
-	anim_tree = get_node(current_class).get_node("AnimationTree")
-	anim_player = get_node(current_class).get_node("AnimationPlayer")
+	anim_tree = class_node.get_node("AnimationTree")
+	anim_player = class_node.get_node("AnimationPlayer")
 	get_animation_lengths()
 
 func take_damage(source: Area2D):
@@ -156,29 +153,34 @@ func take_damage(source: Area2D):
 	elif player_id == 2:
 		current_health -= StageManager.p1_damage
 
-func attack():
+func attack(index: int):
 	is_attacking = true
 	$ComboTimer.wait_time = combo_timer
-	if ready_attack_1:
-		$ComboTimer.start()
-		await get_tree().create_timer(0.5).timeout
-		is_attacking = false
-		ready_attack_1 = false
-		ready_attack_2 = true
-	elif ready_attack_2:
-		$ComboTimer.start()
-		await get_tree().create_timer(0.5).timeout
-		is_attacking = false
-		ready_attack_2 = false
-		ready_attack_3 = true
-	elif ready_attack_3:
-		$ComboTimer.wait_time = 0.6
-		$ComboTimer.start()
+	match index:
+		1:
+			print("attack 1")
+			$ComboTimer.start()
+			await get_tree().create_timer(attack_1_length).timeout
+			is_attacking = false
+			attack_index += 1
+		2:
+			print("attack 2")
+			$ComboTimer.start()
+			await get_tree().create_timer(attack_2_length).timeout
+			is_attacking = false
+			attack_index += 1
+		3:
+			print("attack 3")
+			$ComboTimer.wait_time = 0.6
+			$ComboTimer.start()
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
+	print("Attack 1: " + str(attack_1_length))
 	attack_2_length = anim_player.get_animation("attack_right_2").length
+	print("Attack 2: " + str(attack_2_length))
 	attack_3_length = anim_player.get_animation("attack_right_3").length
+	print("Attack 3: " + str(attack_3_length))
 
 func update_stats(stats: Array):
 	armor = stats[0]
@@ -193,9 +195,7 @@ func toggle_pause(state):
 
 func _on_combo_timer_timeout() -> void:
 	is_attacking = false
-	ready_attack_1 = true
-	ready_attack_2 = false
-	ready_attack_3 = false
+	attack_index = 1
 
 func _on_button_pressed() -> void:
 	class_change("hero")

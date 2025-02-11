@@ -8,6 +8,7 @@ var damage_data: Array = [10, 15, 20, 10, 15, 15]
 var speed_data: Array = [200, 150, 150, 170, 180, 150]
 var dodge_mult_data: Array = [4, 4, 2.5, 3, 4.5, 4]
 var dodge_duration_data: Array = [0.6, 0.6, 0.6, 0.6, 0.8, 0.4]
+var multi_dodge_data: Array = [false, false, true, false, false, false]
 
 func _ready():
 	load_data()
@@ -43,7 +44,8 @@ func save_data():
 		"damage": damage_data,
 		"speed": speed_data,
 		"dodge mult": dodge_mult_data,
-		"dodge duration": dodge_duration_data
+		"dodge duration": dodge_duration_data,
+		"can multi dodge": multi_dodge_data
 		}
 	file.store_string(JSON.stringify(data))
 	file.close()
@@ -61,5 +63,6 @@ func get_class_data(name: String) -> Array:
 	data_set.append(speed_data[id])
 	data_set.append(dodge_mult_data[id])
 	data_set.append(dodge_duration_data[id])
+	data_set.append(multi_dodge_data[id])
 	
 	return data_set
