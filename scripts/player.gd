@@ -11,7 +11,7 @@ var damage: float = base_damage
 var speed: float = 150.0
 var dodge_speed_mult = 4
 var dodge_duration = 0.6
-var dodge_cooldown = 1.2
+var dodge_cooldown = 1.5
 var dodge_speed = 0.0
 
 
@@ -205,3 +205,7 @@ func _on_button_pressed() -> void:
 func _on_button_2_pressed() -> void:
 	class_change("demon")
 	$Button2.release_focus()
+
+func _on_button_3_pressed() -> void:
+	class_change("pyromancer")
+	$Button3.release_focus()

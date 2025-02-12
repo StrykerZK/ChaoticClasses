@@ -12,6 +12,7 @@ func _process(delta: float) -> void:
 	$DPS.text = "DPS: " + str(dps)
 
 func take_damage(source: Area2D):
+	print("area entered")
 	var dmg = StageManager.p1_damage
 	var new_dmg = dmg * dmg_reduction
 	$DPSTimer.start()

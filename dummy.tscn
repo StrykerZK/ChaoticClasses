@@ -13,7 +13,6 @@ height = 38.0
 
 [node name="Dummy" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 0
 script = ExtResource("1_0aeea")
 armor = 0.0
 
@@ -28,6 +27,8 @@ position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_2pohd")
 
 [node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 3)
