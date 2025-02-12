@@ -50,20 +50,20 @@ func _ready() -> void:
 	temp_count = dodge_count
 
 func _process(delta: float) -> void:
-	handle_input() # Input data
-	move_and_slide() # Character movement
+	if !is_paused:
+		handle_input() # Input data
+		move_and_slide() # Character movement
 	
-	if is_instance_valid(anim_tree) and is_multiplayer_authority():
-		update_animation_parameters() # Update AnimationTree
+		if is_instance_valid(anim_tree) and is_multiplayer_authority():
+			update_animation_parameters() # Update AnimationTree
 	
-	StageManager.update_player_stats(player_id, max_health, current_health, damage)
-	
+		StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
 func handle_input():
 	if !is_dodging and !is_attacking:
 		direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 	
-	if direction:
+	if direction and !is_attacking:
 		last_input_direction = direction
 		if is_dodging:
 			velocity = last_input_direction * dodge_speed
@@ -141,6 +141,8 @@ func update_animation_parameters():
 			anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
 
 func class_change(class_title: String):
+	reset_systems()
+	is_paused = true
 	if is_instance_valid(get_node(current_class)):
 		get_node(current_class).queue_free()
 	
@@ -159,6 +161,9 @@ func class_change(class_title: String):
 	anim_tree = class_node.get_node("AnimationTree")
 	anim_player = class_node.get_node("AnimationPlayer")
 	attack_method = Callable(class_node, "attack")
+	
+	await get_tree().create_timer(2).timeout
+	is_paused = false
 
 func take_damage(source: Area2D):
 	if player_id == 1:
@@ -175,6 +180,19 @@ func update_stats(stats: Array):
 	dodge_duration = stats[4]
 	dodge_count = stats[5]
 	temp_count = dodge_count
+	
+	print("Armor:" + str(armor))
+	print("Damage:" + str(base_damage))
+	print("Speed" + str(speed))
+	print("Dodge Mult: " + str(dodge_speed_mult))
+	print("Dodge Duration: " + str(dodge_duration))
+	print("Dodge Count: " + str(dodge_count))
+
+func reset_systems():
+	is_dodging = false
+	can_dodge = true
+	is_attacking = false
+	attack_index = 1
 
 func toggle_pause(state):
 	is_paused = state
@@ -182,4 +200,8 @@ func toggle_pause(state):
 
 func _on_button_pressed() -> void:
 	class_change("hero")
-	$Button.queue_free()
+	$Button.release_focus()
+
+func _on_button_2_pressed() -> void:
+	class_change("demon")
+	$Button2.release_focus()
