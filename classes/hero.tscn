@@ -797,7 +797,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_psyiu")
 hframes = 10
 vframes = 4
-frame = 3
+frame = 34
 
 [node name="Hitbox" type="Area2D" parent="."]
 

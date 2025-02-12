@@ -513,7 +513,7 @@ position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_83ret")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
+zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
 
 [node name="Hurtbox" type="Area2D" parent="."]
@@ -538,9 +538,6 @@ one_shot = true
 [node name="IFrameTimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="ComboTimer" type="Timer" parent="."]
-
 [connection signal="area_entered" from="Hurtbox" to="." method="take_damage"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
-[connection signal="timeout" from="ComboTimer" to="." method="_on_combo_timer_timeout"]

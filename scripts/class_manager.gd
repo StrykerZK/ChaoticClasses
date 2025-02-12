@@ -2,17 +2,16 @@ extends Node
 
 const SAVE_PATH = "user://stats.json"
 
-var name_list: Array = ["base", "hero", "demon", "gladiator", "monk", "shogun"]
-var armor_data: Array = [0, 2, 2, 2, 1, 2]
-var damage_data: Array = [10, 15, 20, 10, 15, 15]
-var speed_data: Array = [200, 150, 150, 170, 180, 150]
-var dodge_mult_data: Array = [4, 4, 2.5, 3, 4.5, 4]
-var dodge_duration_data: Array = [0.6, 0.6, 0.6, 0.6, 0.8, 0.4]
-var multi_dodge_data: Array = [false, false, true, false, false, false]
+var name_list: Array
+var armor_data: Array
+var damage_data: Array
+var speed_data: Array
+var dodge_mult_data: Array
+var dodge_duration_data: Array
+var dodge_count_data: Array
 
 func _ready():
 	load_data()
-	save_data()
 
 func load_data():
 	if FileAccess.file_exists(SAVE_PATH):
@@ -34,6 +33,8 @@ func load_data():
 							dodge_mult_data = data["dodge mult"]
 						"dodge duration":
 							dodge_duration_data = data["dodge duration"]
+						"dodge count":
+							dodge_count_data = data["dodge count"]
 			file.close()
 
 func save_data():
@@ -45,17 +46,17 @@ func save_data():
 		"speed": speed_data,
 		"dodge mult": dodge_mult_data,
 		"dodge duration": dodge_duration_data,
-		"can multi dodge": multi_dodge_data
+		"dodge count": dodge_count_data
 		}
 	file.store_string(JSON.stringify(data))
 	file.close()
 
-func get_class_data(name: String) -> Array:
+func get_class_data(new_name: String) -> Array:
 	var id = 0
 	var data_set = []
 	
 	for i in range(name_list.size()):
-		if name_list[i] == name:
+		if name_list[i] == new_name:
 			id = i
 	
 	data_set.append(armor_data[id])
@@ -63,6 +64,6 @@ func get_class_data(name: String) -> Array:
 	data_set.append(speed_data[id])
 	data_set.append(dodge_mult_data[id])
 	data_set.append(dodge_duration_data[id])
-	data_set.append(multi_dodge_data[id])
+	data_set.append(dodge_count_data[id])
 	
 	return data_set
