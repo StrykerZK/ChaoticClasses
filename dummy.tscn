@@ -11,7 +11,7 @@ height = 38.0
 radius = 15.0
 height = 38.0
 
-[node name="Dummy" type="CharacterBody2D"]
+[node name="Dummy" type="CharacterBody2D" groups=["dummy"]]
 collision_layer = 2
 script = ExtResource("1_0aeea")
 armor = 0.0

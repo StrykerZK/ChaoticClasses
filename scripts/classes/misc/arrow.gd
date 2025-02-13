@@ -5,27 +5,29 @@ extends Area2D
 var direction: Vector2 = Vector2.ZERO
 var velocity: Vector2 = Vector2.ZERO
 var mouse_pos: Vector2 = Vector2.ZERO
+var full_charged: bool = false
 
 func _ready() -> void:
-	$AnimatedSprite2D.play()
+	pass
 
 func _process(delta: float) -> void:
 	position += velocity * delta
 
-func start_follow_timer():
-	$FollowTimer.start()
+func charge_arrow(level: float):
+	if level < 2.0:
+		$AnimationPlayer.play("default")
+	elif level < 3.0:
+		$AnimationPlayer.play("charge_1")
+	elif level == 3.0:
+		$AnimationPlayer.play("charge_2")
+		full_charged = true
 
 func _on_area_entered(area: Area2D) -> void:
 	pass
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("dummy"):
-		queue_free()
+		if !full_charged:
+			queue_free()
 	elif body.is_in_group("environment"):
 		queue_free()
-
-func _on_follow_timer_timeout() -> void:
-	mouse_pos = get_global_mouse_position()
-	direction = position.direction_to(mouse_pos)
-	rotation = direction.angle()
-	velocity = direction * speed

@@ -19,23 +19,23 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func attack(index: int):
+func attack(index: float):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
 	match index:
-		1:
+		1.0:
 			print("attack 1")
 			$ComboTimer.start()
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
-			player.attack_index += 1
-		2:
+			player.attack_index += 1.0
+		2.0:
 			print("attack 2")
 			$ComboTimer.start()
 			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
-			player.attack_index += 1
-		3:
+			player.attack_index += 1.0
+		3.0:
 			player.damage = player.base_damage * 2
 			print("attack 3")
 			$ComboTimer.wait_time = attack_3_length
@@ -51,5 +51,5 @@ func get_animation_lengths():
 
 func _on_combo_timer_timeout() -> void:
 	player.is_attacking = false
-	player.attack_index = 1
+	player.attack_index = 1.0
 	player.damage = player.base_damage

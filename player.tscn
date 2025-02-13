@@ -546,6 +546,13 @@ offset_right = 407.0
 offset_bottom = -116.0
 text = "Pyromancer"
 
+[node name="Button4" type="Button" parent="."]
+offset_left = 297.0
+offset_top = -112.0
+offset_right = 407.0
+offset_bottom = -81.0
+text = "Archer"
+
 [node name="DodgeTimer" type="Timer" parent="."]
 one_shot = true
 
@@ -556,4 +563,5 @@ one_shot = true
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
 [connection signal="pressed" from="Button3" to="." method="_on_button_3_pressed"]
+[connection signal="pressed" from="Button4" to="." method="_on_button_4_pressed"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]

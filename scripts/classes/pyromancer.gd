@@ -19,25 +19,25 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func attack(index: int):
+func attack(index: float):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
 	match index:
-		1:
+		1.0:
 			print("attack 1")
 			$ComboTimer.start()
 			spawn_projectile(player.attack_index)
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
-			player.attack_index += 1
-		2:
+			player.attack_index += 1.0
+		2.0:
 			print("attack 2")
 			$ComboTimer.start()
 			spawn_projectile(player.attack_index)
 			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
-			player.attack_index += 1
-		3:
+			player.attack_index += 1.0
+		3.0:
 			player.can_dodge = false
 			print("attack 3")
 			spawn_projectile(player.attack_index)
@@ -49,17 +49,17 @@ func spawn_projectile(attack: int):
 	var mouse_pos = player.get_global_mouse_position()
 	
 	match attack:
-		1:
+		1.0:
 			spawn_time = attack_1_length / 2
 			spawn_time += 0.05
-		2:
+		2.0:
 			spawn_time = attack_2_length / 2
 			spawn_time += 0.05
-		3:
+		3.0:
 			spawn_time= attack_3_length / 2
 			spawn_time += 0.05
 	
-	if attack != 3:
+	if attack != 3.0:
 		var fireball = fireball_scene.instantiate()
 		await get_tree().create_timer(spawn_time).timeout
 		get_tree().current_scene.add_child(fireball)
@@ -97,5 +97,5 @@ func get_animation_lengths():
 
 func _on_combo_timer_timeout() -> void:
 	player.is_attacking = false
-	player.attack_index = 1
+	player.attack_index = 1.0
 	player.can_dodge = true

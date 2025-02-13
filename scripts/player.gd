@@ -14,7 +14,6 @@ var dodge_duration = 0.6
 var dodge_cooldown = 1.5
 var dodge_speed = 0.0
 
-
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var game_manager: Node
@@ -33,8 +32,10 @@ var temp_count = 1
 
 # Variables for attacking
 var is_attacking = false
-var attack_index = 1
+var attack_index: float = 1.0
 var attack_method = Callable(self, "attack")
+var mouse_pos: Vector2 = Vector2.ZERO
+var last_mouse_pos: Vector2 = Vector2.ZERO
 
 func _enter_tree() -> void:
 	game_manager = get_node("/root/Main/GameManager")
@@ -43,6 +44,7 @@ func _ready() -> void:
 	anim_tree = get_node(current_class).get_node("AnimationTree")
 	anim_tree.active = true
 	anim_player = get_node(current_class).get_node("AnimationPlayer")
+	mouse_pos = get_global_mouse_position()
 	
 	$DodgeTimer.wait_time = dodge_duration
 	dodge_speed = speed * dodge_speed_mult
@@ -80,10 +82,12 @@ func handle_input():
 			start_dodge()
 	
 	if Input.is_action_pressed("attack"):
+		mouse_pos = get_local_mouse_position()
 		if current_class != "Base":
 			if !is_attacking and !is_dodging:
+				anim_tree["parameters/attack/blend_position"] = Vector2(mouse_pos.x, attack_index)
+				last_mouse_pos = mouse_pos
 				attack_method.call(attack_index)
-				anim_tree["parameters/attack/blend_position"] = Vector2(last_input_direction.x, attack_index)
 		else:
 			pass
 
@@ -131,6 +135,13 @@ func update_animation_parameters():
 	
 	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
 	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
+	
+	if current_class != "Base":
+		if current_class == "archer":
+			anim_tree["parameters/attack/blend_position"] = Vector2(mouse_pos.x, attack_index)
+		else:
+			anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
+	
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction
@@ -209,3 +220,7 @@ func _on_button_2_pressed() -> void:
 func _on_button_3_pressed() -> void:
 	class_change("pyromancer")
 	$Button3.release_focus()
+
+func _on_button_4_pressed() -> void:
+	class_change("archer")
+	$Button4.release_focus()

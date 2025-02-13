@@ -18,9 +18,7 @@ func take_damage(source: Area2D):
 	$DPSTimer.start()
 	$LastDamage.text = "Last Dmg: " + str(new_dmg)
 	dps += new_dmg
-	
-	if source.is_in_group("projectiles"):
-		source.queue_free()
+
 
 func reset_dps():
 	dps = 0
