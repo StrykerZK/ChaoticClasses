@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://cxeud2sgthd17"]
+[gd_scene load_steps=51 format=3 uid="uid://cxeud2sgthd17"]
 
 [ext_resource type="Script" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bb3xku23khouf" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
@@ -777,17 +777,22 @@ advance_condition = &"is_attacking"
 advance_mode = 2
 advance_condition = &"is_running"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fuuo2"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"is_dodging"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_2oee8"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_eea0a")
-states/attack/position = Vector2(416, 7)
+states/attack/position = Vector2(582, 15)
 states/dodge/node = SubResource("AnimationNodeBlendSpace1D_bmfui")
-states/dodge/position = Vector2(416, 201)
+states/dodge/position = Vector2(582, 202)
 states/idle/node = SubResource("AnimationNodeBlendSpace2D_86tsb")
 states/idle/position = Vector2(349, 100)
 states/run/node = SubResource("AnimationNodeBlendSpace2D_014y2")
 states/run/position = Vector2(487, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4")]
-graph_offset = Vector2(-109, -72)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_fuuo2")]
+graph_offset = Vector2(-103, -26)
 
 [node name="hero" type="Node2D"]
 script = ExtResource("1_1fpu4")
@@ -820,7 +825,7 @@ parameters/conditions/idle = false
 parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
-parameters/attack/blend_position = Vector2(0, 0)
+parameters/attack/blend_position = Vector2(0.0992907, 3.12766)
 parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://dpn1uarsdks0w"]
+[gd_scene load_steps=56 format=3 uid="uid://dpn1uarsdks0w"]
 
 [ext_resource type="Script" path="res://scripts/classes/archer.gd" id="1_jrsw8"]
 [ext_resource type="Texture2D" uid="uid://dysv50fd30o74" path="res://art/player/archer_sprite_sheet.png" id="1_s1fos"]
@@ -679,16 +679,20 @@ advance_condition = &"idle"
 advance_mode = 2
 advance_condition = &"is_running"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4258j"]
+advance_mode = 2
+advance_condition = &"is_dodging"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ybhgl"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_oj40l")
-states/attack/position = Vector2(391, 8)
+states/attack/position = Vector2(564, -4)
 states/dodge/node = SubResource("AnimationNodeBlendSpace1D_xn82j")
-states/dodge/position = Vector2(400, 184)
+states/dodge/position = Vector2(564, 199)
 states/idle/node = SubResource("AnimationNodeBlendSpace2D_uqcta")
 states/idle/position = Vector2(328, 100)
 states/run/node = SubResource("AnimationNodeBlendSpace2D_ie8xu")
 states/run/position = Vector2(473, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3vxuc"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_qwfho"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_kao0e"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_mc1tx"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_ah1hg"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_powi3"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_jniai"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_u6ihb"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_3rhy7"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_njxrp"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_yk6tl")]
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3vxuc"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_qwfho"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_kao0e"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_mc1tx"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_ah1hg"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_powi3"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_jniai"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_u6ihb"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_3rhy7"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_njxrp"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_yk6tl"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_4258j")]
 graph_offset = Vector2(-83, -44)
 
 [node name="archer" type="Node2D"]

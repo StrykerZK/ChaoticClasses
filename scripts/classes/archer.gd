@@ -12,7 +12,7 @@ var charge_1_length: float = 0.4
 var charge_2_length: float = 0.5
 var charge_1_time = 1.0
 var charge_2_time = 1.5
-var can_shoot = true
+var can_shoot = false
 var early_shot = false
 
 func _ready() -> void:
@@ -23,36 +23,36 @@ func _ready() -> void:
 	get_animation_lengths()
 
 func _process(delta: float) -> void:
-	if !player.is_paused:
+	if !player.is_paused and !player.is_dodging:
 		handle_input()
 	
 
 func handle_input():
-	if Input.is_action_just_released("attack"):
-		if can_shoot:
-			spawn_projectile(player.attack_index)
-		else:
-			early_shot = true
-
-func attack(index: float):
-	player.is_attacking = true
-	can_shoot = false
-	$ChargeTimer.wait_time = charge_1_time - charge_1_length
-	match index:
-		1.0:
-			print("Readying")
-			await get_tree().create_timer(ready_length).timeout
-			if early_shot == true:
-				early_shot = false
+	if player.is_attacking:
+		if Input.is_action_just_released("attack"):
+			if can_shoot:
 				spawn_projectile(player.attack_index)
 			else:
-				can_shoot = true
-				player.can_dodge = true
-				print("Charging!")
-				$ChargeTimer.start()
+				early_shot = true
+
+func attack(index: float):
+	player.can_dodge = false
+	if !player.is_dodging:
+		player.is_attacking = true
+		$ChargeTimer.wait_time = charge_1_time - charge_1_length
+		match index:
+			1.0:
+				print("Readying")
+				await get_tree().create_timer(ready_length).timeout
+				if early_shot == true:
+					early_shot = false
+					spawn_projectile(player.attack_index)
+				else:
+					can_shoot = true
+					print("Charging!")
+					$ChargeTimer.start()
 
 func charge_projectile():
-	player.can_dodge = false
 	match player.attack_index:
 		1.0:
 			if player.is_attacking:
@@ -70,7 +70,6 @@ func charge_projectile():
 			if player.is_attacking:
 				player.attack_index += 0.5
 				player.damage = player.base_damage * 4
-	player.can_dodge = true
 
 func spawn_projectile(index: float):
 	
@@ -88,11 +87,10 @@ func spawn_projectile(index: float):
 	
 	can_shoot = false
 	player.attack_index = 0.0
-	await get_tree().create_timer(release_length).timeout
+	await get_tree().create_timer(release_length + 0.2).timeout
 	player.is_attacking = false
 	player.attack_index = 1.0
 	player.can_dodge = true
-	can_shoot = true
 	early_shot = false
 	
 	# First arrow always calls previous arrow's damage

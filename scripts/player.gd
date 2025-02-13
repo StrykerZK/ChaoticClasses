@@ -81,7 +81,7 @@ func handle_input():
 		if can_dodge:
 			start_dodge()
 	
-	if Input.is_action_pressed("attack"):
+	if Input.is_action_just_pressed("attack"):
 		mouse_pos = get_local_mouse_position()
 		if current_class != "Base":
 			if !is_attacking and !is_dodging:
@@ -110,14 +110,24 @@ func start_dodge():
 
 func end_dodge():
 	is_dodging = false
-	velocity = Vector2.ZERO
 	if temp_count > 1:
 		can_dodge = true
 		temp_count -= 1
+		$DodgeResetTimer.stop()
+		$DodgeResetTimer.start()
 	elif temp_count == 1:
-		await get_tree().create_timer(dodge_cooldown).timeout
-		can_dodge = true
-		temp_count = dodge_count
+		$DodgeResetTimer.stop()
+		dodge_on_cooldown()
+
+func dodge_on_cooldown():
+	print("Cooldown start")
+	can_dodge = false
+	await get_tree().create_timer(dodge_cooldown).timeout
+	while is_attacking:
+		await get_tree().create_timer(0.1).timeout # Wait for attack to finish
+	can_dodge = true
+	temp_count = dodge_count
+	print("Ready")
 
 func activate_i_frame(value: float):
 	$Hurtbox/HurtboxCollision.disabled = true
