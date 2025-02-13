@@ -5,10 +5,11 @@ extends Node2D
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
 
-var attack_1_length: float = 0.3
-var attack_2_length: float = 0.3
-var attack_3_length: float = 0.5
-var combo_timer = 1.5
+var release_length: float = 0.2
+var ready_length: float = 0.5
+var charge_1_length: float = 0.4
+var charge_2_length: float = 0.5
+var combo_timer = 0.5
 
 func _ready() -> void:
 	player = get_parent()
@@ -17,32 +18,33 @@ func _ready() -> void:
 	get_animation_lengths()
 
 func _process(delta: float) -> void:
-	pass
 
 func attack(index: int):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1:
-			print("attack 1")
-			$ComboTimer.start()
+			print("Readying")
+			await get_tree().create_timer(ready_length).timeout
 			spawn_projectile(player.attack_index)
-			await get_tree().create_timer(attack_1_length).timeout
+			$ComboTimer.start()
 			player.is_attacking = false
 			player.attack_index += 1
 		2:
-			print("attack 2")
+			print("Charge 2")
+			await get_tree().create_timer(charge_1_length).timeout
 			$ComboTimer.start()
 			spawn_projectile(player.attack_index)
-			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1
 		3:
-			player.can_dodge = false
-			print("attack 3")
+			print("Charge 3")
 			spawn_projectile(player.attack_index)
-			$ComboTimer.wait_time = attack_3_length
+			$ComboTimer.wait_time = charge_2_length
 			$ComboTimer.start()
+
+func charge_projectile():
+	pass
 
 func spawn_projectile(attack: int):
 	var spawn_time = 0.3
@@ -88,12 +90,14 @@ func spawn_projectile(attack: int):
 				fireball.start_follow_timer()
 
 func get_animation_lengths():
-	attack_1_length = anim_player.get_animation("attack_right_1").length
-	print("Attack 1: " + str(attack_1_length))
-	attack_2_length = anim_player.get_animation("attack_right_2").length
-	print("Attack 2: " + str(attack_2_length))
-	attack_3_length = anim_player.get_animation("attack_right_3").length
-	print("Attack 3: " + str(attack_3_length))
+	release_length = anim_player.get_animation("release_right").length
+	print("Release: " + str(release_length))
+	ready_length = anim_player.get_animation("ready_right").length
+	print("Ready: " + str(ready_length))
+	charge_1_length = anim_player.get_animation("charge_1_right").length
+	print("Charge 1: " + str(charge_1_length))
+	charge_2_length = anim_player.get_animation("charge_2_right").length
+	print("Charge 2: " + str(charge_2_length))
 
 func _on_combo_timer_timeout() -> void:
 	player.is_attacking = false
