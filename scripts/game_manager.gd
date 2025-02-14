@@ -15,22 +15,20 @@ var player_2_class: String = "Base"
 
 func _ready():
 	player_manager = get_node("/root/Main/PlayerManager")
-	player_spawn = player_manager.get_node("PlayerSpawn")
+	assign_players.rpc()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("back"):
 		toggle_pause.rpc()
 
-@rpc("any_peer","call_local")
 func _process(delta: float) -> void:
-	if player_1 == null and StageManager.player_count == 1:
-		if player_spawn.get_node(str(StageManager.player_list[0])).is_node_ready():
-			player_1 = player_spawn.get_node(str(StageManager.player_list[0]))
-			paused.connect(Callable(player_1, "toggle_pause"))
-	if player_2 == null and StageManager.player_count == 2:
-		if player_spawn.get_node(str(StageManager.player_list[1])).is_node_ready():
-			player_2 = player_spawn.get_node(str(StageManager.player_list[1]))
-			paused.connect(Callable(player_2, "toggle_pause"))
+	pass
+
+@rpc("any_peer","call_local")
+func assign_players():
+	var players = get_tree().get_nodes_in_group("players")
+	player_1 = players[0]
+	player_2 = players[1]
 
 @rpc("any_peer","call_local")
 func change_class():
@@ -53,8 +51,8 @@ func change_class():
 	
 	
 	# Run class_change() method in players
-	player_1.class_change(class_title_1, transform_time)
-	player_2.class_change(class_title_2, transform_time)
+	player_1.class_change.rpc(class_title_1, transform_time)
+	player_2.class_change.rpc(class_title_2, transform_time)
 	
 	# Instantiate the new classes
 	var class_node_1 = load("res://classes/" + class_title_1 + ".tscn").instantiate()
@@ -71,7 +69,7 @@ func change_class():
 	await get_tree().create_timer(transform_time + 0.05).timeout
 	toggle_pause()
 
-@rpc("any_peer","call_local")
+@rpc("authority","call_local")
 func toggle_pause():
 	
 	# ADD CONDITIONS FOR OTHER PLAYER PAUSE, CLASS SWAPPING, ETC.

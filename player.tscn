@@ -540,6 +540,7 @@ parameters/idle/blend_position = Vector2(0.267016, 0.448598)
 parameters/run/blend_position = Vector2(0.928447, -0.594673)
 
 [node name="ClassSynchronizer" type="MultiplayerSynchronizer" parent="Base"]
+process_mode = 4
 replication_config = SubResource("SceneReplicationConfig_ndcyi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

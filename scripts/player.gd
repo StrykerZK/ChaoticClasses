@@ -44,8 +44,6 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	player_id = name
-	$PlayerSynchronizer.set_multiplayer_authority(str(name).to_int())
-	$Base/ClassSynchronizer.set_multiplayer_authority(str(name).to_int())
 	
 	current_class = get_child(0).name
 	anim_tree = get_node(current_class + "/AnimationTree")
@@ -101,7 +99,6 @@ func handle_input():
 		else:
 			pass
 
-@rpc("any_peer","call_local")
 func start_dodge():
 	is_dodging = true
 	can_dodge = false
@@ -176,7 +173,7 @@ func class_change(class_title: String, transform_time: float):
 	reset_systems()
 	
 	# Clear current class node
-	get_child(0).queue_free()
+	get_node(current_class).queue_free()
 	
 	current_class = class_title # Change current class ref
 	
@@ -193,7 +190,6 @@ func transform_done():
 	anim_tree.active = true
 	anim_player = get_node(current_class + "/AnimationPlayer")
 	attack_method = Callable(get_node(current_class), "attack")
-	get_node(current_class + "/ClassSynchronizer").set_multiplayer_authority(str(name).to_int())
 
 func take_damage(damage: float):
 	pass

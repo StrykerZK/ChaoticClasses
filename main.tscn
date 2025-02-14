@@ -128,15 +128,15 @@ player_scene = ExtResource("2_lxg2x")
 
 [node name="PlayerSpawn" type="Node" parent="PlayerManager"]
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager"]
-_spawnable_scenes = PackedStringArray("res://player.tscn", "res://classes/hero.tscn", "res://classes/demon.tscn", "res://classes/pyromancer.tscn", "res://classes/archer.tscn", "res://classes/misc/arrow.tscn", "res://classes/misc/fireball.tscn")
-spawn_path = NodePath("../PlayerSpawn")
-
-[node name="Player1Spawn" type="Marker2D" parent="PlayerManager" groups=["spawnpoints"]]
+[node name="Player1Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
 position = Vector2(240, 330)
 
-[node name="Player2Spawn" type="Marker2D" parent="PlayerManager" groups=["spawnpoints"]]
+[node name="Player2Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
 position = Vector2(312, 330)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager"]
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://classes/misc/arrow.tscn", "res://classes/misc/fireball.tscn")
+spawn_path = NodePath("..")
 
 [node name="GameManager" type="Node" parent="."]
 process_mode = 3
