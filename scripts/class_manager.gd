@@ -51,6 +51,15 @@ func save_data():
 	file.store_string(JSON.stringify(data))
 	file.close()
 
+func get_class_count() -> int:
+	var count = name_list.size()
+	return count
+
+func get_class_title(index: int) -> String:
+	var class_title = name_list[index]
+	return class_title
+
+@rpc("any_peer", "call_local")
 func get_class_data(new_name: String) -> Array:
 	var id = 0
 	var data_set = []

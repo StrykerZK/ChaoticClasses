@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var current_class = "Base"
+@export var current_class = ""
 @export var player_id = 1
 
 var max_health: float = 100
@@ -18,7 +18,6 @@ var dodge_speed = 0.0
 @onready var anim_player: AnimationPlayer
 @onready var game_manager: Node
 @onready var player_manager: Node
-@onready var class_node: Node2D
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
@@ -46,9 +45,10 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	player_id = name
 	
-	anim_tree = get_node(current_class).get_node("AnimationTree")
+	current_class = get_child(0).name
+	anim_tree = get_node(current_class + "/AnimationTree")
 	anim_tree.active = true
-	anim_player = get_node(current_class).get_node("AnimationPlayer")
+	anim_player = get_node(current_class + "/AnimationPlayer")
 	mouse_pos = get_global_mouse_position()
 	
 	$DodgeTimer.wait_time = dodge_duration
@@ -69,6 +69,7 @@ func _process(delta: float) -> void:
 	
 		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
+@rpc("any_peer","call_local")
 func handle_input():
 	if !is_dodging and !is_attacking:
 		direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
@@ -99,6 +100,7 @@ func handle_input():
 		else:
 			pass
 
+@rpc("any_peer","call_local")
 func start_dodge():
 	is_dodging = true
 	can_dodge = false
@@ -167,30 +169,29 @@ func update_animation_parameters():
 		else:
 			anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
 
-func class_change(class_title: String):
+@rpc("any_peer","call_local")
+func class_change(class_title: String, transform_time: float):
+	# Reset variables and booleans
 	reset_systems()
-	is_paused = true
-	if is_instance_valid(get_node(current_class)):
-		get_node(current_class).queue_free()
 	
-	current_class = class_title
+	# Clear current class node
+	get_child(0).queue_free()
 	
+	current_class = class_title # Change current class ref
+	
+	# Update stats to new class
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
 	
-	var class_node = load("res://classes/" + class_title + ".tscn").instantiate()
-	
-	if !has_node(current_class):
-		add_child(class_node)
-		class_node = get_node(class_title)
-		move_child(class_node,0)
+	$TransformTimer.wait_time = transform_time
+	$TransformTimer.start()
 
-	anim_tree = class_node.get_node("AnimationTree")
-	anim_player = class_node.get_node("AnimationPlayer")
-	attack_method = Callable(class_node, "attack")
-	
-	await get_tree().create_timer(2).timeout
-	is_paused = false
+func transform_done():
+	# Set new class's children nodes and methods
+	anim_tree = get_node(current_class + "/AnimationTree")
+	anim_tree.active = true
+	anim_player = get_node(current_class + "/AnimationPlayer")
+	attack_method = Callable(get_node(current_class), "attack")
 
 func take_damage(damage: float):
 	pass
@@ -217,7 +218,11 @@ func reset_systems():
 	can_dodge = true
 	is_attacking = false
 	attack_index = 1
+	$DodgeTimer.stop()
+	$IFrameTimer.stop()
+	$DodgeResetTimer.stop()
 
+@rpc("any_peer","call_local")
 func toggle_pause(state):
 	is_paused = state
-	print("Paused" + str(is_paused))
+	print("Paused: " + str(is_paused))

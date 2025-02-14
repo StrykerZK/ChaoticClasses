@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://ggc1ugsf42y5"]
+[gd_scene load_steps=8 format=4 uid="uid://ggc1ugsf42y5"]
 
 [ext_resource type="Texture2D" uid="uid://dxjiws2ai34r3" path="res://art/tiles/tilemap_32.png" id="1_kqhmq"]
 [ext_resource type="PackedScene" uid="uid://cuw7fymmodn3b" path="res://player.tscn" id="2_lxg2x"]
@@ -111,6 +111,8 @@ physics_layer_1/collision_layer = 32
 physics_layer_1/collision_mask = 2
 sources/2 = SubResource("TileSetAtlasSource_dkp5t")
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mjd8e"]
+
 [node name="Main" type="Node"]
 
 [node name="World" type="Node" parent="."]
@@ -120,12 +122,15 @@ tile_map_data = PackedByteArray("AAAEAAQAAgABAAEAAAAEAAUAAgAGAAAAAAAEAAYAAgAGAAE
 tile_set = SubResource("TileSet_8wvq3")
 
 [node name="PlayerManager" type="Node" parent="."]
+process_mode = 3
 script = ExtResource("2_pwcnq")
 player_scene = ExtResource("2_lxg2x")
 
+[node name="PlayerSpawn" type="Node" parent="PlayerManager"]
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager"]
 _spawnable_scenes = PackedStringArray("res://player.tscn", "res://classes/hero.tscn", "res://classes/demon.tscn", "res://classes/pyromancer.tscn", "res://classes/archer.tscn", "res://classes/misc/arrow.tscn", "res://classes/misc/fireball.tscn")
-spawn_path = NodePath("..")
+spawn_path = NodePath("../PlayerSpawn")
 
 [node name="Player1Spawn" type="Marker2D" parent="PlayerManager"]
 position = Vector2(240, 330)
@@ -158,7 +163,26 @@ text = "JOIN GAME"
 process_mode = 3
 script = ExtResource("4_n6uag")
 
+[node name="Button" type="Button" parent="GameManager"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -250.0
+offset_right = 55.0
+offset_bottom = -219.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Class Change"
+
 [node name="UI" type="Node" parent="."]
+process_mode = 3
+
+[node name="MainSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mjd8e")
 
 [connection signal="pressed" from="PlayerManager/VBoxContainer/Host" to="PlayerManager" method="host"]
 [connection signal="pressed" from="PlayerManager/VBoxContainer/Join" to="PlayerManager" method="join"]
+[connection signal="pressed" from="GameManager/Button" to="GameManager" method="_on_button_pressed"]
