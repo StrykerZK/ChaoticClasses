@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=46 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cfwt7x2hcpfva" path="res://art/player/2D_simple_sprite.png" id="2_dwpav"]
@@ -459,6 +459,32 @@ states/run/position = Vector2(468, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_whqec"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vwyjv"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_5o6ji"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_2d0iu"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_dimne"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_kxe4s"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_sy46s")]
 graph_offset = Vector2(-144, 18)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ndcyi"]
+properties/0/path = NodePath("Sprite2D:flip_h")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Sprite2D:frame")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("AnimationTree:parameters/conditions/idle")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("AnimationTree:parameters/conditions/is_dodging")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("AnimationTree:parameters/conditions/is_running")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("AnimationTree:parameters/dodge/blend_position")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("AnimationTree:parameters/idle/blend_position")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("AnimationTree:parameters/run/blend_position")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_83ret"]
 radius = 15.0
 height = 38.0
@@ -466,6 +492,20 @@ height = 38.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cvhqj"]
 radius = 15.0
 height = 38.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bqprs"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:current_class")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:player_id")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -508,6 +548,9 @@ parameters/dodge/blend_position = Vector2(-0.796502, 0.743396)
 parameters/idle/blend_position = Vector2(0.267016, 0.448598)
 parameters/run/blend_position = Vector2(0.928447, -0.594673)
 
+[node name="ClassSynchronizer" type="MultiplayerSynchronizer" parent="Base"]
+replication_config = SubResource("SceneReplicationConfig_ndcyi")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_83ret")
@@ -525,38 +568,6 @@ position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_cvhqj")
 debug_color = Color(0, 1, 0.12549, 0.419608)
 
-[node name="Button" type="Button" parent="."]
-z_index = 2
-offset_left = 297.0
-offset_top = -224.0
-offset_right = 407.0
-offset_bottom = -193.0
-text = "Hero"
-
-[node name="Button2" type="Button" parent="."]
-z_index = 2
-offset_left = 297.0
-offset_top = -185.0
-offset_right = 407.0
-offset_bottom = -154.0
-text = "Demon"
-
-[node name="Button3" type="Button" parent="."]
-z_index = 2
-offset_left = 297.0
-offset_top = -147.0
-offset_right = 407.0
-offset_bottom = -116.0
-text = "Pyromancer"
-
-[node name="Button4" type="Button" parent="."]
-z_index = 2
-offset_left = 297.0
-offset_top = -112.0
-offset_right = 407.0
-offset_bottom = -81.0
-text = "Archer"
-
 [node name="DodgeTimer" type="Timer" parent="."]
 one_shot = true
 
@@ -567,9 +578,8 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
-[connection signal="pressed" from="Button3" to="." method="_on_button_3_pressed"]
-[connection signal="pressed" from="Button4" to="." method="_on_button_4_pressed"]
+[node name="MainSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bqprs")
+
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]

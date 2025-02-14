@@ -11,12 +11,13 @@ var damage: float = base_damage
 var speed: float = 150.0
 var dodge_speed_mult = 4
 var dodge_duration = 0.6
-var dodge_cooldown = 1.5
+var dodge_cooldown = 1.5 
 var dodge_speed = 0.0
 
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var game_manager: Node
+@onready var player_manager: Node
 @onready var class_node: Node2D
 
 var direction: Vector2 = Vector2.ZERO
@@ -38,9 +39,13 @@ var mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
 func _enter_tree() -> void:
+	set_multiplayer_authority(int(str(name)))
 	game_manager = get_node("/root/Main/GameManager")
+	player_manager = get_node("/root/Main/PlayerManager")
 
 func _ready() -> void:
+	player_id = name
+	
 	anim_tree = get_node(current_class).get_node("AnimationTree")
 	anim_tree.active = true
 	anim_player = get_node(current_class).get_node("AnimationPlayer")
@@ -52,14 +57,17 @@ func _ready() -> void:
 	temp_count = dodge_count
 
 func _process(delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
+		
 	if !is_paused:
 		handle_input() # Input data
 		move_and_slide() # Character movement
 	
-		if is_instance_valid(anim_tree) and is_multiplayer_authority():
+		if is_instance_valid(anim_tree):
 			update_animation_parameters() # Update AnimationTree
 	
-		StageManager.update_player_stats(player_id, max_health, current_health, damage)
+		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
 func handle_input():
 	if !is_dodging and !is_attacking:
@@ -213,19 +221,3 @@ func reset_systems():
 func toggle_pause(state):
 	is_paused = state
 	print("Paused" + str(is_paused))
-
-func _on_button_pressed() -> void:
-	class_change("hero")
-	$Button.release_focus()
-
-func _on_button_2_pressed() -> void:
-	class_change("demon")
-	$Button2.release_focus()
-
-func _on_button_3_pressed() -> void:
-	class_change("pyromancer")
-	$Button3.release_focus()
-
-func _on_button_4_pressed() -> void:
-	class_change("archer")
-	$Button4.release_focus()

@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dxjiws2ai34r3" path="res://art/tiles/tilemap_32.png" id="1_kqhmq"]
 [ext_resource type="PackedScene" uid="uid://cuw7fymmodn3b" path="res://player.tscn" id="2_lxg2x"]
-[ext_resource type="PackedScene" uid="uid://dyuactdutwld2" path="res://dummy.tscn" id="3_5j8nl"]
+[ext_resource type="Script" path="res://scripts/player_manager.gd" id="2_pwcnq"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="4_n6uag"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dkp5t"]
@@ -120,15 +120,45 @@ tile_map_data = PackedByteArray("AAAEAAQAAgABAAEAAAAEAAUAAgAGAAAAAAAEAAYAAgAGAAE
 tile_set = SubResource("TileSet_8wvq3")
 
 [node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("2_pwcnq")
+player_scene = ExtResource("2_lxg2x")
 
-[node name="Dummy" parent="PlayerManager" instance=ExtResource("3_5j8nl")]
-position = Vector2(239, 330)
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager"]
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://classes/hero.tscn", "res://classes/demon.tscn", "res://classes/pyromancer.tscn", "res://classes/archer.tscn", "res://classes/misc/arrow.tscn", "res://classes/misc/fireball.tscn")
+spawn_path = NodePath("..")
 
-[node name="Player" parent="PlayerManager" instance=ExtResource("2_lxg2x")]
-position = Vector2(239, 257)
+[node name="Player1Spawn" type="Marker2D" parent="PlayerManager"]
+position = Vector2(240, 330)
+
+[node name="Player2Spawn" type="Marker2D" parent="PlayerManager"]
+position = Vector2(1040, 330)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Host" type="Button" parent="PlayerManager/VBoxContainer"]
+layout_mode = 2
+text = "HOST GAME"
+
+[node name="Join" type="Button" parent="PlayerManager/VBoxContainer"]
+layout_mode = 2
+text = "JOIN GAME"
 
 [node name="GameManager" type="Node" parent="."]
 process_mode = 3
 script = ExtResource("4_n6uag")
 
 [node name="UI" type="Node" parent="."]
+
+[connection signal="pressed" from="PlayerManager/VBoxContainer/Host" to="PlayerManager" method="host"]
+[connection signal="pressed" from="PlayerManager/VBoxContainer/Join" to="PlayerManager" method="join"]
