@@ -792,7 +792,7 @@ states/idle/position = Vector2(349, 100)
 states/run/node = SubResource("AnimationNodeBlendSpace2D_014y2")
 states/run/position = Vector2(487, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_fuuo2")]
-graph_offset = Vector2(-103, -26)
+graph_offset = Vector2(-94, 18)
 
 [node name="hero" type="Node2D"]
 script = ExtResource("1_1fpu4")
@@ -806,7 +806,7 @@ frame = 1
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
-collision_mask = 7
+collision_mask = 84
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_i36nm")

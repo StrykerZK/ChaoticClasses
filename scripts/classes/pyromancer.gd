@@ -24,14 +24,12 @@ func attack(index: float):
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
-			print("attack 1")
 			$ComboTimer.start()
 			spawn_projectile(player.attack_index)
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		2.0:
-			print("attack 2")
 			$ComboTimer.start()
 			spawn_projectile(player.attack_index)
 			await get_tree().create_timer(attack_2_length).timeout
@@ -39,9 +37,8 @@ func attack(index: float):
 			player.attack_index += 1.0
 		3.0:
 			player.can_dodge = false
-			print("attack 3")
 			spawn_projectile(player.attack_index)
-			$ComboTimer.wait_time = attack_3_length
+			$ComboTimer.wait_time = attack_3_length + 0.2
 			$ComboTimer.start()
 
 func spawn_projectile(attack: int):
@@ -67,6 +64,7 @@ func spawn_projectile(attack: int):
 		fireball.direction = fireball.position.direction_to(mouse_pos)
 		fireball.rotation = fireball.direction.angle()
 		fireball.velocity = fireball.direction * fireball.speed
+		fireball.damage = player.damage
 	else:
 		# Calculate angle offset
 		var start_angle = -60 / 2
@@ -83,6 +81,7 @@ func spawn_projectile(attack: int):
 			fireball.position = $Marker2D.global_position
 			fireball.rotation = angle_offset - PI/2
 			fireball.velocity = Vector2(0, -100).rotated(angle_offset)
+			fireball.damage = player.damage
 			
 			if fireball:
 				fireball.start_follow_timer()

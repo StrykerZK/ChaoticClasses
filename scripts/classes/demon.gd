@@ -24,13 +24,11 @@ func attack(index: float):
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
-			print("attack 1")
 			$ComboTimer.start()
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		2.0:
-			print("attack 2")
 			$ComboTimer.start()
 			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
@@ -38,7 +36,6 @@ func attack(index: float):
 		3.0:
 			player.damage = player.base_damage * 2
 			player.can_dodge = false
-			print("attack 3")
 			$ComboTimer.wait_time = attack_3_length
 			$ComboTimer.start()
 

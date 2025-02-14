@@ -120,14 +120,12 @@ func end_dodge():
 		dodge_on_cooldown()
 
 func dodge_on_cooldown():
-	print("Cooldown start")
 	can_dodge = false
 	await get_tree().create_timer(dodge_cooldown).timeout
 	while is_attacking:
 		await get_tree().create_timer(0.1).timeout # Wait for attack to finish
 	can_dodge = true
 	temp_count = dodge_count
-	print("Ready")
 
 func activate_i_frame(value: float):
 	$Hurtbox/HurtboxCollision.disabled = true
@@ -186,11 +184,8 @@ func class_change(class_title: String):
 	await get_tree().create_timer(2).timeout
 	is_paused = false
 
-func take_damage(source: Area2D):
-	if player_id == 1:
-		current_health -= StageManager.p2_damage
-	elif player_id == 2:
-		current_health -= StageManager.p1_damage
+func take_damage(damage: float):
+	pass
 
 func update_stats(stats: Array):
 	armor = stats[0]

@@ -42,17 +42,16 @@ func attack(index: float):
 		$ChargeTimer.wait_time = charge_1_time - charge_1_length
 		match index:
 			1.0:
-				print("Readying")
 				await get_tree().create_timer(ready_length).timeout
 				if early_shot == true:
 					early_shot = false
 					spawn_projectile(player.attack_index)
 				else:
 					can_shoot = true
-					print("Charging!")
 					$ChargeTimer.start()
 
 func charge_projectile():
+	can_shoot = false
 	match player.attack_index:
 		1.0:
 			if player.is_attacking:
@@ -70,9 +69,13 @@ func charge_projectile():
 			if player.is_attacking:
 				player.attack_index += 0.5
 				player.damage = player.base_damage * 4
+	if early_shot == true:
+		early_shot = false
+		spawn_projectile(player.attack_index)
+	else:
+		can_shoot = true
 
 func spawn_projectile(index: float):
-	
 	$ChargeTimer.stop()
 	
 	var mouse_pos = player.get_global_mouse_position()
@@ -83,6 +86,7 @@ func spawn_projectile(index: float):
 	arrow.direction = arrow.position.direction_to(mouse_pos)
 	arrow.rotation = arrow.direction.angle()
 	arrow.velocity = arrow.direction * arrow.speed
+	arrow.damage = player.damage
 	arrow.charge_arrow(index)
 	
 	can_shoot = false
@@ -91,6 +95,7 @@ func spawn_projectile(index: float):
 	player.is_attacking = false
 	player.attack_index = 1.0
 	player.can_dodge = true
+	player.damage = player.base_damage
 	early_shot = false
 	
 	# First arrow always calls previous arrow's damage

@@ -469,7 +469,7 @@ height = 38.0
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 61
+collision_mask = 33
 script = ExtResource("1_ostsg")
 
 [node name="Base" type="Node2D" parent="."]
@@ -483,7 +483,7 @@ frame = 10
 
 [node name="Hitbox" type="Area2D" parent="Base"]
 collision_layer = 8
-collision_mask = 39
+collision_mask = 84
 
 [node name="HitboxCollision" type="CollisionShape2D" parent="Base/Hitbox"]
 position = Vector2(22, 3)
@@ -517,8 +517,8 @@ zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
 
 [node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 44
+collision_layer = 16
+collision_mask = 76
 
 [node name="HurtboxCollision" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 3)
@@ -567,7 +567,6 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[connection signal="area_entered" from="Hurtbox" to="." method="take_damage"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
 [connection signal="pressed" from="Button3" to="." method="_on_button_3_pressed"]
