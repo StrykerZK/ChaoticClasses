@@ -132,32 +132,11 @@ player_scene = ExtResource("2_lxg2x")
 _spawnable_scenes = PackedStringArray("res://player.tscn", "res://classes/hero.tscn", "res://classes/demon.tscn", "res://classes/pyromancer.tscn", "res://classes/archer.tscn", "res://classes/misc/arrow.tscn", "res://classes/misc/fireball.tscn")
 spawn_path = NodePath("../PlayerSpawn")
 
-[node name="Player1Spawn" type="Marker2D" parent="PlayerManager"]
+[node name="Player1Spawn" type="Marker2D" parent="PlayerManager" groups=["spawnpoints"]]
 position = Vector2(240, 330)
 
-[node name="Player2Spawn" type="Marker2D" parent="PlayerManager"]
-position = Vector2(1040, 330)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerManager"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Host" type="Button" parent="PlayerManager/VBoxContainer"]
-layout_mode = 2
-text = "HOST GAME"
-
-[node name="Join" type="Button" parent="PlayerManager/VBoxContainer"]
-layout_mode = 2
-text = "JOIN GAME"
+[node name="Player2Spawn" type="Marker2D" parent="PlayerManager" groups=["spawnpoints"]]
+position = Vector2(312, 330)
 
 [node name="GameManager" type="Node" parent="."]
 process_mode = 3
@@ -183,6 +162,4 @@ process_mode = 3
 [node name="MainSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_mjd8e")
 
-[connection signal="pressed" from="PlayerManager/VBoxContainer/Host" to="PlayerManager" method="host"]
-[connection signal="pressed" from="PlayerManager/VBoxContainer/Join" to="PlayerManager" method="join"]
 [connection signal="pressed" from="GameManager/Button" to="GameManager" method="_on_button_pressed"]

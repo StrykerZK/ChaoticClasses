@@ -35,6 +35,7 @@ func handle_input():
 			else:
 				early_shot = true
 
+@rpc("any_peer","call_local")
 func attack(index: float):
 	player.can_dodge = false
 	if !player.is_dodging:
@@ -50,6 +51,7 @@ func attack(index: float):
 					can_shoot = true
 					$ChargeTimer.start()
 
+@rpc("any_peer","call_local")
 func charge_projectile():
 	can_shoot = false
 	match player.attack_index:
@@ -75,6 +77,7 @@ func charge_projectile():
 	else:
 		can_shoot = true
 
+@rpc("any_peer","call_local")
 func spawn_projectile(index: float):
 	$ChargeTimer.stop()
 	

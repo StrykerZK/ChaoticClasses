@@ -36,6 +36,8 @@ version_control/autoload_on_startup=true
 environment=""
 projectiles=""
 dummy=""
+spawnpoints=""
+players=""
 
 [input]
 

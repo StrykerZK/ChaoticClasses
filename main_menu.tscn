@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dj1u1l2gmtbga"]
+[gd_scene load_steps=14 format=3 uid="uid://dj1u1l2gmtbga"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_uioiv"]
 [ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://main.tscn" id="2_eagnm"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ch8jwip7mklxs" path="res://art/ui/menu_buttons.png" id="5_yc51r"]
 [ext_resource type="StyleBox" uid="uid://bjixhb1vmhjwa" path="res://art/ui/button_texture.tres" id="6_32sxr"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
+[ext_resource type="Script" path="res://scripts/multiplayer_manager.gd" id="8_vv6tx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bdo5l"]
 texture = ExtResource("3_uwo5s")
@@ -120,26 +121,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_vv6tx")
+game_scene = ExtResource("2_eagnm")
+
+[node name="Start" type="Button" parent="PlayMenu"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 87.0
+offset_right = 433.0
+offset_bottom = 232.0
+theme = ExtResource("5_ojkxa")
+text = "Start"
 
 [node name="NameInput" type="LineEdit" parent="PlayMenu"]
 layout_mode = 0
 offset_left = 70.0
-offset_top = 88.0
+offset_top = 200.0
 offset_right = 433.0
-offset_bottom = 233.0
+offset_bottom = 345.0
 theme = SubResource("Theme_1my30")
 placeholder_text = "Enter Name..."
 alignment = 1
 max_length = 12
-
-[node name="Solo" type="Button" parent="PlayMenu"]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 198.0
-offset_right = 434.0
-offset_bottom = 343.0
-theme = ExtResource("5_ojkxa")
-text = "Solo"
 
 [node name="Host" type="Button" parent="PlayMenu"]
 layout_mode = 0
@@ -195,3 +198,8 @@ max_length = 8
 [connection signal="pressed" from="TitleMenu/Play" to="." method="start_game"]
 [connection signal="pressed" from="TitleMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="TitleMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PlayMenu/Start" to="PlayMenu" method="_on_start_button_pressed"]
+[connection signal="text_changed" from="PlayMenu/NameInput" to="PlayMenu" method="_on_name_input_text_changed"]
+[connection signal="pressed" from="PlayMenu/Host" to="PlayMenu" method="_on_host_pressed"]
+[connection signal="pressed" from="PlayMenu/Join" to="PlayMenu" method="join"]
+[connection signal="pressed" from="PlayMenu/Back" to="PlayMenu" method="_on_back_pressed"]

@@ -19,6 +19,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+@rpc("any_peer","call_local")
 func attack(index: float):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer

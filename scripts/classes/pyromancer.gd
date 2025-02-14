@@ -19,6 +19,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+@rpc("any_peer","call_local")
 func attack(index: float):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
@@ -41,6 +42,7 @@ func attack(index: float):
 			$ComboTimer.wait_time = attack_3_length + 0.2
 			$ComboTimer.start()
 
+@rpc("any_peer","call_local")
 func spawn_projectile(attack: int):
 	var spawn_time = 0.3
 	var mouse_pos = player.get_global_mouse_position()
