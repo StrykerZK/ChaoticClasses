@@ -35,7 +35,8 @@ func handle_input():
 		if Input.is_action_just_released("attack"):
 			if can_shoot:
 				mouse_pos = get_global_mouse_position()
-				spawn_projectile.rpc(player.attack_index, mouse_pos)
+				StageManager.set_target.rpc(player.player_id,mouse_pos)
+				spawn_projectile.rpc(player.attack_index)
 			else:
 				early_shot = true
 
@@ -51,7 +52,8 @@ func attack(index: float):
 				if early_shot == true:
 					early_shot = false
 					mouse_pos = get_global_mouse_position()
-					spawn_projectile.rpc(player.attack_index, mouse_pos)
+					StageManager.set_target.rpc(player.player_id,mouse_pos)
+					spawn_projectile.rpc(player.attack_index)
 				else:
 					can_shoot = true
 					$ChargeTimer.start()
@@ -79,18 +81,19 @@ func charge_projectile():
 	if early_shot == true:
 		early_shot = false
 		mouse_pos = get_global_mouse_position()
-		spawn_projectile.rpc(player.attack_index, mouse_pos)
+		StageManager.set_target.rpc(player.player_id)
+		spawn_projectile.rpc(player.attack_index)
 	else:
 		can_shoot = true
 
 @rpc("any_peer","call_local")
-func spawn_projectile(index: float, target):
+func spawn_projectile(index: float):
 	$ChargeTimer.stop()
 	
-	if is_multiplayer_authority():
-		mouse_pos = get_global_mouse_position()
+	if player.player_id == 1:
+		mouse_pos = StageManager.p1_target
 	else:
-		mouse_pos = target
+		mouse_pos = StageManager.p2_target
 	
 	var arrow = arrow_scene.instantiate()
 	get_tree().current_scene.add_child(arrow)

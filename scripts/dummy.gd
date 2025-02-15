@@ -9,6 +9,7 @@ var dmg_reduction = 0
 
 func _ready() -> void:
 	dmg_reduction = 1 - (armor /  10)
+	$AnimatedSprite2D.play("idle")
 
 func _process(delta: float) -> void:
 	$DPS.text = "DPS: " + str(dps)

@@ -18,41 +18,40 @@ func _ready() -> void:
 	
 	get_animation_lengths()
 	
-	mouse_pos = get_global_mouse_position()
+	mouse_pos = player.mouse_pos
 
 func _process(delta: float) -> void:
 	pass
 
 func attack(index: float):
-	mouse_pos = get_global_mouse_position()
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
 			$ComboTimer.start()
-			spawn_projectile.rpc(player.attack_index, mouse_pos)
+			spawn_projectile.rpc(player.attack_index)
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		2.0:
 			$ComboTimer.start()
-			spawn_projectile.rpc(player.attack_index, mouse_pos)
+			spawn_projectile.rpc(player.attack_index)
 			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		3.0:
 			player.can_dodge = false
-			spawn_projectile.rpc(player.attack_index, mouse_pos)
+			spawn_projectile.rpc(player.attack_index)
 			$ComboTimer.wait_time = attack_3_length + 0.2
 			$ComboTimer.start()
 
 @rpc("any_peer","call_local")
-func spawn_projectile(attack: int, target):
+func spawn_projectile(attack: int):
 	
-	if is_multiplayer_authority():
-		mouse_pos = get_global_mouse_position()
+	if player.player_id == 1:
+		mouse_pos = StageManager.p1_target
 	else:
-		mouse_pos = target
+		mouse_pos = StageManager.p2_target
 	
 	var spawn_time = 0.3
 	match attack:

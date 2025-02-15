@@ -718,58 +718,22 @@ advance_condition = &"is_attacking"
 advance_mode = 2
 advance_condition = &"is_running"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jhnuf"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"is_dodging"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gyaw1"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_eea0a")
-states/attack/position = Vector2(416, 7)
+states/attack/position = Vector2(563, 9)
 states/dodge/node = SubResource("AnimationNodeBlendSpace1D_bmfui")
-states/dodge/position = Vector2(416, 201)
+states/dodge/position = Vector2(563, 198)
 states/idle/node = SubResource("AnimationNodeBlendSpace2D_86tsb")
 states/idle/position = Vector2(349, 100)
 states/run/node = SubResource("AnimationNodeBlendSpace2D_014y2")
 states/run/position = Vector2(487, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4")]
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_jhnuf")]
 graph_offset = Vector2(-68, -23)
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ai07y"]
-properties/0/path = NodePath("Sprite2D:flip_h")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Sprite2D:frame")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("AnimationTree:parameters/conditions/idle")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("AnimationTree:parameters/conditions/is_attacking")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("AnimationTree:parameters/conditions/is_dodging")
-properties/4/spawn = true
-properties/4/replication_mode = 1
-properties/5/path = NodePath("AnimationTree:parameters/conditions/is_running")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath("AnimationTree:parameters/attack/blend_position")
-properties/6/spawn = true
-properties/6/replication_mode = 1
-properties/7/path = NodePath("AnimationTree:parameters/dodge/blend_position")
-properties/7/spawn = true
-properties/7/replication_mode = 1
-properties/8/path = NodePath("AnimationTree:parameters/idle/blend_position")
-properties/8/spawn = true
-properties/8/replication_mode = 1
-properties/9/path = NodePath("AnimationTree:parameters/run/blend_position")
-properties/9/spawn = true
-properties/9/replication_mode = 1
-properties/10/path = NodePath("Hitbox/CollisionShape2D:disabled")
-properties/10/spawn = true
-properties/10/replication_mode = 1
-properties/11/path = NodePath("Hitbox/CollisionShape2D:position")
-properties/11/spawn = true
-properties/11/replication_mode = 1
-properties/12/path = NodePath("Hitbox/CollisionShape2D:scale")
-properties/12/spawn = true
-properties/12/replication_mode = 1
 
 [node name="pyromancer" type="Node2D"]
 script = ExtResource("1_1qsv3")
@@ -813,8 +777,5 @@ parameters/run/blend_position = Vector2(-0.937173, 0.817391)
 
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(24, -4)
-
-[node name="ClassSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_ai07y")
 
 [connection signal="timeout" from="ComboTimer" to="." method="_on_combo_timer_timeout"]
