@@ -1,8 +1,9 @@
-[gd_scene load_steps=56 format=3 uid="uid://dpn1uarsdks0w"]
+[gd_scene load_steps=57 format=3 uid="uid://dpn1uarsdks0w"]
 
 [ext_resource type="Script" path="res://scripts/classes/archer.gd" id="1_jrsw8"]
 [ext_resource type="Texture2D" uid="uid://dysv50fd30o74" path="res://art/player/archer_sprite_sheet.png" id="1_s1fos"]
 [ext_resource type="PackedScene" uid="uid://bv8fshqu3ehhy" path="res://classes/misc/arrow.tscn" id="2_4rt7k"]
+[ext_resource type="Script" path="res://scripts/classes/misc/archer_hitbox.gd" id="4_6wuos"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1uyvq"]
 size = Vector2(22, 46)
@@ -709,6 +710,7 @@ frame = 1
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 84
+script = ExtResource("4_6wuos")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(13, -1)

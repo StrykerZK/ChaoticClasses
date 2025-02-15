@@ -1,8 +1,9 @@
-[gd_scene load_steps=52 format=3 uid="uid://dypflun7yn05e"]
+[gd_scene load_steps=53 format=3 uid="uid://dypflun7yn05e"]
 
 [ext_resource type="Script" path="res://scripts/classes/pyromancer.gd" id="1_1qsv3"]
 [ext_resource type="Texture2D" uid="uid://cit7m8i11ie2n" path="res://art/player/pyromancer_sprite_sheet.png" id="2_0qbia"]
 [ext_resource type="PackedScene" uid="uid://bve17go2qhj4t" path="res://classes/misc/fireball.tscn" id="2_ty1lp"]
+[ext_resource type="Script" path="res://scripts/classes/misc/pyro_hitbox.gd" id="4_cf2yf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2ciw"]
 size = Vector2(22, 46)
@@ -749,6 +750,7 @@ frame = 1
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 84
+script = ExtResource("4_cf2yf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(13, -1)

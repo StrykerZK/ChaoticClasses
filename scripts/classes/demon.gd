@@ -22,6 +22,7 @@ func _process(delta: float) -> void:
 func attack(index: float):
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
+	$Hitbox.damage = player.damage
 	match index:
 		1.0:
 			$ComboTimer.start()
@@ -35,6 +36,7 @@ func attack(index: float):
 			player.attack_index += 1.0
 		3.0:
 			player.damage = player.base_damage * 2
+			$Hitbox.damage = player.damage
 			player.can_dodge = false
 			$ComboTimer.wait_time = attack_3_length
 			$ComboTimer.start()

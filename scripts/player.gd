@@ -3,6 +3,8 @@ extends CharacterBody2D
 @export var current_class = ""
 @export var player_id: int = 1
 
+signal dead(int)
+
 var max_health: float = 100
 var current_health: float
 var armor: float = 0
@@ -18,6 +20,8 @@ var dodge_speed = 0.0
 @onready var anim_player: AnimationPlayer
 @onready var class_synchronizer: MultiplayerSynchronizer
 @onready var player_manager: Node
+@onready var HP_bar: ProgressBar
+@onready var hitbox: Area2D
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
@@ -42,6 +46,8 @@ var combo_timer = 1.0
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
+	dead.connect(Callable($/root/Main/GameManager,"game_over"))
+	dead.connect(Callable($/root/Main/UI,"game_over"))
 	set_multiplayer_authority(int(str(name)))
 
 func _ready() -> void:
@@ -51,6 +57,9 @@ func _ready() -> void:
 	current_class = get_child(0).name
 	class_synchronizer = $ClassSynchronizer
 	$PlayerSynchronizer.root_path = get_path()
+	HP_bar = get_node("UI/HPBar")
+	hitbox = get_node("Base/Hitbox")
+	hitbox.player_id = player_id
 	initialize_class_children()
 	
 	mouse_pos = get_global_mouse_position()
@@ -63,7 +72,6 @@ func _ready() -> void:
 	# Set up camera for each
 	if is_multiplayer_authority():
 		create_camera()
-		$Label.show()
 
 func _process(delta: float) -> void:
 	if !is_paused:
@@ -74,7 +82,6 @@ func _process(delta: float) -> void:
 		
 			if is_instance_valid(anim_tree):
 				update_animation_parameters() # Update AnimationTree
-				
 				
 		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
@@ -107,7 +114,7 @@ func handle_input():
 				attack(attack_index)
 			else:
 				attack_method.call(attack_index)
-				StageManager.set_target.rpc(player_id,get_global_mouse_position())
+				StageManager.set_target.rpc(player_id,mouse_pos)
 
 func attack(index: float):
 	is_attacking = true
@@ -234,8 +241,19 @@ func transform_done():
 	initialize_class_children()
 	#$PlayerSynchronizer.root_path = get_path()
 
-func take_damage(damage: float):
-	pass
+@rpc("any_peer","call_local")
+func take_damage(incoming_dmg: float):
+	var dmg_reduction = 1 - (armor /  10)
+	var new_dmg = incoming_dmg * dmg_reduction
+	current_health -= new_dmg
+	HP_bar.value = current_health
+	if current_health <= 0:
+		die()
+
+func die():
+	dead.emit(player_id)
+	reset_systems()
+	queue_free()
 
 func update_stats(stats: Array):
 	armor = stats[0]
@@ -247,19 +265,19 @@ func update_stats(stats: Array):
 	dodge_count = stats[5]
 	temp_count = dodge_count
 	
-	print("Armor:" + str(armor))
-	print("Damage:" + str(base_damage))
-	print("Speed" + str(speed))
-	print("Dodge Mult: " + str(dodge_speed_mult))
-	print("Dodge Duration: " + str(dodge_duration))
-	print("Dodge Count: " + str(dodge_count))
+	#print("Armor:" + str(armor))
+	#print("Damage:" + str(base_damage))
+	#print("Speed" + str(speed))
+	#print("Dodge Mult: " + str(dodge_speed_mult))
+	#print("Dodge Duration: " + str(dodge_duration))
+	#print("Dodge Count: " + str(dodge_count))
 
 func reset_systems():
 	is_dodging = false
 	can_dodge = true
 	is_attacking = false
 	attack_index = 1
-	if get_child(0).get_node("ComboTimer"):
+	if is_instance_valid(get_child(0).get_node("ComboTimer")):
 		get_child(0).get_node("ComboTimer").stop()
 	$DodgeTimer.stop()
 	$IFrameTimer.stop()
@@ -274,12 +292,13 @@ func initialize_class_children():
 	anim_tree = get_node(current_class + "/AnimationTree")
 	anim_tree.active = true
 	anim_player = get_node(current_class + "/AnimationPlayer")
+	hitbox = get_node(current_class + "/Hitbox")
+	hitbox.player_id = player_id
 	class_synchronizer.root_path = get_child(0).get_path()
 	class_synchronizer.public_visibility = true
 	class_synchronizer.process_mode = 3
 	if current_class != "Base":
 		attack_method = Callable(get_node(current_class), "attack")
-
 
 func create_camera():
 	var camera = Camera2D.new()

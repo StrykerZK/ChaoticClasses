@@ -1,7 +1,8 @@
-[gd_scene load_steps=51 format=3 uid="uid://c7v831l47f44t"]
+[gd_scene load_steps=52 format=3 uid="uid://c7v831l47f44t"]
 
 [ext_resource type="Script" path="res://scripts/classes/demon.gd" id="1_7go43"]
 [ext_resource type="Texture2D" uid="uid://ctjoyp6o01q2y" path="res://art/player/demon_sprite_sheet.png" id="1_va33l"]
+[ext_resource type="Script" path="res://scripts/classes/misc/demon_hitbox.gd" id="3_dywx0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6n02"]
 size = Vector2(68, 56)
@@ -806,6 +807,7 @@ vframes = 4
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 84
+script = ExtResource("3_dywx0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(4, 8)

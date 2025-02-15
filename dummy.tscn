@@ -78,7 +78,7 @@ armor = 0.0
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_0oy45")
 animation = &"idle"
-frame_progress = 0.701332
+frame_progress = 0.444371
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)

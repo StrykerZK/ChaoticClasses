@@ -43,6 +43,8 @@ func class_change():
 	# Randomize and get two new classes
 	var class_title_1 = ClassManager.get_random_class(player_1.player_id)
 	var class_title_2 = ClassManager.get_random_class(player_2.player_id)
+	while class_title_1 == class_title_2:
+		class_title_2 = ClassManager.get_random_class(player_2.player_id)
 	
 	# Run class_change() method in players
 	player_1.class_change.rpc(class_title_1, transform_time)
@@ -78,6 +80,9 @@ func update_player_class(id, class_title):
 	else:
 		print("Doesn't Exist")
 		return
+
+func game_over(id):
+	$SwapTimer.stop()
 
 func _on_swap_timer_timeout() -> void:
 	class_change()

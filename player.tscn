@@ -1,7 +1,9 @@
-[gd_scene load_steps=51 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=53 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
+[ext_resource type="Script" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
+[ext_resource type="Theme" uid="uid://c2sqprx7vguo8" path="res://art/ui/HP_bar.tres" id="4_r7ryu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00hg6"]
 size = Vector2(30, 10)
@@ -671,6 +673,27 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath(".:damage")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:mouse_pos")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:last_mouse_pos")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:current_health")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("UI/HPBar:value")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath(".:armor")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath(".:base_damage")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath(".:player_id")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ndcyi"]
 properties/0/path = NodePath("Sprite2D:flip_h")
@@ -734,6 +757,7 @@ frame = 1
 [node name="Hitbox" type="Area2D" parent="Base"]
 collision_layer = 8
 collision_mask = 84
+script = ExtResource("3_xqdpe")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Base/Hitbox"]
 shape = SubResource("RectangleShape2D_00hg6")
@@ -792,6 +816,36 @@ wait_time = 2.0
 one_shot = true
 
 [node name="TransformTimer" type="Timer" parent="."]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = 28.0
+offset_right = 34.0
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_r7ryu")
+value = 100.0
 
 [connection signal="timeout" from="Base/ComboTimer" to="." method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]

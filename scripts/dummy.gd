@@ -15,6 +15,7 @@ func _process(delta: float) -> void:
 	$DPS.text = "DPS: " + str(dps)
 	$LastDamage.text = "Last Dmg: " + str(last_dmg)
 
+@rpc("any_peer","call_local")
 func take_damage(damage: float):
 	last_dmg = damage * dmg_reduction
 	$DPSTimer.start()
