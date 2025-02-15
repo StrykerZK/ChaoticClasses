@@ -23,7 +23,7 @@ func host():
 		return
 	
 	# Add Compression if needed
-	# peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
+	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 	
 	multiplayer.multiplayer_peer = peer
 	print("Hosted successfully!")
@@ -33,7 +33,7 @@ func join():
 	multiplayer.multiplayer_peer = peer
 	
 	# Add Compression if needed
-	# peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
+	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 
 func peer_connected(pid):
 	print("Player " + str(pid) + " has joined!")
@@ -48,23 +48,24 @@ func peer_disconnected(pid):
 
 func connected_to_server():
 	print("Connected to Server!")
-	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id())
+	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id(), "Base")
 
 func connection_failed():
 	pass
 
 @rpc("any_peer")
-func send_player_information(name, id):
+func send_player_information(name, id, class_title):
 	if !StageManager.player_list.has(id):
 		StageManager.player_list[id] = {
 			"name": name,
 			"id": id,
+			"class": class_title
 		}
 	if multiplayer.is_server():
 		for i in StageManager.player_list:
-			send_player_information.rpc(StageManager.player_list[i].name, i)
+			send_player_information.rpc(StageManager.player_list[i].name, i, StageManager.player_list[i].class)
 
-@rpc("any_peer","call_local")
+@rpc("call_local","reliable")
 func start_game():
 	get_tree().change_scene_to_packed(game_scene)
 
@@ -86,8 +87,7 @@ func _on_name_input_text_changed(new_text: String):
 		$Host.disabled = true
 		$Join.disabled = true
 
-
 func _on_host_pressed() -> void:
 	host()
-	send_player_information($NameInput.text, multiplayer.get_unique_id())
+	send_player_information($NameInput.text, multiplayer.get_unique_id(), "Base")
 	$Start.show()

@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var player_id = 2
 
 var dps: float = 0
+var last_dmg: float = 0
 var dmg_reduction = 0
 
 func _ready() -> void:
@@ -11,12 +12,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	$DPS.text = "DPS: " + str(dps)
+	$LastDamage.text = "Last Dmg: " + str(last_dmg)
 
 func take_damage(damage: float):
-	var new_dmg = damage * dmg_reduction
+	last_dmg = damage * dmg_reduction
 	$DPSTimer.start()
-	$LastDamage.text = "Last Dmg: " + str(new_dmg)
-	dps += new_dmg
+	dps += last_dmg
 
 
 func reset_dps():

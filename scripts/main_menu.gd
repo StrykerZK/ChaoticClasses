@@ -2,7 +2,7 @@ extends Control
 
 @export var main_game: PackedScene
 
-func _enter_tree() -> void:
+func _ready() -> void:
 	$TitleMenu.show()
 	$PlayMenu.hide()
 
@@ -15,7 +15,7 @@ func start_game() -> void:
 
 
 func _on_settings_pressed() -> void:
-	pass # Replace with function body.
+	pass
 
 
 func _on_quit_pressed() -> void:

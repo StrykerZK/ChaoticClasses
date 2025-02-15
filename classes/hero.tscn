@@ -1,7 +1,8 @@
-[gd_scene load_steps=52 format=3 uid="uid://cxeud2sgthd17"]
+[gd_scene load_steps=53 format=3 uid="uid://cxeud2sgthd17"]
 
 [ext_resource type="Script" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bb3xku23khouf" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
+[ext_resource type="Script" path="res://scripts/classes/misc/hero_hitbox.gd" id="3_4bifk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i36nm"]
 size = Vector2(17, 42)
@@ -834,9 +835,6 @@ properties/11/replication_mode = 1
 properties/12/path = NodePath("AnimationTree:parameters/run/blend_position")
 properties/12/spawn = true
 properties/12/replication_mode = 1
-properties/13/path = NodePath("ComboTimer:wait_time")
-properties/13/spawn = true
-properties/13/replication_mode = 1
 
 [node name="hero" type="Node2D"]
 script = ExtResource("1_1fpu4")
@@ -851,6 +849,7 @@ frame = 1
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 84
+script = ExtResource("3_4bifk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_i36nm")

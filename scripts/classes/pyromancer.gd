@@ -10,43 +10,51 @@ var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
 var combo_timer = 1.5
 
+var mouse_pos
+
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
 	
 	get_animation_lengths()
+	
+	mouse_pos = get_global_mouse_position()
 
 func _process(delta: float) -> void:
 	pass
 
-@rpc("any_peer","call_local")
 func attack(index: float):
+	mouse_pos = get_global_mouse_position()
 	player.is_attacking = true
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
 			$ComboTimer.start()
-			spawn_projectile(player.attack_index)
+			spawn_projectile.rpc(player.attack_index, mouse_pos)
 			await get_tree().create_timer(attack_1_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		2.0:
 			$ComboTimer.start()
-			spawn_projectile(player.attack_index)
+			spawn_projectile.rpc(player.attack_index, mouse_pos)
 			await get_tree().create_timer(attack_2_length).timeout
 			player.is_attacking = false
 			player.attack_index += 1.0
 		3.0:
 			player.can_dodge = false
-			spawn_projectile(player.attack_index)
+			spawn_projectile.rpc(player.attack_index, mouse_pos)
 			$ComboTimer.wait_time = attack_3_length + 0.2
 			$ComboTimer.start()
 
 @rpc("any_peer","call_local")
-func spawn_projectile(attack: int):
-	var spawn_time = 0.3
-	var mouse_pos = player.get_global_mouse_position()
+func spawn_projectile(attack: int, target):
 	
+	if is_multiplayer_authority():
+		mouse_pos = get_global_mouse_position()
+	else:
+		mouse_pos = target
+	
+	var spawn_time = 0.3
 	match attack:
 		1.0:
 			spawn_time = attack_1_length / 2
@@ -67,6 +75,7 @@ func spawn_projectile(attack: int):
 		fireball.rotation = fireball.direction.angle()
 		fireball.velocity = fireball.direction * fireball.speed
 		fireball.damage = player.damage
+		fireball.player_id = player.player_id
 	else:
 		# Calculate angle offset
 		var start_angle = -60 / 2
@@ -81,9 +90,11 @@ func spawn_projectile(attack: int):
 			
 			# Set projectile position and direction
 			fireball.position = $Marker2D.global_position
+			fireball.mouse_pos = mouse_pos
 			fireball.rotation = angle_offset - PI/2
 			fireball.velocity = Vector2(0, -100).rotated(angle_offset)
 			fireball.damage = player.damage
+			fireball.player_id = player.player_id
 			
 			if fireball:
 				fireball.start_follow_timer()

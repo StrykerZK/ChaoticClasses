@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var current_class = ""
-@export var player_id = 1
+@export var player_id: int = 1
 
 var max_health: float = 100
 var current_health: float
@@ -16,7 +16,7 @@ var dodge_speed = 0.0
 
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
-@onready var game_manager: Node
+@onready var class_synchronizer: MultiplayerSynchronizer
 @onready var player_manager: Node
 
 var direction: Vector2 = Vector2.ZERO
@@ -38,35 +38,38 @@ var mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
 func _enter_tree() -> void:
+	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
 	set_multiplayer_authority(int(str(name)))
-	game_manager = get_node("/root/Main/GameManager")
-	player_manager = get_node("/root/Main/PlayerManager")
 
 func _ready() -> void:
-	player_id = name
+	player_manager = get_node("/root/Main/PlayerManager")
+	player_id = int(str(name))
 	
 	current_class = get_child(0).name
-	anim_tree = get_node(current_class + "/AnimationTree")
-	anim_tree.active = true
-	anim_player = get_node(current_class + "/AnimationPlayer")
+	initialize_class_children()
+	$PlayerSynchronizer.root_path = get_path()
+	
 	mouse_pos = get_global_mouse_position()
 	
 	$DodgeTimer.wait_time = dodge_duration
 	dodge_speed = speed * dodge_speed_mult
 	current_health = max_health
 	temp_count = dodge_count
+	# Set up camera for each
+	if is_multiplayer_authority():
+		create_camera()
+		$Label.show()
 
 func _process(delta: float) -> void:
-	if !is_multiplayer_authority():
-		return
-		
 	if !is_paused:
-		handle_input() # Input data
-		move_and_slide() # Character movement
-	
-		if is_instance_valid(anim_tree):
-			update_animation_parameters() # Update AnimationTree
-	
+		if is_multiplayer_authority():
+			handle_input() # Input data
+		
+			move_and_slide() # Character movement
+		
+			if is_instance_valid(anim_tree):
+				update_animation_parameters() # Update AnimationTree
+		$Label.position = get_global_mouse_position()
 		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
 func handle_input():
@@ -173,23 +176,27 @@ func class_change(class_title: String, transform_time: float):
 	reset_systems()
 	
 	# Clear current class node
-	get_node(current_class).queue_free()
+	get_child(0).queue_free()
 	
 	current_class = class_title # Change current class ref
+	
+	# Instantiate new class
+	var class_node = load("res://classes/" + class_title + ".tscn").instantiate()
+	
+	# Add new class node as child
+	add_child(class_node)
+	move_child(class_node,0)
 	
 	# Update stats to new class
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
 	
-	$TransformTimer.wait_time = transform_time
-	$TransformTimer.start()
+	initialize_class_children()
 
 func transform_done():
 	# Set new class's children nodes and methods
-	anim_tree = get_node(current_class + "/AnimationTree")
-	anim_tree.active = true
-	anim_player = get_node(current_class + "/AnimationPlayer")
-	attack_method = Callable(get_node(current_class), "attack")
+	initialize_class_children()
+	$PlayerSynchronizer.root_path = get_path()
 
 func take_damage(damage: float):
 	pass
@@ -224,3 +231,25 @@ func reset_systems():
 func toggle_pause(state):
 	is_paused = state
 	print("Paused: " + str(is_paused))
+
+func initialize_class_children():
+	anim_tree = get_node(current_class + "/AnimationTree")
+	anim_tree.active = true
+	anim_player = get_node(current_class + "/AnimationPlayer")
+	class_synchronizer = get_node(current_class + "/ClassSynchronizer")
+	class_synchronizer.root_path = get_child(0).get_path()
+	if current_class != "Base":
+		attack_method = Callable(get_node(current_class), "attack")
+
+
+func create_camera():
+	var camera = Camera2D.new()
+	camera.enabled = true
+	camera.zoom = Vector2(1.5, 1.5)
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 5
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = get_viewport_rect().size.x
+	camera.limit_bottom = get_viewport_rect().size.y
+	add_child(camera)

@@ -15,23 +15,27 @@ var charge_2_time = 1.5
 var can_shoot = false
 var early_shot = false
 
+var mouse_pos
+
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
 	anim_tree = $AnimationTree
 	
 	get_animation_lengths()
+	
+	mouse_pos = get_global_mouse_position()
 
 func _process(delta: float) -> void:
 	if !player.is_paused and !player.is_dodging:
 		handle_input()
-	
 
 func handle_input():
 	if player.is_attacking:
 		if Input.is_action_just_released("attack"):
 			if can_shoot:
-				spawn_projectile(player.attack_index)
+				mouse_pos = get_global_mouse_position()
+				spawn_projectile.rpc(player.attack_index, mouse_pos)
 			else:
 				early_shot = true
 
@@ -46,7 +50,8 @@ func attack(index: float):
 				await get_tree().create_timer(ready_length).timeout
 				if early_shot == true:
 					early_shot = false
-					spawn_projectile(player.attack_index)
+					mouse_pos = get_global_mouse_position()
+					spawn_projectile.rpc(player.attack_index, mouse_pos)
 				else:
 					can_shoot = true
 					$ChargeTimer.start()
@@ -73,16 +78,20 @@ func charge_projectile():
 				player.damage = player.base_damage * 4
 	if early_shot == true:
 		early_shot = false
-		spawn_projectile(player.attack_index)
+		mouse_pos = get_global_mouse_position()
+		spawn_projectile.rpc(player.attack_index, mouse_pos)
 	else:
 		can_shoot = true
 
 @rpc("any_peer","call_local")
-func spawn_projectile(index: float):
+func spawn_projectile(index: float, target):
 	$ChargeTimer.stop()
 	
-	var mouse_pos = player.get_global_mouse_position()
-
+	if is_multiplayer_authority():
+		mouse_pos = get_global_mouse_position()
+	else:
+		mouse_pos = target
+	
 	var arrow = arrow_scene.instantiate()
 	get_tree().current_scene.add_child(arrow)
 	arrow.position = $Marker2D.global_position
@@ -90,6 +99,7 @@ func spawn_projectile(index: float):
 	arrow.rotation = arrow.direction.angle()
 	arrow.velocity = arrow.direction * arrow.speed
 	arrow.damage = player.damage
+	arrow.player_id = player.player_id
 	arrow.charge_arrow(index)
 	
 	can_shoot = false
@@ -101,7 +111,6 @@ func spawn_projectile(index: float):
 	player.damage = player.base_damage
 	early_shot = false
 	
-	# First arrow always calls previous arrow's damage
 
 
 func get_animation_lengths():

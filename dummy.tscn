@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dyuactdutwld2"]
+[gd_scene load_steps=6 format=3 uid="uid://dyuactdutwld2"]
 
 [ext_resource type="Script" path="res://scripts/dummy.gd" id="1_0aeea"]
 [ext_resource type="Texture2D" uid="uid://cfwt7x2hcpfva" path="res://art/player/2D_simple_sprite.png" id="2_l0mep"]
@@ -10,6 +10,14 @@ height = 38.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6hye3"]
 radius = 15.0
 height = 38.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_svbqe"]
+properties/0/path = NodePath(".:dps")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:last_dmg")
+properties/1/spawn = true
+properties/1/replication_mode = 1
 
 [node name="Dummy" type="CharacterBody2D" groups=["dummy"]]
 collision_layer = 2
@@ -58,5 +66,9 @@ vertical_alignment = 1
 [node name="DPSTimer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
+
+[node name="DummySynchronizer" type="MultiplayerSynchronizer" parent="."]
+process_mode = 3
+replication_config = SubResource("SceneReplicationConfig_svbqe")
 
 [connection signal="timeout" from="DPSTimer" to="." method="reset_dps"]

@@ -497,8 +497,12 @@ height = 38.0
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+properties/1/path = NodePath("Hurtbox/HurtboxCollision:disabled")
+properties/1/spawn = true
+properties/1/replication_mode = 1
 
 [node name="Player" type="CharacterBody2D" groups=["players"]]
+process_mode = 1
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_ostsg")
@@ -540,16 +544,11 @@ parameters/idle/blend_position = Vector2(0.267016, 0.448598)
 parameters/run/blend_position = Vector2(0.928447, -0.594673)
 
 [node name="ClassSynchronizer" type="MultiplayerSynchronizer" parent="Base"]
-process_mode = 4
 replication_config = SubResource("SceneReplicationConfig_ndcyi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_83ret")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(1.5, 1.5)
-position_smoothing_enabled = true
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 16
@@ -559,6 +558,9 @@ collision_mask = 76
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_cvhqj")
 debug_color = Color(0, 1, 0.12549, 0.419608)
+
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_vnws8")
 
 [node name="DodgeTimer" type="Timer" parent="."]
 one_shot = true
@@ -572,8 +574,14 @@ one_shot = true
 
 [node name="TransformTimer" type="Timer" parent="."]
 
-[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_vnws8")
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_right = 20.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 32
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]
