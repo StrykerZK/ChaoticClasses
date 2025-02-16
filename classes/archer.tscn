@@ -740,4 +740,6 @@ parameters/run/blend_position = Vector2(0, 0)
 [node name="ChargeTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="ChargeAnimTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="ChargeTimer" to="." method="charge_projectile"]

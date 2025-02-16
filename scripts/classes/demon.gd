@@ -7,6 +7,7 @@ var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
 var combo_timer = 1.5
+var type = "melee"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -21,6 +22,7 @@ func _process(delta: float) -> void:
 
 func attack(index: float):
 	player.is_attacking = true
+	$ComboTimer.stop()
 	$ComboTimer.wait_time = combo_timer
 	$Hitbox.damage = player.damage
 	match index:
@@ -43,11 +45,8 @@ func attack(index: float):
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
-	print("Attack 1: " + str(attack_1_length))
 	attack_2_length = anim_player.get_animation("attack_right_2").length
-	print("Attack 2: " + str(attack_2_length))
 	attack_3_length = anim_player.get_animation("attack_right_3").length
-	print("Attack 3: " + str(attack_3_length))
 
 func _on_combo_timer_timeout() -> void:
 	player.is_attacking = false

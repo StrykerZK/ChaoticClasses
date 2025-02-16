@@ -9,6 +9,7 @@ var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
 var combo_timer = 1.5
+var type = "ranged"
 
 var mouse_pos
 
@@ -18,13 +19,13 @@ func _ready() -> void:
 	
 	get_animation_lengths()
 	
-	mouse_pos = player.mouse_pos
 
 func _process(delta: float) -> void:
 	pass
 
 func attack(index: float):
 	player.is_attacking = true
+	$ComboTimer.stop()
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
@@ -46,15 +47,18 @@ func attack(index: float):
 			$ComboTimer.start()
 
 @rpc("any_peer","call_local")
-func spawn_projectile(attack: int):
+func spawn_projectile(index: float):
 	
+	#if is_multiplayer_authority():
+	#	mouse_pos = player.mouse_pos
+	#else:
 	if player.player_id == 1:
 		mouse_pos = StageManager.p1_target
-	else:
+	elif player.player_id != 1:
 		mouse_pos = StageManager.p2_target
 	
 	var spawn_time = 0.3
-	match attack:
+	match index:
 		1.0:
 			spawn_time = attack_1_length / 2
 			spawn_time += 0.05
@@ -65,7 +69,7 @@ func spawn_projectile(attack: int):
 			spawn_time= attack_3_length / 2
 			spawn_time += 0.05
 	
-	if attack != 3.0:
+	if index != 3.0:
 		var fireball = fireball_scene.instantiate()
 		await get_tree().create_timer(spawn_time).timeout
 		get_tree().current_scene.add_child(fireball)
@@ -100,11 +104,8 @@ func spawn_projectile(attack: int):
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
-	print("Attack 1: " + str(attack_1_length))
 	attack_2_length = anim_player.get_animation("attack_right_2").length
-	print("Attack 2: " + str(attack_2_length))
 	attack_3_length = anim_player.get_animation("attack_right_3").length
-	print("Attack 3: " + str(attack_3_length))
 
 func _on_combo_timer_timeout() -> void:
 	player.is_attacking = false

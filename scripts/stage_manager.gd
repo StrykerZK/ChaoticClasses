@@ -9,7 +9,7 @@ var p2_target: Vector2 = Vector2.ZERO
 func _ready():
 	pass
 
-@rpc("any_peer","call_local")
+@rpc("any_peer","call_local","reliable")
 func set_target(id, target):
 	if id == 1:
 		p1_target = target
