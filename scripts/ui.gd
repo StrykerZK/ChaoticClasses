@@ -1,13 +1,11 @@
-extends Control
-
-var screen_center: Vector2 = Vector2.ZERO
+extends CanvasLayer
 
 var player_1
 var player_2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	screen_center = Vector2(get_viewport_rect().size.x / 2,get_viewport_rect().size.y / 2)
+	get_viewport()
 	assign_players()
 
 
@@ -23,7 +21,7 @@ func game_over(id):
 		$Label.text = StageManager.player_list[1].player_name + " won!"
 	$Label.add_theme_font_size_override("font_size", 60)
 	$Label.add_theme_color_override("font_color",Color.MINT_CREAM)
-	$Label.position = screen_center - Vector2($Label.size.x / 2, $Label.size.y / 2)
+	$Label.position = $ScreenCenter.global_position - Vector2($Label.size.x / 2, $Label.size.y / 2)
 	$Label.show()
 	
 func assign_players():

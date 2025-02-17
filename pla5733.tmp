@@ -1,12 +1,11 @@
-[gd_scene load_steps=72 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=55 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
+[ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_l1kt2"]
 [ext_resource type="Script" path="res://scripts/classes/base.gd" id="2_u12l6"]
-[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_xoy6n"]
 [ext_resource type="Script" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
-[ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://player_2_info.tscn" id="4_5fsvi"]
-[ext_resource type="Texture2D" uid="uid://btdbrpkiwayqq" path="res://art/misc/transform-sheet.png" id="7_pl1nw"]
+[ext_resource type="Theme" uid="uid://c2sqprx7vguo8" path="res://art/ui/HP_bar.tres" id="4_r7ryu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00hg6"]
 size = Vector2(30, 10)
@@ -679,18 +678,24 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath(".:current_health")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:armor")
+properties/4/path = NodePath("UI/HPBar:value")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-properties/5/path = NodePath(".:base_damage")
+properties/5/path = NodePath(".:armor")
 properties/5/spawn = true
 properties/5/replication_mode = 1
-properties/6/path = NodePath(".:is_dodging")
+properties/6/path = NodePath(".:base_damage")
 properties/6/spawn = true
 properties/6/replication_mode = 1
-properties/7/path = NodePath(".:is_attacking")
+properties/7/path = NodePath(".:is_paused")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath(".:is_dodging")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath(".:is_attacking")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ndcyi"]
 properties/0/path = NodePath("Sprite2D:flip_h")
@@ -736,134 +741,12 @@ properties/13/path = NodePath("Hitbox/CollisionShape2D:scale")
 properties/13/spawn = true
 properties/13/replication_mode = 1
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ktfs"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_52tnk"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_aept2"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fdx5j"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cv68n"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(256, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_11di5"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(320, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_u7q3e"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(384, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jbc6g"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(448, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h8rpb"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(512, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wlbqr"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(576, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yoh8f"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(640, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_umoam"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(704, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n455t"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(768, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1hkud"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(832, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p0vl3"]
-atlas = ExtResource("7_pl1nw")
-region = Rect2(896, 0, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_4gxxo"]
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_4ktfs")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_52tnk")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_aept2")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_fdx5j")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_cv68n")
-}, {
-"duration": 0.1,
-"texture": SubResource("AtlasTexture_11di5")
-}, {
-"duration": 0.5,
-"texture": SubResource("AtlasTexture_u7q3e")
-}, {
-"duration": 0.15,
-"texture": SubResource("AtlasTexture_jbc6g")
-}, {
-"duration": 0.3,
-"texture": SubResource("AtlasTexture_h8rpb")
-}, {
-"duration": 0.1,
-"texture": SubResource("AtlasTexture_wlbqr")
-}, {
-"duration": 0.4,
-"texture": SubResource("AtlasTexture_yoh8f")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_umoam")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_n455t")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_1hkud")
-}, {
-"duration": 0.05,
-"texture": SubResource("AtlasTexture_p0vl3")
-}, {
-"duration": 1.0,
-"texture": null
-}],
-"loop": false,
-"name": &"transform",
-"speed": 1.0
-}]
-
 [node name="Player" type="CharacterBody2D" groups=["players"]]
 process_mode = 3
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_ostsg")
-p1_info_scene = ExtResource("3_xoy6n")
-p2_info_scene = ExtResource("4_5fsvi")
+pause_menu = ExtResource("2_l1kt2")
 
 [node name="Base" type="Node2D" parent="."]
 script = ExtResource("2_u12l6")
@@ -938,15 +821,39 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
-[node name="PlayerFX" type="AnimatedSprite2D" parent="."]
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_4gxxo")
-animation = &"transform"
-frame = 15
-frame_progress = 1.0
+[node name="TransformTimer" type="Timer" parent="."]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HPBar" type="ProgressBar" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = 28.0
+offset_right = 34.0
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_r7ryu")
+value = 100.0
 
 [connection signal="timeout" from="Base/ComboTimer" to="Base" method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]
+[connection signal="timeout" from="TransformTimer" to="." method="transform_done"]

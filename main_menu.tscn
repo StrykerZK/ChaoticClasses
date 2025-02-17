@@ -59,7 +59,6 @@ offset_bottom = 720.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_bdo5l")
 
 [node name="TitleMenu" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -118,6 +117,7 @@ theme = ExtResource("5_ojkxa")
 text = "Quit"
 
 [node name="PlayMenu" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

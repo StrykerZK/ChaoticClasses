@@ -8,6 +8,9 @@ var p2_target: Vector2 = Vector2.ZERO
 
 var game_state = ""
 
+var p1_stats = []
+var p2_stats = []
+
 func _ready():
 	pass
 
@@ -30,6 +33,27 @@ func get_player_2_name() -> Variant:
 		if keys != 1:
 			return keys.player_name
 	return player_name
-	
-#func update_player_stats(id: int, max: float, current: float, damage: float):
-#	pass
+
+func get_player_2_id() -> int:
+	var player_id = 1
+	for keys in player_list:
+		if keys != 1:
+			return keys
+	return player_id
+
+@rpc("any_peer","call_local")
+func update_player_stats(id: int, current_health: float):
+	if id == 1:
+		if p1_stats.is_empty():
+			p1_stats.append(current_health)
+		else:
+			p1_stats[0] = current_health
+	else:
+		if p2_stats.is_empty():
+			p2_stats.append(current_health)
+		else:
+			p2_stats[0] = current_health
+
+@rpc("any_peer","call_local")
+func update_game_state(state: String):
+	game_state = state

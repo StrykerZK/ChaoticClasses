@@ -16,7 +16,9 @@ func _ready():
 	player_manager = get_node("/root/Main/PlayerManager")
 	
 func _input(event: InputEvent) -> void:
-	if StageManager.game_state != "Starting Game" or StageManager.game_state != "Game Over":
+	if StageManager.game_state != "Starting Game"\
+	and StageManager.game_state != "Game Over"\
+	and StageManager.game_state != "Transforming":
 		if event.is_action_pressed("back"):
 			toggle_pause.rpc()
 
@@ -36,7 +38,9 @@ func assign_players():
 
 @rpc("any_peer")
 func class_change():
-	#toggle_pause.rpc()
+	toggle_pause.rpc()
+	
+	StageManager.update_game_state.rpc("Transforming")
 	
 	# Randomize and get two new classes
 	var class_title_1 = ClassManager.get_random_class(player_1.player_id)
@@ -44,23 +48,25 @@ func class_change():
 	while class_title_1 == class_title_2:
 		class_title_2 = ClassManager.get_random_class(player_2.player_id)
 	
-	# Run class_change() method in players
-	player_1.class_change.rpc(class_title_1, transform_time)
-	player_2.class_change.rpc(class_title_2, transform_time)
-	
 	# Update StageManager's player_list
 	update_player_class.rpc(player_1.player_id, class_title_1)
 	update_player_class.rpc(player_2.player_id, class_title_2)
 	
-	#toggle_pause.rpc()
+	# Run class_change() method in players
+	player_1.class_change.rpc(class_title_1)
+	player_2.class_change.rpc(class_title_2)
+	
 
 @rpc("any_peer","call_local")
 func toggle_pause():
 	# ADD CONDITIONS FOR OTHER PLAYER PAUSE, CLASS SWAPPING, ETC.
 	get_tree().paused = !get_tree().paused
 	is_paused = !is_paused
+	if is_instance_valid(player_1):
+		player_1.toggle_pause()
+	if is_instance_valid(player_2):
+		player_2.toggle_pause()
 	$SwapTimer.paused = !$SwapTimer.paused
-	paused.emit()
 
 func _on_button_pressed() -> void:
 	if multiplayer.is_server():
@@ -86,11 +92,7 @@ func game_start():
 func game_over(id):
 	$SwapTimer.stop()
 	await get_tree().create_timer(4).timeout
-	if id == 1:
-		player_2.is_paused = true
-	else:
-		player_1.is_paused = true
-	
+	toggle_pause()
 
 func _on_swap_timer_timeout() -> void:
 	class_change()

@@ -1,0 +1,112 @@
+[gd_scene load_steps=11 format=3 uid="uid://3sey3la8odjp"]
+
+[ext_resource type="Script" path="res://scripts/ui/player_1_info.gd" id="1_rktu7"]
+[ext_resource type="Texture2D" uid="uid://1cm44ox4qsba" path="res://art/player/sprites/base_sprite.png" id="2_k0ad6"]
+[ext_resource type="Texture2D" uid="uid://d2bng3v8v3po0" path="res://art/ui/class_info_overlay.png" id="3_ogiuj"]
+[ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="4_cxb4a"]
+[ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="5_bim81"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_irvfe"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrrmj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i4wde"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvyu6"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ljk5"]
+bg_color = Color(0.929412, 0.101961, 0.137255, 1)
+
+[node name="Player1Info" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rktu7")
+
+[node name="PortraitBG" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 640.0
+offset_right = 84.0
+offset_bottom = 704.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_irvfe")
+
+[node name="PlayerSprite" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 646.0
+offset_right = 84.0
+offset_bottom = 710.0
+texture = ExtResource("2_k0ad6")
+
+[node name="FalloffBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 690.0
+offset_right = 246.0
+offset_bottom = 702.0
+theme_override_styles/background = SubResource("StyleBoxFlat_wrrmj")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i4wde")
+max_value = 200.0
+value = 200.0
+show_percentage = false
+
+[node name="HPBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 690.0
+offset_right = 246.0
+offset_bottom = 702.0
+theme_override_styles/background = SubResource("StyleBoxFlat_fvyu6")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3ljk5")
+max_value = 200.0
+value = 200.0
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="."]
+layout_mode = 0
+offset_top = 624.0
+offset_right = 256.0
+offset_bottom = 720.0
+texture = ExtResource("3_ogiuj")
+
+[node name="PlayerName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 654.0
+offset_right = 252.0
+offset_bottom = 661.0
+theme_override_colors/font_color = Color(0.641655, 0.458806, 0.988129, 1)
+theme_override_fonts/font = ExtResource("4_cxb4a")
+theme_override_font_sizes/font_size = 8
+text = "Zee"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerClass" type="Label" parent="."]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 665.0
+offset_right = 252.0
+offset_bottom = 672.0
+theme_override_fonts/font = ExtResource("5_bim81")
+theme_override_font_sizes/font_size = 8
+text = "Pyromancer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="FalloffTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[connection signal="value_changed" from="HPBar" to="." method="start_falloff"]
+[connection signal="timeout" from="FalloffTimer" to="." method="_on_falloff_timer_timeout"]

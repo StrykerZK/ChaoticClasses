@@ -5,7 +5,7 @@ var player_2
 
 func _ready() -> void:
 	
-	StageManager.game_state = "Starting Game"
+	StageManager.update_game_state.rpc("Starting Game")
 	
 	assign_players()
 	$AnimationPlayer.play("start_game")
@@ -18,7 +18,7 @@ func _ready() -> void:
 	player_1.is_paused = false
 	player_2.is_paused = false
 	$GameManager.game_start()
-	StageManager.game_state = "In Match"
+	StageManager.update_game_state.rpc("In Match")
 
 func assign_players():
 	var players = get_tree().get_nodes_in_group("players")

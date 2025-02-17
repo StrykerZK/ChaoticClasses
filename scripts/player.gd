@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@export var pause_menu: PackedScene
+@export var p1_info_scene: PackedScene
+@export var p2_info_scene: PackedScene
 
 @export var current_class = "Base"
 @export var current_type = "melee"
@@ -23,12 +24,12 @@ var dodge_speed = 0.0
 @onready var anim_player: AnimationPlayer
 @onready var class_synchronizer: MultiplayerSynchronizer
 @onready var player_manager: Node
-@onready var HP_bar: ProgressBar
 @onready var hitbox: Area2D
+@onready var p1_info_node: Control
+@onready var p2_info_node: Control
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
-var changing_class = false
 var is_paused = true
 
 # Variables for dodging
@@ -61,12 +62,10 @@ func _ready() -> void:
 	class_synchronizer = $ClassSynchronizer
 	$PlayerSynchronizer.root_path = get_path()
 	
-	HP_bar = get_node("UI/HPBar")
-	HP_bar.max_value = max_health
-	HP_bar.value = max_health
-	
 	hitbox = get_node("Base/Hitbox")
 	hitbox.player_id = player_id
+	
+	
 	
 	initialize_class_children()
 	
@@ -81,10 +80,12 @@ func _ready() -> void:
 	# Set up camera for each
 	if is_multiplayer_authority():
 		create_camera()
+		await get_tree().create_timer(4).timeout
+		create_player_info()
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
-		if !is_paused:
+		if !is_paused and StageManager.game_state != "Transforming":
 			mouse_pos = get_global_mouse_position()
 			local_mouse_pos = get_local_mouse_position()
 			handle_input() # Input data
@@ -93,7 +94,8 @@ func _process(delta: float) -> void:
 			
 			if is_instance_valid(anim_tree):
 				update_animation_parameters() # Update AnimationTree
-		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
+		
+		StageManager.update_player_stats.rpc(player_id, current_health)
 
 func handle_input():
 	if current_class != "archer": # If not archer, don't move while attacking
@@ -179,10 +181,10 @@ func dodge_on_cooldown():
 	temp_count = dodge_count
 
 func activate_i_frame(value: float):
-	$Hurtbox/HurtboxCollision.disabled = true
+	$Hurtbox.set_deferred("monitorable", false)
 	$IFrameTimer.start(value)
 	await $IFrameTimer.timeout
-	$Hurtbox/HurtboxCollision.disabled = false
+	$Hurtbox.set_deferred("monitorable", true)
 
 func update_animation_parameters():
 	if !is_dodging and !is_attacking:
@@ -207,8 +209,7 @@ func update_animation_parameters():
 		anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
 
 @rpc("any_peer","call_local")
-func class_change(class_title: String, transform_time: float):
-	is_paused = true
+func class_change(class_title: String):
 	# Reset variables and booleans
 	reset_systems()
 	
@@ -217,7 +218,11 @@ func class_change(class_title: String, transform_time: float):
 	class_synchronizer.public_visibility = false
 	class_synchronizer.root_path = get_parent().get_path()
 	
+	# Play transform FX
+	$PlayerFX.play("transform")
+	
 	# Clear current class node
+	await get_tree().create_timer(0.4).timeout
 	get_child(0).queue_free()
 	
 	current_class = class_title # Change current class ref
@@ -226,6 +231,7 @@ func class_change(class_title: String, transform_time: float):
 	var class_node = load("res://classes/" + class_title + ".tscn").instantiate()
 	
 	# Add new class node as child
+	await get_tree().create_timer(1.4).timeout
 	add_child(class_node)
 	move_child(class_node,0)
 	
@@ -238,23 +244,44 @@ func class_change(class_title: String, transform_time: float):
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
 	
-	await get_tree().create_timer(transform_time).timeout
-	is_paused = false
+	# Update Info UI
+	if is_multiplayer_authority():
+		p1_info_node.update_display.rpc()
+		p2_info_node.update_display.rpc()
+	
 	initialize_class_children()
-
-func transform_done(): # NOT USED
-	# Set new class's children nodes and methods
-	initialize_class_children()
-	#$PlayerSynchronizer.root_path = get_path()
+	
+	if is_multiplayer_authority() and multiplayer.is_server():
+		$/root/Main/GameManager.toggle_pause.rpc()
+		StageManager.update_game_state.rpc("In Game")
 
 @rpc("any_peer","call_local")
 func take_damage(incoming_dmg: float):
+	# Calculate armor into damage
 	var dmg_reduction = 1 - (armor /  10)
 	var new_dmg = incoming_dmg * dmg_reduction
 	current_health -= new_dmg
-	HP_bar.value = current_health
+	
+	# Update Info UI
+	if is_multiplayer_authority():
+		StageManager.update_player_stats.rpc(player_id, current_health)
+	
+	# I-Frame and flasing effect
+	activate_i_frame(0.5)
+	get_child(0).get_child(0).modulate.s = 50
+	
+	# Slowdown effect
+	Engine.time_scale = 0.2
+	await get_tree().create_timer(0.1).timeout
+	Engine.time_scale = 1
+	
 	if current_health <= 0:
 		die()
+		return
+	
+	# Finish flashing effect
+	await $IFrameTimer.timeout
+	get_child(0).get_child(0).modulate.s = 0
 
 func die():
 	dead.emit(player_id)
@@ -286,26 +313,23 @@ func update_stats(stats: Array):
 	#print("Dodge Count: " + str(dodge_count))
 
 func reset_systems():
-	is_dodging = false
-	can_dodge = true
 	is_attacking = false
-	attack_index = 1
+	is_dodging = false
+	
 	if current_class != "archer":
-		get_child(0).get_node("ComboTimer").stop()
+		get_child(0).get_node("ComboTimer").timeout.emit()
 	else:
 		get_child(0).get_node("ChargeTimer").stop()
 		get_child(0).get_node("ChargeAnimTimer").stop()
 	$DodgeTimer.stop()
-	$IFrameTimer.stop()
 	$DodgeResetTimer.stop()
+	$IFrameTimer.timeout.emit()
+	attack_index = 1
+	can_dodge = true
 
 @rpc("any_peer","call_local")
 func toggle_pause():
 	is_paused = !is_paused
-	if is_paused:
-		add_child(pause_menu.instantiate())
-	elif !is_paused:
-		get_node("PauseMenu").queue_free()
 
 func initialize_class_children():
 	anim_tree = get_node(current_class + "/AnimationTree")
@@ -318,6 +342,7 @@ func initialize_class_children():
 
 func create_camera():
 	var camera = Camera2D.new()
+	camera.name = "Camera"
 	camera.enabled = true
 	camera.zoom = Vector2(1.5, 1.5)
 	camera.position_smoothing_enabled = true
@@ -327,3 +352,13 @@ func create_camera():
 	camera.limit_right = get_viewport_rect().size.x
 	camera.limit_bottom = get_viewport_rect().size.y
 	add_child(camera)
+
+func create_player_info():
+	var p1_info = p1_info_scene.instantiate()
+	var p2_info = p2_info_scene.instantiate()
+	$UI.add_child(p1_info)
+	$UI.add_child(p2_info)
+	p1_info_node = $UI/Player1Info
+	p2_info_node = $UI/Player2Info
+	p1_info_node.update_display.rpc()
+	p2_info_node.update_display.rpc()

@@ -33,10 +33,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if !player.is_paused and !player.is_dodging:
-		handle_input()
+		if StageManager.game_state != "Transforming":
+			handle_input()
 
 func handle_input():
-	if player.is_attacking:
+	if player.is_attacking and !player.is_paused:
 		if Input.is_action_just_released("attack"):
 			mouse_pos = get_global_mouse_position()
 			StageManager.set_target.rpc(player.player_id,mouse_pos)

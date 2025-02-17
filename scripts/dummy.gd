@@ -21,6 +21,5 @@ func take_damage(damage: float):
 	$DPSTimer.start()
 	dps += last_dmg
 
-
 func reset_dps():
 	dps = 0
