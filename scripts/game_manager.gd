@@ -14,18 +14,16 @@ var player_count = 0
 
 func _ready():
 	player_manager = get_node("/root/Main/PlayerManager")
-	if multiplayer.is_server():
-		$SwapTimer.start()
-
+	
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("back"):
-		toggle_pause.rpc()
+	if StageManager.game_state != "Starting Game" or StageManager.game_state != "Game Over":
+		if event.is_action_pressed("back"):
+			toggle_pause.rpc()
 
 func _process(delta: float) -> void:
 	pass
 
 func _on_players_connected():
-	print("Player joined game!")
 	player_count += 1
 	if player_count == StageManager.player_list.size():
 		assign_players.rpc()
@@ -58,10 +56,10 @@ func class_change():
 
 @rpc("any_peer","call_local")
 func toggle_pause():
-	
 	# ADD CONDITIONS FOR OTHER PLAYER PAUSE, CLASS SWAPPING, ETC.
 	get_tree().paused = !get_tree().paused
 	is_paused = !is_paused
+	$SwapTimer.paused = !$SwapTimer.paused
 	paused.emit()
 
 func _on_button_pressed() -> void:
@@ -81,8 +79,18 @@ func update_player_class(id, class_title):
 		print("Doesn't Exist")
 		return
 
+func game_start():
+	if multiplayer.is_server():
+		$SwapTimer.start()
+
 func game_over(id):
 	$SwapTimer.stop()
+	await get_tree().create_timer(4).timeout
+	if id == 1:
+		player_2.is_paused = true
+	else:
+		player_1.is_paused = true
+	
 
 func _on_swap_timer_timeout() -> void:
 	class_change()

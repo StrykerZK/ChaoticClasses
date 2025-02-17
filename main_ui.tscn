@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1aj3uw0040ii"]
+
+[ext_resource type="Script" path="res://scripts/ui.gd" id="1_50b53"]
+[ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
+
+[sub_resource type="Theme" id="Theme_omnm7"]
+Label/colors/font_color = Color(0.1691, 0.43343, 0.89, 1)
+Label/colors/font_outline_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 8
+Label/constants/shadow_offset_x = -2
+Label/constants/shadow_offset_y = 2
+Label/constants/shadow_outline_size = 16
+Label/font_sizes/font_size = 48
+Label/fonts/font = ExtResource("2_iropl")
+
+[node name="UI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_50b53")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -210.0
+offset_right = 216.0
+offset_bottom = -168.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(120, 21)
+theme = SubResource("Theme_omnm7")
+theme_override_colors/font_color = Color(0.168627, 0.435294, 0.890196, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -210.0
+offset_right = 216.0
+offset_bottom = -168.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(120, 21)
+theme = SubResource("Theme_omnm7")
+theme_override_colors/font_color = Color(0.168627, 0.435294, 0.890196, 1)
+horizontal_alignment = 1
+vertical_alignment = 1

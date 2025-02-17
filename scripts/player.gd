@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@export var pause_menu: PackedScene
+
 @export var current_class = "Base"
 @export var current_type = "melee"
 @export var player_id: int = 1
@@ -27,7 +29,7 @@ var dodge_speed = 0.0
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
 var changing_class = false
-var is_paused = false
+var is_paused = true
 
 # Variables for dodging
 var is_dodging = false
@@ -42,14 +44,12 @@ var attack_method = Callable(self, "attack")
 var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
-var attack_1_length: float = 0.3
-var attack_2_length: float = 0.4
-var combo_timer = 1.0
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
-	dead.connect(Callable($/root/Main/UI,"game_over"))
+	dead.connect(Callable($/root/Main/MainUI,"game_over"))
+	
 	set_multiplayer_authority(int(str(name)))
 
 func _ready() -> void:
@@ -57,29 +57,34 @@ func _ready() -> void:
 	player_id = int(str(name))
 	
 	current_class = get_child(0).name
+	attack_method = Callable(get_child(0), "attack")
 	class_synchronizer = $ClassSynchronizer
 	$PlayerSynchronizer.root_path = get_path()
 	
 	HP_bar = get_node("UI/HPBar")
 	HP_bar.max_value = max_health
+	HP_bar.value = max_health
 	
 	hitbox = get_node("Base/Hitbox")
 	hitbox.player_id = player_id
 	
 	initialize_class_children()
 	
-	$Base/ComboTimer.wait_time = combo_timer
 	$DodgeTimer.wait_time = dodge_duration
 	dodge_speed = speed * dodge_speed_mult
 	current_health = max_health
 	temp_count = dodge_count
+	
+	if player_id == 1:
+		anim_tree["parameters/idle/blend_position"] = Vector2(1,0)
+	
 	# Set up camera for each
 	if is_multiplayer_authority():
 		create_camera()
 
 func _process(delta: float) -> void:
-	if !is_paused:
-		if is_multiplayer_authority():
+	if is_multiplayer_authority():
+		if !is_paused:
 			mouse_pos = get_global_mouse_position()
 			local_mouse_pos = get_local_mouse_position()
 			handle_input() # Input data
@@ -88,8 +93,6 @@ func _process(delta: float) -> void:
 			
 			if is_instance_valid(anim_tree):
 				update_animation_parameters() # Update AnimationTree
-				
-			$Label.position = global_position
 		#StageManager.update_player_stats(player_id, max_health, current_health, damage)
 
 func handle_input():
@@ -130,35 +133,14 @@ func handle_input():
 			start_dodge()
 	
 	if Input.is_action_just_pressed("attack"):
-		if !is_attacking and !is_dodging:
-			StageManager.set_target.rpc(player_id,mouse_pos)
-			last_mouse_pos = local_mouse_pos
-			#anim_tree["parameters/attack/blend_position"] = Vector2(mouse_pos.x, attack_index)
-			if current_class == "Base":
-				attack(attack_index)
-			else:
+		if !is_paused:
+			if !is_attacking and !is_dodging:
+				StageManager.set_target.rpc(player_id,mouse_pos)
+				last_mouse_pos = local_mouse_pos
 				attack_method.call(attack_index)
 
 func attack(index: float):
-	$Base/ComboTimer.stop()
-	is_attacking = true
-	hitbox.damage = damage
-	match index:
-		1.0:
-			$Base/ComboTimer.start()
-			await get_tree().create_timer(attack_1_length + 0.01).timeout
-			is_attacking = false
-			attack_index += 1.0
-		2.0:
-			$Base/ComboTimer.start()
-			await get_tree().create_timer(attack_2_length + 0.01).timeout
-			is_attacking = false
-			attack_index = 1.0
-			damage += base_damage
-
-func _on_combo_timer_timeout() -> void:
-	attack_index = 1.0
-	damage = base_damage
+	pass
 
 func start_dodge():
 	is_dodging = true
@@ -224,18 +206,14 @@ func update_animation_parameters():
 		anim_tree["parameters/run/blend_position"] = last_input_direction
 		anim_tree["parameters/dodge/blend_position"] = last_input_direction.x
 
-func get_animation_lengths():
-	attack_1_length = anim_player.get_animation("attack_right_1").length
-	attack_2_length = anim_player.get_animation("attack_right_2").length
-
 @rpc("any_peer","call_local")
 func class_change(class_title: String, transform_time: float):
 	is_paused = true
 	# Reset variables and booleans
 	reset_systems()
 	
-	# Reset ClassSynchronizer
-	class_synchronizer.process_mode = 4
+	# Disable ClassSynchronizer
+	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
 	class_synchronizer.public_visibility = false
 	class_synchronizer.root_path = get_parent().get_path()
 	
@@ -251,15 +229,20 @@ func class_change(class_title: String, transform_time: float):
 	add_child(class_node)
 	move_child(class_node,0)
 	
+	# Enable ClassSynchronizer
+	class_synchronizer.root_path = get_child(0).get_path()
+	class_synchronizer.public_visibility = true
+	class_synchronizer.process_mode = Node.PROCESS_MODE_INHERIT
+	
 	# Update stats to new class
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
 	
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(transform_time).timeout
 	is_paused = false
 	initialize_class_children()
 
-func transform_done():
+func transform_done(): # NOT USED
 	# Set new class's children nodes and methods
 	initialize_class_children()
 	#$PlayerSynchronizer.root_path = get_path()
@@ -276,6 +259,13 @@ func take_damage(incoming_dmg: float):
 func die():
 	dead.emit(player_id)
 	reset_systems()
+	
+	# Disable ClassSynchronizer
+	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
+	class_synchronizer.public_visibility = false
+	class_synchronizer.root_path = get_parent().get_path()
+	
+	# Remove player node
 	queue_free()
 
 func update_stats(stats: Array):
@@ -300,16 +290,22 @@ func reset_systems():
 	can_dodge = true
 	is_attacking = false
 	attack_index = 1
-	if is_instance_valid(get_child(0).get_node("ComboTimer")):
+	if current_class != "archer":
 		get_child(0).get_node("ComboTimer").stop()
+	else:
+		get_child(0).get_node("ChargeTimer").stop()
+		get_child(0).get_node("ChargeAnimTimer").stop()
 	$DodgeTimer.stop()
 	$IFrameTimer.stop()
 	$DodgeResetTimer.stop()
 
 @rpc("any_peer","call_local")
-func toggle_pause(state):
-	is_paused = state
-	print("Paused: " + str(is_paused))
+func toggle_pause():
+	is_paused = !is_paused
+	if is_paused:
+		add_child(pause_menu.instantiate())
+	elif !is_paused:
+		get_node("PauseMenu").queue_free()
 
 func initialize_class_children():
 	anim_tree = get_node(current_class + "/AnimationTree")
@@ -317,12 +313,8 @@ func initialize_class_children():
 	anim_player = get_node(current_class + "/AnimationPlayer")
 	hitbox = get_node(current_class + "/Hitbox")
 	hitbox.player_id = player_id
-	class_synchronizer.root_path = get_child(0).get_path()
-	class_synchronizer.public_visibility = true
-	class_synchronizer.process_mode = 3
-	if current_class != "Base":
-		attack_method = Callable(get_node(current_class), "attack")
-		current_type = get_node(current_class).type
+	attack_method = Callable(get_child(0), "attack")
+	current_type = get_child(0).type
 
 func create_camera():
 	var camera = Camera2D.new()
@@ -335,4 +327,3 @@ func create_camera():
 	camera.limit_right = get_viewport_rect().size.x
 	camera.limit_bottom = get_viewport_rect().size.y
 	add_child(camera)
-	$Label.show()

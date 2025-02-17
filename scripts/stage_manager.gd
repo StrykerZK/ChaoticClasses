@@ -6,6 +6,8 @@ var player_count = 0
 var p1_target: Vector2 = Vector2.ZERO
 var p2_target: Vector2 = Vector2.ZERO
 
+var game_state = ""
+
 func _ready():
 	pass
 
@@ -22,5 +24,12 @@ func get_target(id) -> Vector2:
 	else:
 		return p2_target
 
-func update_player_stats(id: int, max: float, current: float, damage: float):
-	pass
+func get_player_2_name() -> Variant:
+	var player_name = ""
+	for keys in player_list:
+		if keys != 1:
+			return keys.player_name
+	return player_name
+	
+#func update_player_stats(id: int, max: float, current: float, damage: float):
+#	pass

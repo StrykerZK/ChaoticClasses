@@ -1,7 +1,9 @@
-[gd_scene load_steps=53 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=55 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
+[ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_l1kt2"]
+[ext_resource type="Script" path="res://scripts/classes/base.gd" id="2_u12l6"]
 [ext_resource type="Script" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
 [ext_resource type="Theme" uid="uid://c2sqprx7vguo8" path="res://art/ui/HP_bar.tres" id="4_r7ryu"]
 
@@ -744,8 +746,10 @@ process_mode = 1
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_ostsg")
+pause_menu = ExtResource("2_l1kt2")
 
 [node name="Base" type="Node2D" parent="."]
+script = ExtResource("2_u12l6")
 
 [node name="Sprite2D" type="Sprite2D" parent="Base"]
 scale = Vector2(2, 2)
@@ -847,13 +851,7 @@ grow_vertical = 2
 theme = ExtResource("4_r7ryu")
 value = 100.0
 
-[node name="Label" type="Label" parent="."]
-offset_right = 10.0
-offset_bottom = 23.0
-size_flags_horizontal = 4
-text = "X"
-
-[connection signal="timeout" from="Base/ComboTimer" to="." method="_on_combo_timer_timeout"]
+[connection signal="timeout" from="Base/ComboTimer" to="Base" method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="TransformTimer" to="." method="transform_done"]

@@ -4,6 +4,7 @@ extends Node2D
 
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
+@onready var main_node: Node
 
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
@@ -16,6 +17,7 @@ var mouse_pos
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
+	main_node = get_tree().root.get_node("Main")
 	
 	get_animation_lengths()
 	
@@ -72,7 +74,7 @@ func spawn_projectile(index: float):
 	if index != 3.0:
 		var fireball = fireball_scene.instantiate()
 		await get_tree().create_timer(spawn_time).timeout
-		get_tree().current_scene.add_child(fireball)
+		main_node.add_child(fireball)
 		fireball.position = $Marker2D.global_position
 		fireball.direction = fireball.position.direction_to(mouse_pos)
 		fireball.rotation = fireball.direction.angle()
@@ -87,7 +89,7 @@ func spawn_projectile(index: float):
 		await get_tree().create_timer(spawn_time).timeout
 		for i in range(3):
 			var fireball = fireball_scene.instantiate()
-			get_tree().current_scene.add_child(fireball)
+			main_node.add_child(fireball)
 			
 			var angle_offset  = deg_to_rad(start_angle + i * angle_step)
 			

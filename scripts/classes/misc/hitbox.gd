@@ -11,8 +11,7 @@ func _on_area_entered(area: Area2D) -> void:
 		if area.get_parent().has_method("take_damage")\
 		and area.get_parent().player_id != player_id:
 			area.get_parent().take_damage.rpc(damage)
-			if is_multiplayer_authority():
-				print("Hit!")
+	
 	
 	if area.is_in_group("projectiles"):
 		if deflection:

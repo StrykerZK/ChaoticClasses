@@ -93,6 +93,7 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_rygh6")
 
 [node name="FollowTimer" type="Timer" parent="."]
+wait_time = 0.7
 one_shot = true
 
 [connection signal="timeout" from="FollowTimer" to="." method="_on_follow_timer_timeout"]

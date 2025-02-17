@@ -1,6 +1,6 @@
 extends Projectile
 
-@export var arrow_speed: float = 300
+@export var arrow_speed: float = 500
 
 var full_charged: bool = false
 

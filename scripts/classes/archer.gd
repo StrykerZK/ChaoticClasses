@@ -5,6 +5,7 @@ extends Node2D
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
 @onready var anim_tree: AnimationTree
+@onready var main_node: Node
 
 var release_length: float = 0.2
 var ready_length: float = 0.5
@@ -24,6 +25,7 @@ func _ready() -> void:
 	anim_player = $AnimationPlayer
 	anim_tree = $AnimationTree
 	current_speed = player.speed
+	main_node = get_tree().root.get_node("Main")
 	
 	get_animation_lengths()
 	
@@ -97,7 +99,7 @@ func spawn_projectile(index: float):
 		mouse_pos = StageManager.p2_target
 	
 	var arrow = arrow_scene.instantiate()
-	get_tree().current_scene.add_child(arrow)
+	main_node.add_child(arrow)
 	arrow.position = $Marker2D.global_position
 	arrow.direction = arrow.position.direction_to(mouse_pos)
 	arrow.rotation = arrow.direction.angle()
