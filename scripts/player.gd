@@ -315,6 +315,7 @@ func update_stats(stats: Array):
 func reset_systems():
 	is_attacking = false
 	is_dodging = false
+	get_child(0).get_child(0).modulate.s = 0 # Reset iframe red flash
 	
 	if current_class != "archer":
 		get_child(0).get_node("ComboTimer").timeout.emit()
@@ -323,7 +324,7 @@ func reset_systems():
 		get_child(0).get_node("ChargeAnimTimer").stop()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()
-	$IFrameTimer.timeout.emit()
+	$IFrameTimer.stop()
 	attack_index = 1
 	can_dodge = true
 

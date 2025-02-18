@@ -32,6 +32,7 @@ grow_vertical = 2
 script = ExtResource("1_w2fjm")
 
 [node name="PortraitBG" type="Panel" parent="."]
+layout_mode = 0
 offset_left = 1196.0
 offset_top = 16.0
 offset_right = 1264.0
@@ -39,6 +40,7 @@ offset_bottom = 80.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tq8lq")
 
 [node name="PlayerSprite" type="TextureRect" parent="."]
+layout_mode = 0
 offset_left = 1196.0
 offset_top = 22.0
 offset_right = 1264.0
@@ -47,6 +49,7 @@ texture = ExtResource("1_qm34m")
 flip_h = true
 
 [node name="FalloffBar" type="ProgressBar" parent="."]
+layout_mode = 0
 offset_left = 1034.0
 offset_top = 66.0
 offset_right = 1178.0
@@ -58,6 +61,7 @@ value = 200.0
 show_percentage = false
 
 [node name="HPBar" type="ProgressBar" parent="."]
+layout_mode = 0
 offset_left = 1034.0
 offset_top = 66.0
 offset_right = 1178.0
@@ -69,6 +73,7 @@ value = 200.0
 show_percentage = false
 
 [node name="Overlay" type="TextureRect" parent="."]
+layout_mode = 0
 offset_left = 1024.0
 offset_right = 1280.0
 offset_bottom = 96.0
@@ -76,6 +81,7 @@ texture = ExtResource("2_82a5e")
 flip_h = true
 
 [node name="PlayerName" type="Label" parent="."]
+layout_mode = 0
 offset_left = 1028.0
 offset_top = 30.0
 offset_right = 1184.0
@@ -88,6 +94,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PlayerClass" type="Label" parent="."]
+layout_mode = 0
 offset_left = 1028.0
 offset_top = 41.0
 offset_right = 1184.0

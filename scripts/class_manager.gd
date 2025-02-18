@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_PATH = "user://stats.json"
+const SAVE_PATH = "res://resources/stats.json"
 
 var name_list: Array
 var armor_data: Array
