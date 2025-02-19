@@ -68,7 +68,6 @@ func get_random_class(id) -> String:
 		class_title = get_class_title(class_index)
 	return class_title
 
-
 @rpc("any_peer", "call_local")
 func get_class_data(new_name: String) -> Array:
 	var id = 0

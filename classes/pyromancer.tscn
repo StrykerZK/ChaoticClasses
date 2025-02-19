@@ -776,6 +776,10 @@ parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
 
 [node name="ComboTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true
 
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(24, -4)

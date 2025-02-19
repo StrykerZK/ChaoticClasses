@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1aj3uw0040ii"]
+[gd_scene load_steps=6 format=3 uid="uid://d1aj3uw0040ii"]
 
 [ext_resource type="Script" path="res://scripts/ui.gd" id="1_50b53"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
+[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_60xrb"]
+[ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://player_2_info.tscn" id="4_dqrjs"]
 
 [sub_resource type="Theme" id="Theme_omnm7"]
 Label/colors/font_color = Color(0.1691, 0.43343, 0.89, 1)
@@ -38,3 +40,9 @@ vertical_alignment = 1
 
 [node name="ScreenCenter" type="Marker2D" parent="."]
 position = Vector2(640, 360)
+
+[node name="Player1Info" parent="." instance=ExtResource("3_60xrb")]
+visible = false
+
+[node name="Player2Info" parent="." instance=ExtResource("4_dqrjs")]
+visible = false

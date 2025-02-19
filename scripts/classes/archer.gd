@@ -6,6 +6,7 @@ extends Node2D
 @onready var anim_player: AnimationPlayer
 @onready var anim_tree: AnimationTree
 @onready var main_node: Node
+@onready var dodge_timer: Timer
 
 var release_length: float = 0.2
 var ready_length: float = 0.5
@@ -15,16 +16,17 @@ var charge_1_time = 1.0
 var charge_2_time = 1.5
 var can_shoot = false
 var early_shot = false
-var current_speed = 150
+var base_speed = 150
 var type = "ranged"
 
 var mouse_pos
 
 func _ready() -> void:
 	player = get_parent()
+	dodge_timer = player.get_node("DodgeCooldownTimer")
 	anim_player = $AnimationPlayer
 	anim_tree = $AnimationTree
-	current_speed = player.speed
+	base_speed = player.speed
 	main_node = get_tree().root.get_node("Main")
 	
 	get_animation_lengths()
@@ -33,7 +35,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if !player.is_paused and !player.is_dodging:
-		if StageManager.game_state != "Transforming":
+		if player.is_multiplayer_authority():
 			handle_input()
 
 func handle_input():
@@ -41,14 +43,18 @@ func handle_input():
 		if Input.is_action_just_released("attack"):
 			mouse_pos = get_global_mouse_position()
 			StageManager.set_target.rpc(player.player_id,mouse_pos)
-			if can_shoot:
-				spawn_projectile.rpc(player.attack_index)
-			else:
-				early_shot = true
+			shoot.rpc()
+
+@rpc("any_peer","call_local")
+func shoot():
+	if can_shoot:
+		spawn_projectile(player.attack_index)
+	else:
+		early_shot = true
 
 @rpc("any_peer","call_local")
 func attack(index: float):
-	player.speed = 30
+	player.speed = 40
 	player.can_dodge = false
 	can_shoot = false
 	if !player.is_dodging:
@@ -56,10 +62,11 @@ func attack(index: float):
 		$ChargeTimer.wait_time = charge_1_time - charge_1_length
 		match index:
 			1.0:
-				await get_tree().create_timer(ready_length).timeout
+				use_attack_timer(ready_length)
+				await $AttackTimer.timeout
 				if early_shot == true:
 					early_shot = false
-					spawn_projectile.rpc(player.attack_index)
+					spawn_projectile(player.attack_index)
 				else:
 					can_shoot = true
 					$ChargeTimer.start()
@@ -86,7 +93,6 @@ func charge_projectile():
 				player.attack_index += 0.5
 				player.damage = player.base_damage * 4
 
-@rpc("any_peer","call_local")
 func spawn_projectile(index: float):
 	$ChargeTimer.stop()
 	$ChargeAnimTimer.stop()
@@ -111,17 +117,27 @@ func spawn_projectile(index: float):
 	
 	can_shoot = false
 	player.attack_index = 0.0
-	await get_tree().create_timer(release_length + 0.2).timeout
+	use_attack_timer(release_length)
+	await $AttackTimer.timeout
 	player.is_attacking = false
 	player.attack_index = 1.0
-	player.can_dodge = true
 	player.damage = player.base_damage
+	player.speed = base_speed
+	player.can_attack = true
+	if dodge_timer.is_stopped(): player.can_dodge = true
 	early_shot = false
-	player.speed = current_speed
 
+func use_attack_timer(time: float):
+	$AttackTimer.wait_time = time
+	$AttackTimer.start()
 
 func get_animation_lengths():
 	release_length = anim_player.get_animation("release_right").length
 	ready_length = anim_player.get_animation("ready_right").length
 	charge_1_length = anim_player.get_animation("charge_1_right").length
 	charge_2_length = anim_player.get_animation("charge_2_right").length
+
+func stop_systems():
+	$ChargeAnimTimer.stop()
+	$ChargeTimer.stop()
+	player.speed = base_speed

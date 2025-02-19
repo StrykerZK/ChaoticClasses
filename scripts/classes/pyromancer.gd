@@ -5,55 +5,50 @@ extends Node2D
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
 @onready var main_node: Node
+@onready var dodge_timer: Timer
 
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
 var combo_timer = 1.5
+var base_speed = 200
 var type = "ranged"
 
 var mouse_pos
 
 func _ready() -> void:
 	player = get_parent()
+	dodge_timer = player.get_node("DodgeCooldownTimer")
 	anim_player = $AnimationPlayer
+	base_speed = player.speed
 	main_node = get_tree().root.get_node("Main")
 	
 	get_animation_lengths()
-	
 
 func _process(delta: float) -> void:
 	pass
 
+@rpc("any_peer","call_local")
 func attack(index: float):
+	player.speed = 30
+	player.can_dodge = false
 	player.is_attacking = true
 	$ComboTimer.stop()
 	$ComboTimer.wait_time = combo_timer
 	match index:
 		1.0:
 			$ComboTimer.start()
-			spawn_projectile.rpc(player.attack_index)
-			await get_tree().create_timer(attack_1_length).timeout
-			player.is_attacking = false
-			player.attack_index += 1.0
+			spawn_projectile(player.attack_index)
+			use_attack_timer(attack_1_length)
 		2.0:
 			$ComboTimer.start()
-			spawn_projectile.rpc(player.attack_index)
-			await get_tree().create_timer(attack_2_length).timeout
-			player.is_attacking = false
-			player.attack_index += 1.0
+			spawn_projectile(player.attack_index)
+			use_attack_timer(attack_2_length)
 		3.0:
-			player.can_dodge = false
-			spawn_projectile.rpc(player.attack_index)
-			$ComboTimer.wait_time = attack_3_length + 0.2
-			$ComboTimer.start()
+			spawn_projectile(player.attack_index)
+			use_attack_timer(attack_3_length)
 
-@rpc("any_peer","call_local")
 func spawn_projectile(index: float):
-	
-	#if is_multiplayer_authority():
-	#	mouse_pos = player.mouse_pos
-	#else:
 	if player.player_id == 1:
 		mouse_pos = StageManager.p1_target
 	elif player.player_id != 1:
@@ -71,9 +66,9 @@ func spawn_projectile(index: float):
 			spawn_time= attack_3_length / 2
 			spawn_time += 0.05
 	
+	await get_tree().create_timer(spawn_time).timeout
 	if index != 3.0:
 		var fireball = fireball_scene.instantiate()
-		await get_tree().create_timer(spawn_time).timeout
 		main_node.add_child(fireball)
 		fireball.position = $Marker2D.global_position
 		fireball.direction = fireball.position.direction_to(mouse_pos)
@@ -85,8 +80,6 @@ func spawn_projectile(index: float):
 		# Calculate angle offset
 		var start_angle = -60 / 2
 		var angle_step = 60 / 2
-		
-		await get_tree().create_timer(spawn_time).timeout
 		for i in range(3):
 			var fireball = fireball_scene.instantiate()
 			main_node.add_child(fireball)
@@ -103,6 +96,23 @@ func spawn_projectile(index: float):
 			
 			if fireball:
 				fireball.start_follow_timer()
+			
+			await get_tree().create_timer(0.2).timeout
+
+func use_attack_timer(time: float):
+	$AttackTimer.wait_time = time
+	$AttackTimer.start()
+	await $AttackTimer.timeout
+	player.is_attacking = false
+	if player.attack_index == 3.0:
+		player.attack_index = 1.0 # Reset after 3rd attack
+		$ComboTimer.wait_time = 1.0
+		$ComboTimer.start()
+	else:
+		player.attack_index += 1.0
+		player.can_attack = true
+	player.speed = base_speed
+	if dodge_timer.is_stopped(): player.can_dodge = true
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
@@ -110,6 +120,10 @@ func get_animation_lengths():
 	attack_3_length = anim_player.get_animation("attack_right_3").length
 
 func _on_combo_timer_timeout() -> void:
-	player.is_attacking = false
 	player.attack_index = 1.0
-	player.can_dodge = true
+	player.can_attack = true
+
+func stop_systems():
+	$ComboTimer.stop()
+	$AttackTimer.stop()
+	player.speed = base_speed

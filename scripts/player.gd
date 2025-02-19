@@ -1,47 +1,43 @@
 extends CharacterBody2D
 
-@export var p1_info_scene: PackedScene
-@export var p2_info_scene: PackedScene
-
-@export var current_class = "Base"
-@export var current_type = "melee"
+@export var current_class: String = "Base"
+@export var current_type: String = "melee"
 @export var player_id: int = 1
+var current_class_node: Node
 
 signal dead(int)
 
 var max_health: float = 200
-var current_health: float
+var current_health: float = max_health
 var armor: float = 0
 var base_damage: float = 5
 var damage: float = base_damage
 var speed: float = 150.0
-var dodge_speed_mult = 4
-var dodge_duration = 0.6
-var dodge_cooldown = 1.5 
-var dodge_speed = 0.0
+var dodge_speed_mult: float = 4
+var dodge_duration: float = 0.6
+var dodge_cooldown: float = 1.5 
+var dodge_speed: float = 0.0
 
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var class_synchronizer: MultiplayerSynchronizer
 @onready var player_manager: Node
 @onready var hitbox: Area2D
-@onready var p1_info_node: Control
-@onready var p2_info_node: Control
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
-var is_paused = true
+var is_paused: bool = true
 
 # Variables for dodging
-var is_dodging = false
-var can_dodge = true
-var dodge_count = 1
-var temp_count = 1
+var is_dodging: bool = false
+var can_dodge: bool = true
+var dodge_count: int = 1
+var temp_count: int = dodge_count
 
 # Variables for attacking
-var is_attacking = false
+var is_attacking: bool = false
+var can_attack: bool = true
 var attack_index: float = 1.0
-var attack_method = Callable(self, "attack")
 var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
@@ -57,35 +53,34 @@ func _ready() -> void:
 	player_manager = get_node("/root/Main/PlayerManager")
 	player_id = int(str(name))
 	
-	current_class = get_child(0).name
-	attack_method = Callable(get_child(0), "attack")
+	current_class_node = get_child(0)
+	current_class = current_class_node.name
+	current_type = current_class_node.type
 	class_synchronizer = $ClassSynchronizer
 	$PlayerSynchronizer.root_path = get_path()
 	
 	hitbox = get_node("Base/Hitbox")
 	hitbox.player_id = player_id
 	
-	
-	
 	initialize_class_children()
 	
 	$DodgeTimer.wait_time = dodge_duration
+	$DodgeCooldownTimer.wait_time = dodge_cooldown
 	dodge_speed = speed * dodge_speed_mult
-	current_health = max_health
-	temp_count = dodge_count
 	
+	# Face players correct way
 	if player_id == 1:
 		anim_tree["parameters/idle/blend_position"] = Vector2(1,0)
+	else:
+		anim_tree["parameters/idle/blend_position"] = Vector2(-1,0)
 	
 	# Set up camera for each
 	if is_multiplayer_authority():
 		create_camera()
-		await get_tree().create_timer(4).timeout
-		create_player_info()
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
-		if !is_paused and StageManager.game_state != "Transforming":
+		if !is_paused:
 			mouse_pos = get_global_mouse_position()
 			local_mouse_pos = get_local_mouse_position()
 			handle_input() # Input data
@@ -94,11 +89,9 @@ func _process(delta: float) -> void:
 			
 			if is_instance_valid(anim_tree):
 				update_animation_parameters() # Update AnimationTree
-		
-		StageManager.update_player_stats.rpc(player_id, current_health)
 
 func handle_input():
-	if current_class != "archer": # If not archer, don't move while attacking
+	if current_type != "ranged": # If not ranged, don't move while attacking
 		if !is_dodging and !is_attacking:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		
@@ -135,18 +128,17 @@ func handle_input():
 			start_dodge()
 	
 	if Input.is_action_just_pressed("attack"):
-		if !is_paused:
-			if !is_attacking and !is_dodging:
+		if !is_attacking and !is_dodging:
+			if can_attack:
 				StageManager.set_target.rpc(player_id,mouse_pos)
 				last_mouse_pos = local_mouse_pos
-				attack_method.call(attack_index)
-
-func attack(index: float):
-	pass
+				current_class_node.attack.rpc(attack_index)
+				can_attack = false
 
 func start_dodge():
 	is_dodging = true
 	can_dodge = false
+	can_attack = false
 	
 	activate_i_frame(dodge_duration)
 	
@@ -163,6 +155,7 @@ func start_dodge():
 
 func end_dodge():
 	is_dodging = false
+	can_attack = true
 	if temp_count > 1:
 		can_dodge = true
 		temp_count -= 1
@@ -174,7 +167,9 @@ func end_dodge():
 
 func dodge_on_cooldown():
 	can_dodge = false
-	await get_tree().create_timer(dodge_cooldown).timeout
+	$DodgeCooldownTimer.wait_time = dodge_cooldown
+	$DodgeCooldownTimer.start()
+	await $DodgeCooldownTimer.timeout
 	while is_attacking:
 		await get_tree().create_timer(0.1).timeout # Wait for attack to finish
 	can_dodge = true
@@ -184,6 +179,9 @@ func activate_i_frame(value: float):
 	$Hurtbox.set_deferred("monitorable", false)
 	$IFrameTimer.start(value)
 	await $IFrameTimer.timeout
+	deactivate_i_frame()
+	
+func deactivate_i_frame():
 	$Hurtbox.set_deferred("monitorable", true)
 
 func update_animation_parameters():
@@ -223,7 +221,7 @@ func class_change(class_title: String):
 	
 	# Clear current class node
 	await get_tree().create_timer(0.4).timeout
-	get_child(0).queue_free()
+	current_class_node.queue_free()
 	
 	current_class = class_title # Change current class ref
 	
@@ -234,20 +232,16 @@ func class_change(class_title: String):
 	await get_tree().create_timer(1.4).timeout
 	add_child(class_node)
 	move_child(class_node,0)
+	current_class_node = get_child(0)
 	
 	# Enable ClassSynchronizer
-	class_synchronizer.root_path = get_child(0).get_path()
+	class_synchronizer.root_path = current_class_node.get_path()
 	class_synchronizer.public_visibility = true
 	class_synchronizer.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	# Update stats to new class
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
-	
-	# Update Info UI
-	if is_multiplayer_authority():
-		p1_info_node.update_display.rpc()
-		p2_info_node.update_display.rpc()
 	
 	initialize_class_children()
 	
@@ -268,7 +262,7 @@ func take_damage(incoming_dmg: float):
 	
 	# I-Frame and flasing effect
 	activate_i_frame(0.5)
-	get_child(0).get_child(0).modulate.s = 50
+	current_class_node.get_child(0).modulate.s = 50
 	
 	# Slowdown effect
 	Engine.time_scale = 0.2
@@ -281,7 +275,7 @@ func take_damage(incoming_dmg: float):
 	
 	# Finish flashing effect
 	await $IFrameTimer.timeout
-	get_child(0).get_child(0).modulate.s = 0
+	current_class_node.get_child(0).modulate.s = 0
 
 func die():
 	dead.emit(player_id)
@@ -315,17 +309,15 @@ func update_stats(stats: Array):
 func reset_systems():
 	is_attacking = false
 	is_dodging = false
-	get_child(0).get_child(0).modulate.s = 0 # Reset iframe red flash
-	
-	if current_class != "archer":
-		get_child(0).get_node("ComboTimer").timeout.emit()
-	else:
-		get_child(0).get_node("ChargeTimer").stop()
-		get_child(0).get_node("ChargeAnimTimer").stop()
+	can_attack = true
+	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
+	current_class_node.stop_systems()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()
 	$IFrameTimer.stop()
+	deactivate_i_frame()
 	attack_index = 1
+	damage = base_damage
 	can_dodge = true
 
 @rpc("any_peer","call_local")
@@ -338,8 +330,7 @@ func initialize_class_children():
 	anim_player = get_node(current_class + "/AnimationPlayer")
 	hitbox = get_node(current_class + "/Hitbox")
 	hitbox.player_id = player_id
-	attack_method = Callable(get_child(0), "attack")
-	current_type = get_child(0).type
+	current_type = current_class_node.type
 
 func create_camera():
 	var camera = Camera2D.new()
@@ -353,13 +344,3 @@ func create_camera():
 	camera.limit_right = get_viewport_rect().size.x
 	camera.limit_bottom = get_viewport_rect().size.y
 	add_child(camera)
-
-func create_player_info():
-	var p1_info = p1_info_scene.instantiate()
-	var p2_info = p2_info_scene.instantiate()
-	$UI.add_child(p1_info)
-	$UI.add_child(p2_info)
-	p1_info_node = $UI/Player1Info
-	p2_info_node = $UI/Player2Info
-	p1_info_node.update_display.rpc()
-	p2_info_node.update_display.rpc()

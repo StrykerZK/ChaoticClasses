@@ -6,6 +6,7 @@ var falloff_ready: bool = false
 
 func _ready() -> void:
 	player_id = 1
+	update_display.rpc()
 
 func _process(delta: float) -> void:
 	if !StageManager.p1_stats.is_empty():

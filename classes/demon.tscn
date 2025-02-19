@@ -779,7 +779,6 @@ advance_mode = 2
 advance_condition = &"is_running"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aidun"]
-switch_mode = 2
 advance_mode = 2
 advance_condition = &"is_dodging"
 
@@ -803,7 +802,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_va33l")
 hframes = 10
 vframes = 4
-frame = 5
+frame = 2
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
@@ -834,5 +833,9 @@ parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
 
 [node name="ComboTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true
 
 [connection signal="timeout" from="ComboTimer" to="." method="_on_combo_timer_timeout"]

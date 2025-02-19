@@ -12,8 +12,11 @@ var player_1: CharacterBody2D
 var player_2: CharacterBody2D
 var player_count = 0
 
+var main_ui: CanvasLayer
+
 func _ready():
 	player_manager = get_node("/root/Main/PlayerManager")
+	main_ui = get_node("/root/Main/MainUI")
 	
 func _input(event: InputEvent) -> void:
 	if StageManager.game_state != "Starting Game"\
@@ -56,6 +59,8 @@ func class_change():
 	player_1.class_change.rpc(class_title_1)
 	player_2.class_change.rpc(class_title_2)
 	
+	# Update player info
+	main_ui.class_change.rpc()
 
 @rpc("any_peer","call_local")
 func toggle_pause():
@@ -85,7 +90,7 @@ func update_player_class(id, class_title):
 		print("Doesn't Exist")
 		return
 
-func game_start():
+func start_game():
 	if multiplayer.is_server():
 		$SwapTimer.start()
 

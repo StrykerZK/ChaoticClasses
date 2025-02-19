@@ -31,7 +31,8 @@ func get_player_2_name() -> Variant:
 	var player_name = ""
 	for keys in player_list:
 		if keys != 1:
-			return keys.player_name
+			player_name = player_list[keys].player_name
+			return player_name
 	return player_name
 
 func get_player_2_id() -> int:

@@ -16,22 +16,30 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+@rpc("any_peer","call_local")
 func attack(index: float):
-	$ComboTimer.stop()
 	player.is_attacking = true
+	$ComboTimer.stop()
 	$Hitbox.damage = player.damage
 	match index:
 		1.0:
 			$ComboTimer.start()
-			await get_tree().create_timer(attack_1_length + 0.01).timeout
-			player.is_attacking = false
-			player.attack_index += 1.0
+			use_attack_timer(attack_1_length)
 		2.0:
 			$ComboTimer.start()
-			await get_tree().create_timer(attack_2_length + 0.01).timeout
-			player.is_attacking = false
-			player.attack_index = 1.0
 			player.damage += player.base_damage
+			use_attack_timer(attack_2_length)
+
+func use_attack_timer(time: float):
+	$AttackTimer.wait_time = time
+	$AttackTimer.start()
+	await $AttackTimer.timeout
+	player.is_attacking = false
+	if player.attack_index == 2.0:
+		player.attack_index = 1.0 # Reset after 2nd attack
+	else:
+		player.attack_index += 1.0
+	player.can_attack = true
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("slap_1_right").length
@@ -40,3 +48,7 @@ func get_animation_lengths():
 func _on_combo_timer_timeout() -> void:
 	player.attack_index = 1.0
 	player.damage = player.base_damage
+
+func stop_systems():
+	$ComboTimer.stop()
+	$AttackTimer.stop()
