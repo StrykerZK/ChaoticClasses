@@ -6,19 +6,19 @@ extends Node2D
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var attack_3_length: float = 0.5
+@export var dash_speed: float = 0
+var last_dash_speed: float = 0
 var combo_timer = 1.5
 var type = "melee"
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
 	get_animation_lengths()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	check_property_changes()
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -28,12 +28,15 @@ func attack(index: float):
 	$Hitbox.damage = player.damage
 	match index:
 		1.0:
+			player.dash_duration = attack_1_length - 0.4
 			$ComboTimer.start()
 			use_attack_timer(attack_1_length)
 		2.0:
+			player.dash_duration = attack_2_length - 0.4
 			$ComboTimer.start()
 			use_attack_timer(attack_2_length)
 		3.0:
+			player.dash_duration = attack_3_length - 0.5
 			player.damage = player.base_damage * 2
 			$Hitbox.damage = player.damage
 			use_attack_timer(attack_3_length)
@@ -64,3 +67,11 @@ func _on_combo_timer_timeout() -> void:
 func stop_systems():
 	$ComboTimer.stop()
 	$AttackTimer.stop()
+
+func check_property_changes():
+	if last_dash_speed != dash_speed:
+		player.dash_speed = dash_speed
+		player.tween_dash_value()
+		last_dash_speed = dash_speed
+	else:
+		pass

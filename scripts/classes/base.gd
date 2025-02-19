@@ -5,6 +5,8 @@ extends Node2D
 
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.4
+@export var dash_speed: float = 0
+var last_dash_speed: float = 0
 var combo_timer = 1.0
 var type = "melee"
 
@@ -14,7 +16,7 @@ func _ready() -> void:
 	get_animation_lengths()
 
 func _process(delta: float) -> void:
-	pass
+	check_property_changes()
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -23,9 +25,11 @@ func attack(index: float):
 	$Hitbox.damage = player.damage
 	match index:
 		1.0:
+			player.dash_duration = attack_1_length - 0.1
 			$ComboTimer.start()
 			use_attack_timer(attack_1_length)
 		2.0:
+			player.dash_duration = attack_2_length - 0.1
 			$ComboTimer.start()
 			player.damage += player.base_damage
 			use_attack_timer(attack_2_length)
@@ -52,3 +56,11 @@ func _on_combo_timer_timeout() -> void:
 func stop_systems():
 	$ComboTimer.stop()
 	$AttackTimer.stop()
+
+func check_property_changes():
+	if last_dash_speed != dash_speed:
+		player.dash_speed = dash_speed
+		player.tween_dash_value()
+		last_dash_speed = dash_speed
+	else:
+		pass

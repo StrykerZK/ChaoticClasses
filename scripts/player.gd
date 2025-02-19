@@ -7,7 +7,7 @@ var current_class_node: Node
 
 signal dead(int)
 
-var max_health: float = 200
+@export var max_health: float = 200
 var current_health: float = max_health
 var armor: float = 0
 var base_damage: float = 5
@@ -15,9 +15,12 @@ var damage: float = base_damage
 var speed: float = 150.0
 var dodge_speed_mult: float = 4
 var dodge_duration: float = 0.6
-var dodge_cooldown: float = 1.5 
+@export var dodge_cooldown: float = 1.5 
 var dodge_speed: float = 0.0
+@export var dash_speed: float = 0.0
+@export var dash_duration: float = 0.2
 
+# Misc variables
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var class_synchronizer: MultiplayerSynchronizer
@@ -33,6 +36,7 @@ var is_dodging: bool = false
 var can_dodge: bool = true
 var dodge_count: int = 1
 var temp_count: int = dodge_count
+var dodge_tween: Tween
 
 # Variables for attacking
 var is_attacking: bool = false
@@ -41,6 +45,10 @@ var attack_index: float = 1.0
 var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
+var dash_tween: Tween
+
+
+
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
@@ -91,34 +99,32 @@ func _process(delta: float) -> void:
 				update_animation_parameters() # Update AnimationTree
 
 func handle_input():
-	if current_type != "ranged": # If not ranged, don't move while attacking
-		if !is_dodging and !is_attacking:
-			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
-		
-		if direction and !is_attacking:
-			last_input_direction = direction
-			if is_dodging:
-				velocity = last_input_direction * dodge_speed
-			else:
-				velocity = direction * speed
-		else:
-			if is_dodging:
-				velocity = last_input_direction * dodge_speed
-			else:
-				velocity = Vector2.ZERO
-	else: # If archer, move while attacking
+	if current_type == "melee": # If melee, don't move while attacking
 		if !is_dodging:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
+		last_input_direction = direction
 		
-		if direction:
-			last_input_direction = direction
-			if is_dodging:
-				velocity = last_input_direction * dodge_speed
-			else:
-				velocity = direction * speed
+		if is_attacking:
+			velocity = position.direction_to(get_global_mouse_position()) * dash_speed
 		else:
-			if is_dodging:
-				velocity = last_input_direction * dodge_speed
+			if direction:
+				velocity = direction * speed
+			else:
+				velocity = Vector2.ZERO
+		
+		if is_dodging:
+			velocity = last_input_direction * dodge_speed
+		
+	else: # If ranged, move while attacking
+		if !is_dodging:
+			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
+		last_input_direction = direction
+		
+		if is_dodging:
+			velocity = last_input_direction * dodge_speed
+		else:
+			if direction:
+				velocity = direction * speed
 			else:
 				velocity = Vector2.ZERO
 	
@@ -135,7 +141,24 @@ func handle_input():
 				current_class_node.attack.rpc(attack_index)
 				can_attack = false
 
+func tween_dash_value():
+	if dash_tween:
+		dash_tween.kill()
+	dash_tween = create_tween()
+	dash_tween.tween_property(self, "dash_speed", 0.0, dash_duration)\
+	.set_trans(Tween.TRANS_QUAD)\
+	.set_ease(Tween.EASE_OUT)
+
+func tween_dodge_value():
+	if dodge_tween:
+		dodge_tween.kill()
+	dodge_tween = create_tween()
+	dodge_tween.tween_property(self, "dodge_speed", 0.0, dodge_duration)\
+	.set_trans(Tween.TRANS_QUAD)\
+	.set_ease(Tween.EASE_OUT)
+
 func start_dodge():
+	is_attacking = false
 	is_dodging = true
 	can_dodge = false
 	can_attack = false
@@ -145,10 +168,7 @@ func start_dodge():
 	dodge_speed = speed * dodge_speed_mult
 	
 	# Tween the dodge speed to 0 smoothly
-	var tween = get_tree().create_tween()
-	tween.tween_property(self, "dodge_speed", 0.0, dodge_duration)\
-	.set_trans(Tween.TRANS_QUAD)\
-	.set_ease(Tween.EASE_OUT)
+	tween_dodge_value()
 	
 	$DodgeTimer.wait_time = dodge_duration
 	$DodgeTimer.start()
