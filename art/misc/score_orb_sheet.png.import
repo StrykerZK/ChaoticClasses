@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dppex4837udm6"
-path="res://.godot/imported/pyromancer_sprite.png-ab45bc0e17c6185677a434d9c50dd1a9.ctex"
+uid="uid://c2l85hrsy4uev"
+path="res://.godot/imported/score_orb_sheet.png-f1e833f91eedcff6e1ca0f41be868863.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/sprites/pyromancer_sprite.png"
-dest_files=["res://.godot/imported/pyromancer_sprite.png-ab45bc0e17c6185677a434d9c50dd1a9.ctex"]
+source_file="res://art/misc/score_orb_sheet.png"
+dest_files=["res://.godot/imported/score_orb_sheet.png-f1e833f91eedcff6e1ca0f41be868863.ctex"]
 
 [params]
 

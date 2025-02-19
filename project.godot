@@ -105,6 +105,7 @@ back={
 2d_physics/layer_5="Hurtbox"
 2d_physics/layer_6="Collectibles"
 2d_physics/layer_7="Hazards"
+2d_physics/layer_8="Utility"
 
 [rendering]
 

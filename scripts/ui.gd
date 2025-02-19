@@ -12,8 +12,12 @@ func _process(delta: float) -> void:
 func game_over(id):
 	if id == 1:
 		$Label.text = str(StageManager.get_player_2_name()) + " won!"
+		if is_instance_valid(player_2.get_node("Camera")):
+			player_2.get_node("Camera").queue_free()
 	else:
 		$Label.text = StageManager.player_list[1].player_name + " won!"
+		if is_instance_valid(player_1.get_node("Camera")):
+			player_1.get_node("Camera").queue_free()
 	$Label.add_theme_font_size_override("font_size", 60)
 	$Label.add_theme_color_override("font_color",Color.MINT_CREAM)
 	$Label.position = $ScreenCenter.global_position - Vector2($Label.size.x / 2, $Label.size.y / 2)

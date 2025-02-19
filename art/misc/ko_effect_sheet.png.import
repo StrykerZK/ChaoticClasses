@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dppex4837udm6"
-path="res://.godot/imported/pyromancer_sprite.png-ab45bc0e17c6185677a434d9c50dd1a9.ctex"
+uid="uid://dc7ewwuj1eu6d"
+path="res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/sprites/pyromancer_sprite.png"
-dest_files=["res://.godot/imported/pyromancer_sprite.png-ab45bc0e17c6185677a434d9c50dd1a9.ctex"]
+source_file="res://art/misc/ko_effect_sheet.png"
+dest_files=["res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"]
 
 [params]
 

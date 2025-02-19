@@ -32,7 +32,7 @@ LineEdit/colors/selection_color = Color(0, 0, 0, 1)
 LineEdit/constants/caret_width = 0
 LineEdit/constants/minimum_character_width = 0
 LineEdit/constants/outline_size = 0
-LineEdit/font_sizes/font_size = 22
+LineEdit/font_sizes/font_size = 24
 LineEdit/fonts/font = ExtResource("8_kxojv")
 LineEdit/icons/clear = null
 LineEdit/styles/focus = ExtResource("6_32sxr")
@@ -42,24 +42,21 @@ LineEdit/styles/read_only = ExtResource("6_32sxr")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l44iw"]
 texture = ExtResource("5_yc51r")
 
-[node name="MainMenu" type="Control"]
-layout_mode = 3
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_uioiv")
+main_game = ExtResource("2_eagnm")
+
+[node name="Background" type="Panel" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_uioiv")
-main_game = ExtResource("2_eagnm")
-
-[node name="Background" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 720.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_bdo5l")
 
 [node name="TitleMenu" type="Control" parent="."]
-layout_mode = 1
+visible = false
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -67,11 +64,16 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Title" type="Label" parent="TitleMenu"]
-layout_mode = 0
-offset_left = 78.0
-offset_top = 74.0
-offset_right = 778.0
-offset_bottom = 278.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.334
+anchor_top = 0.244
+anchor_right = 0.334
+anchor_bottom = 0.244
+offset_left = -349.52
+offset_top = -101.68
+offset_right = 350.48
+offset_bottom = 102.32
 theme_override_colors/font_color = Color(0.105676, 0.332768, 0.60645, 1)
 theme_override_constants/line_spacing = 20
 theme_override_fonts/font = ExtResource("4_2x3gf")
@@ -82,11 +84,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Play" type="Button" parent="TitleMenu"]
-layout_mode = 0
-offset_left = 70.0
-offset_top = 285.0
-offset_right = 433.0
-offset_bottom = 430.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196
+anchor_top = 0.497
+anchor_right = 0.196
+anchor_bottom = 0.497
+offset_left = -180.88
+offset_top = -72.84
+offset_right = 182.12
+offset_bottom = 72.16
 theme = ExtResource("5_ojkxa")
 theme_override_colors/font_hover_pressed_color = Color(0.309804, 0.709804, 1, 1)
 theme_override_colors/font_hover_color = Color(0.309804, 0.709804, 1, 1)
@@ -97,28 +104,40 @@ theme_override_styles/hover_pressed = ExtResource("6_32sxr")
 theme_override_styles/hover = SubResource("StyleBoxTexture_h6ktl")
 theme_override_styles/normal = SubResource("StyleBoxTexture_ptcef")
 text = "Play"
+metadata/_edit_use_anchors_ = true
 
 [node name="Settings" type="Button" parent="TitleMenu"]
-layout_mode = 0
-offset_left = 70.0
-offset_top = 396.0
-offset_right = 433.0
-offset_bottom = 541.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196
+anchor_top = 0.651
+anchor_right = 0.196
+anchor_bottom = 0.651
+offset_left = -180.88
+offset_top = -72.72
+offset_right = 182.12
+offset_bottom = 72.28
 theme = ExtResource("5_ojkxa")
 text = "Settings"
+metadata/_edit_use_anchors_ = true
 
 [node name="Quit" type="Button" parent="TitleMenu"]
-layout_mode = 0
-offset_left = 70.0
-offset_top = 508.0
-offset_right = 433.0
-offset_bottom = 653.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196
+anchor_top = 0.806
+anchor_right = 0.196
+anchor_bottom = 0.806
+offset_left = -180.88
+offset_top = -72.3201
+offset_right = 182.12
+offset_bottom = 72.6799
 theme = ExtResource("5_ojkxa")
 text = "Quit"
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayMenu" type="Control" parent="."]
-visible = false
-layout_mode = 1
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -129,87 +148,130 @@ game_scene = ExtResource("2_eagnm")
 
 [node name="Start" type="Button" parent="PlayMenu"]
 visible = false
-layout_mode = 0
-offset_left = 70.0
-offset_top = 87.0
-offset_right = 433.0
-offset_bottom = 232.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.195219
+anchor_top = 0.192833
+anchor_right = 0.195219
+anchor_bottom = 0.192833
+offset_left = -179.88
+offset_top = -77.84
+offset_right = 183.12
+offset_bottom = 67.16
 theme = ExtResource("5_ojkxa")
 text = "Start"
+metadata/_edit_use_anchors_ = true
 
 [node name="NameInput" type="LineEdit" parent="PlayMenu"]
-layout_mode = 0
-offset_left = 70.0
-offset_top = 200.0
-offset_right = 433.0
-offset_bottom = 345.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.195219
+anchor_top = 0.347444
+anchor_right = 0.195219
+anchor_bottom = 0.347444
+offset_left = -179.88
+offset_top = -77.16
+offset_right = 183.12
+offset_bottom = 67.84
 theme = SubResource("Theme_1my30")
 placeholder_text = "Enter Name..."
 alignment = 1
 max_length = 12
 
 [node name="Host" type="Button" parent="PlayMenu"]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 310.0
-offset_right = 434.0
-offset_bottom = 455.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196219
+anchor_top = 0.500444
+anchor_right = 0.196219
+anchor_bottom = 0.500444
+offset_left = -181.16
+offset_top = -75.32
+offset_right = 181.84
+offset_bottom = 69.68
 theme = ExtResource("5_ojkxa")
 disabled = true
 text = "Host"
 
 [node name="Join" type="Button" parent="PlayMenu"]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 422.0
-offset_right = 434.0
-offset_bottom = 567.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196219
+anchor_top = 0.650889
+anchor_right = 0.196219
+anchor_bottom = 0.650889
+offset_left = -181.16
+offset_top = -72.64
+offset_right = 181.84
+offset_bottom = 72.36
 theme = ExtResource("5_ojkxa")
 disabled = true
 text = "Join
 "
 
 [node name="Back" type="Button" parent="PlayMenu"]
-layout_mode = 0
-offset_left = 71.0
-offset_top = 530.0
-offset_right = 434.0
-offset_bottom = 675.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.196219
+anchor_top = 0.806444
+anchor_right = 0.196219
+anchor_bottom = 0.806444
+offset_left = -181.16
+offset_top = -72.64
+offset_right = 181.84
+offset_bottom = 72.36
 theme = ExtResource("5_ojkxa")
 text = "BACK
 "
 
 [node name="IPInput" type="LineEdit" parent="PlayMenu"]
 visible = false
-layout_mode = 0
-offset_left = 415.0
-offset_top = 422.0
-offset_right = 778.0
-offset_bottom = 567.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.465219
+anchor_top = 0.650889
+anchor_right = 0.465219
+anchor_bottom = 0.650889
+offset_left = -181.48
+offset_top = -72.64
+offset_right = 181.52
+offset_bottom = 72.36
 theme = SubResource("Theme_1my30")
 placeholder_text = "IP Address"
 alignment = 1
 max_length = 16
+metadata/_edit_use_anchors_ = true
 
 [node name="PortInput" type="LineEdit" parent="PlayMenu"]
 visible = false
-layout_mode = 0
-offset_left = 769.0
-offset_top = 422.0
-offset_right = 954.0
-offset_bottom = 567.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.672219
+anchor_top = 0.650889
+anchor_right = 0.672219
+anchor_bottom = 0.650889
+offset_left = -92.4401
+offset_top = -72.64
+offset_right = 92.5599
+offset_bottom = 72.36
 theme = SubResource("Theme_1my30")
 placeholder_text = "Port"
 alignment = 1
 max_length = 8
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerPanel" type="Panel" parent="PlayMenu"]
 visible = false
-layout_mode = 0
-offset_left = 413.0
-offset_top = 309.0
-offset_right = 776.0
-offset_bottom = 454.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.463219
+anchor_top = 0.499444
+anchor_right = 0.463219
+anchor_bottom = 0.499444
+offset_left = -180.92
+offset_top = -75.6
+offset_right = 182.08
+offset_bottom = 69.4
 theme_override_styles/panel = SubResource("StyleBoxTexture_l44iw")
 
 [node name="PlayerList" type="VBoxContainer" parent="PlayMenu/PlayerPanel"]

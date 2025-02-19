@@ -30,6 +30,7 @@ var dodge_speed: float = 0.0
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
 var is_paused: bool = true
+var is_dead: bool = false
 
 # Variables for dodging
 var is_dodging: bool = false
@@ -46,9 +47,6 @@ var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
 var dash_tween: Tween
-
-
-
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
@@ -91,11 +89,13 @@ func _process(delta: float) -> void:
 		if !is_paused:
 			mouse_pos = get_global_mouse_position()
 			local_mouse_pos = get_local_mouse_position()
-			handle_input() # Input data
+			
+			if !is_dead:
+				handle_input() # Input data
 			
 			move_and_slide() # Character movement
 			
-			if is_instance_valid(anim_tree):
+			if is_instance_valid(anim_tree) and !is_dead:
 				update_animation_parameters() # Update AnimationTree
 
 func handle_input():
@@ -284,21 +284,22 @@ func take_damage(incoming_dmg: float):
 	activate_i_frame(0.5)
 	current_class_node.get_child(0).modulate.s = 50
 	
+	# Die if equal or below 0 health
+	if current_health <= 0:
+		die()
+		return
+	
 	# Slowdown effect
 	Engine.time_scale = 0.2
 	await get_tree().create_timer(0.1).timeout
 	Engine.time_scale = 1
-	
-	if current_health <= 0:
-		die()
-		return
 	
 	# Finish flashing effect
 	await $IFrameTimer.timeout
 	current_class_node.get_child(0).modulate.s = 0
 
 func die():
-	dead.emit(player_id)
+	is_dead = true
 	reset_systems()
 	
 	# Disable ClassSynchronizer
@@ -306,7 +307,27 @@ func die():
 	class_synchronizer.public_visibility = false
 	class_synchronizer.root_path = get_parent().get_path()
 	
-	# Remove player node
+	# Slowdown effect
+	current_class_node.get_child(0).modulate.s = 50
+	if is_instance_valid(get_node("Camera")):
+		get_node("Camera").zoom = Vector2(2.5,2.5)
+	Engine.time_scale = 0.1
+	await get_tree().create_timer(0.2).timeout
+	Engine.time_scale = 1
+	if is_instance_valid(get_node("Camera")):
+		get_node("Camera").zoom = Vector2(1.5,1.5)
+	
+	# Yeet player across map
+	var players = get_tree().get_nodes_in_group("players")
+	for i in players:
+		if i.name != str(player_id):
+			$Collisionbox.disabled = true
+			velocity = position.direction_to(i.position) * -1500
+	
+	await get_tree().create_timer(3)
+	
+	# Emit signal and remove player node
+	dead.emit(player_id)
 	queue_free()
 
 func update_stats(stats: Array):

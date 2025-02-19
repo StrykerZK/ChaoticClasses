@@ -78,9 +78,9 @@ func spawn_projectile(index: float):
 		fireball.player_id = player.player_id
 	else:
 		# Calculate angle offset
-		var start_angle = -60 / 2
-		var angle_step = 60 / 4
-		for i in range(5):
+		var start_angle = -60 #-60 / 2
+		var angle_step = 60 #60 / 4
+		for i in range(6):
 			var fireball = fireball_scene.instantiate()
 			main_node.add_child(fireball)
 			
@@ -97,7 +97,7 @@ func spawn_projectile(index: float):
 			if fireball:
 				fireball.start_follow_timer()
 			
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.05).timeout
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
