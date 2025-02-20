@@ -34,6 +34,8 @@ func game_over(id):
 func start_game():
 	# Assign player nodes
 	assign_players()
+	$Player1Info._ready()
+	$Player2Info._ready()
 	
 	# Start animation for countdown
 	$AnimationPlayer.play("start_game")
@@ -46,10 +48,8 @@ func start_game():
 	$FX.hide()
 	
 	# Setup player info tabs
-	$Player1Info._ready()
 	$Player1Info.show()
 	$Player1Info.display_scores()
-	$Player2Info._ready()
 	$Player2Info.show()
 	$Player2Info.display_scores()
 

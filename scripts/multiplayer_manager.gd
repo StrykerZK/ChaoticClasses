@@ -44,6 +44,7 @@ func join():
 	
 	$Host.disabled = true
 	$Join.disabled = true
+	$HostPortInput.hide()
 	$IPInput.editable = false
 	$PortInput.editable = false
 

@@ -162,10 +162,10 @@ max_length = 12
 [node name="HostPortInput" type="LineEdit" parent="PlayMenu"]
 visible = false
 layout_mode = 0
-offset_left = 409.0
-offset_top = 285.0
-offset_right = 772.0
-offset_bottom = 430.0
+offset_left = 412.0
+offset_top = 284.0
+offset_right = 775.0
+offset_bottom = 429.0
 theme = ExtResource("9_58hxh")
 placeholder_text = "Enter Port..."
 alignment = 1

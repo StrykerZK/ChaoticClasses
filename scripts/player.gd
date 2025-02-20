@@ -123,14 +123,13 @@ func handle_input():
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		last_input_direction = direction
 		
-		if is_dodging:
-			velocity = last_input_direction * dodge_speed
+		if direction:
+			velocity = direction * speed
 		else:
-			if direction:
-				velocity = direction * speed
-			else:
-				velocity = Vector2.ZERO
-	
+			velocity = Vector2.ZERO
+		
+		if is_dodging:
+			velocity = last_input_direction * dodge_speed	
 	
 	if Input.is_action_just_pressed("dodge"):
 		if can_dodge:
@@ -273,22 +272,22 @@ func class_change(class_title: String):
 		StageManager.update_game_state.rpc("In Game")
 
 func take_damage(incoming_dmg: float):
-	# Calculate armor into damage
-	var dmg_reduction = 1 - (armor /  10)
-	var new_dmg = incoming_dmg * dmg_reduction
-	current_health -= new_dmg
-	
-	# Update Info UI
 	if is_multiplayer_authority():
+		# Calculate armor into damage
+		var dmg_reduction = 1 - (armor /  10)
+		var new_dmg = incoming_dmg * dmg_reduction
+		current_health -= new_dmg
+		
+		# Update Info UI
 		StageManager.update_player_stats.rpc(player_id, current_health)
-	
+		
 	# I-Frame and flasing effect
 	activate_i_frame(0.5)
 	current_class_node.get_child(0).modulate.s = 50
 	
 	# Die if equal or below 0 health
 	if current_health <= 0:
-		die()
+		die.rpc()
 		return
 	
 	# Slowdown effect
@@ -300,10 +299,11 @@ func take_damage(incoming_dmg: float):
 	await $IFrameTimer.timeout
 	current_class_node.get_child(0).modulate.s = 0
 
+@rpc("any_peer","call_local")
 func die():
 	is_dead = true
 	reset_systems()
-	disable_collisions.rpc()
+	disable_collisions()
 	
 	# Disable ClassSynchronizer
 	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
@@ -398,11 +398,11 @@ func create_camera():
 	add_child(camera)
 
 func zoom_camera(amount: float):
-	if $Camera:
+	if is_multiplayer_authority():
 		$Camera.zoom = Vector2(amount,amount)
 
 func smooth_camera(setting: String):
-	if $Camera:
+	if is_multiplayer_authority():
 		if setting == "limit":
 			$Camera.limit_smoothed = !$Camera.limit_smoothed
 		elif setting == "position":

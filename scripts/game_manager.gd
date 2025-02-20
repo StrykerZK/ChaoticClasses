@@ -98,12 +98,16 @@ func game_over(id):
 	if multiplayer.is_server():
 		$SwapTimer.stop()
 		StageManager.update_game_state.rpc("Game Over")
-		await get_tree().create_timer(7).timeout
-		if StageManager.p1_score != 3 and StageManager.p2_score != 3:
-			clear_winner.rpc(id)
-			new_game.rpc()
+	await get_tree().create_timer(7).timeout
+	if StageManager.p1_score != 3 and StageManager.p2_score != 3:
+		clear_winner(id)
+		if id == 1:
+			await player_2.tree_exited
 		else:
-			game_end.rpc()
+			await player_1.tree_exited
+		new_game()
+	else:
+		game_end()
 
 func _on_swap_timer_timeout() -> void:
 	class_change()
@@ -113,10 +117,8 @@ func _on_swap_timer_timeout() -> void:
 func clear_winner(loser_id):
 	if loser_id == 1:
 		player_2.queue_free()
-		await player_2.tree_exited
 	else:
 		player_1.queue_free()
-		await player_1.tree_exited
 
 @rpc("any_peer","call_local")
 func new_game():
