@@ -710,6 +710,7 @@ blend_point_11/pos = Vector2(1, 2)
 min_space = Vector2(-1, 0)
 max_space = Vector2(1, 4)
 y_label = "attack_index"
+blend_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5n8nb"]
 animation = &"dodge_left"
@@ -864,7 +865,7 @@ parameters/conditions/idle = false
 parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
-parameters/attack/blend_position = Vector2(-0.393617, 2.53191)
+parameters/attack/blend_position = Vector2(-0.991135, 2.02128)
 parameters/dodge/blend_position = 0
 parameters/idle/blend_position = Vector2(0.939, 0.875)
 parameters/run/blend_position = Vector2(0, 0)
@@ -880,3 +881,4 @@ one_shot = true
 [node name="AttackTimer" type="Timer" parent="."]
 
 [connection signal="timeout" from="ChargeTimer" to="." method="charge_projectile"]
+[connection signal="timeout" from="ChargeAnimTimer" to="." method="finish_charge"]

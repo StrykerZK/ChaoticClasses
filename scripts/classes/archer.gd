@@ -80,16 +80,20 @@ func charge_projectile():
 				player.attack_index += 0.5
 				$ChargeAnimTimer.wait_time = charge_1_length
 				$ChargeAnimTimer.start()
-			if player.is_attacking:
-				player.attack_index += 0.5
-				player.damage = player.base_damage * 2
-				$ChargeTimer.start()
 		2.0:
 			if player.is_attacking:
 				player.attack_index += 0.5
-			$ChargeAnimTimer.wait_time = charge_2_length
-			$ChargeAnimTimer.start()
-			if player.is_attacking:
+				$ChargeAnimTimer.wait_time = charge_2_length
+				$ChargeAnimTimer.start()
+
+func finish_charge():
+	if player.is_attacking:
+		match player.attack_index:
+			1.5:
+				player.attack_index += 0.5
+				player.damage = player.base_damage * 2
+				$ChargeTimer.start()
+			2.5:
 				player.attack_index += 0.5
 				player.damage = player.base_damage * 4
 

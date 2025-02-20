@@ -113,14 +113,19 @@ func _on_swap_timer_timeout() -> void:
 	class_change()
 	$SwapTimer.start()
 
-@rpc("any_peer","call_local")
+@rpc("any_peer")
+func clear_player(id):
+	if id == 1:
+		player_1.queue_free()
+	else:
+		player_2.queue_free()
+
 func clear_winner(loser_id):
 	if loser_id == 1:
 		player_2.queue_free()
 	else:
 		player_1.queue_free()
 
-@rpc("any_peer","call_local")
 func new_game():
 	player_manager.spawn_players()
 	assign_players()

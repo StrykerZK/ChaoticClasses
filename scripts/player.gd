@@ -23,7 +23,6 @@ var dodge_speed: float = 0.0
 # Misc variables
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
-@onready var class_synchronizer: MultiplayerSynchronizer
 @onready var player_manager: Node
 @onready var hitbox: Area2D
 
@@ -50,9 +49,9 @@ var dash_tween: Tween
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
+	dead.connect(Callable(StageManager,"game_over"))
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
 	dead.connect(Callable($/root/Main/MainUI,"game_over"))
-	dead.connect(Callable(StageManager,"game_over"))
 	
 	set_multiplayer_authority(int(str(name)))
 
@@ -63,7 +62,6 @@ func _ready() -> void:
 	current_class_node = get_child(0)
 	current_class = current_class_node.name
 	current_type = current_class_node.type
-	class_synchronizer = $ClassSynchronizer
 	$PlayerSynchronizer.root_path = get_path()
 	
 	hitbox = get_node("Base/Hitbox")
@@ -95,11 +93,9 @@ func _process(delta: float) -> void:
 			
 			if !is_dead:
 				handle_input() # Input data
+				update_animation_parameters.rpc() # Update animations
 			
 			move_and_slide() # Character movement
-			
-			if is_instance_valid(anim_tree) and !is_dead:
-				update_animation_parameters() # Update AnimationTree
 
 func handle_input():
 	if current_type == "melee": # If melee, don't move while attacking
@@ -206,7 +202,10 @@ func activate_i_frame(value: float):
 func deactivate_i_frame():
 	$Hurtbox.set_deferred("monitorable", true)
 
+@rpc("any_peer","call_local")
 func update_animation_parameters():
+	if !is_instance_valid(anim_tree):
+		return
 	if !is_dodging and !is_attacking:
 		anim_tree.set("parameters/conditions/idle", velocity == Vector2.ZERO)
 		anim_tree.set("parameters/conditions/is_running", velocity != Vector2.ZERO)
@@ -233,11 +232,6 @@ func class_change(class_title: String):
 	# Reset variables and booleans
 	reset_systems()
 	
-	# Disable ClassSynchronizer
-	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
-	class_synchronizer.public_visibility = false
-	class_synchronizer.root_path = get_parent().get_path()
-	
 	# Play transform FX
 	$PlayerFX.play("transform")
 	
@@ -256,11 +250,6 @@ func class_change(class_title: String):
 	move_child(class_node,0)
 	current_class_node = get_child(0)
 	
-	# Enable ClassSynchronizer
-	class_synchronizer.root_path = current_class_node.get_path()
-	class_synchronizer.public_visibility = true
-	class_synchronizer.process_mode = Node.PROCESS_MODE_INHERIT
-	
 	# Update stats to new class
 	var new_stats = ClassManager.get_class_data(class_title)
 	update_stats(new_stats)
@@ -272,22 +261,22 @@ func class_change(class_title: String):
 		StageManager.update_game_state.rpc("In Game")
 
 func take_damage(incoming_dmg: float):
-	if is_multiplayer_authority():
-		# Calculate armor into damage
-		var dmg_reduction = 1 - (armor /  10)
-		var new_dmg = incoming_dmg * dmg_reduction
-		current_health -= new_dmg
-		
-		# Update Info UI
-		StageManager.update_player_stats.rpc(player_id, current_health)
-		
+	#if is_multiplayer_authority(): # Add this for any dmg sync errors
+	# Calculate armor into damage
+	var dmg_reduction = 1 - (armor /  10)
+	var new_dmg = incoming_dmg * dmg_reduction
+	current_health -= new_dmg
+	
+	# Update Info UI
+	StageManager.update_player_stats.rpc(player_id, current_health)
+	
 	# I-Frame and flasing effect
 	activate_i_frame(0.5)
 	current_class_node.get_child(0).modulate.s = 50
 	
 	# Die if equal or below 0 health
 	if current_health <= 0:
-		die.rpc()
+		die() # Add RPC for dmg sync errors
 		return
 	
 	# Slowdown effect
@@ -299,16 +288,11 @@ func take_damage(incoming_dmg: float):
 	await $IFrameTimer.timeout
 	current_class_node.get_child(0).modulate.s = 0
 
-@rpc("any_peer","call_local")
+@rpc("any_peer","call_local","unreliable")
 func die():
 	is_dead = true
 	reset_systems()
 	disable_collisions()
-	
-	# Disable ClassSynchronizer
-	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
-	class_synchronizer.public_visibility = false
-	class_synchronizer.root_path = get_parent().get_path()
 	
 	# Get all player nodes
 	var players = get_tree().get_nodes_in_group("players")
@@ -316,17 +300,30 @@ func die():
 	# Slowdown effect and zoom
 	current_class_node.get_child(0).modulate.s = 50
 	for i in players:
-		i.zoom_camera(2.5)
+		if i.player_id != player_id:
+			i.remove_camera()
+		else:
+			if !i.is_multiplayer_authority():
+				i.create_camera()
+			i.zoom_camera(2.5)
 	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.15).timeout
 	Engine.time_scale = 1
 	for i in players:
-		i.zoom_camera(1.5)
+		if i.player_id != player_id:
+			if i.is_multiplayer_authority():
+				i.create_camera()
+				i.zoom_camera(1)
+		else:
+			if !i.is_multiplayer_authority():
+				i.remove_camera()
+			i.zoom_camera(1.5)
 	
 	# Yeet player across map
-	for i in players:
-		if i.name != str(player_id):
-			velocity = position.direction_to(i.position) * -1500
+	if is_multiplayer_authority():
+		for i in players:
+			if i.name != str(player_id):
+				velocity = position.direction_to(i.position) * -1500
 	
 	dead.emit(player_id)
 	
@@ -385,6 +382,8 @@ func initialize_class_children():
 	current_type = current_class_node.type
 
 func create_camera():
+	if $Camera:
+		return
 	var camera = Camera2D.new()
 	camera.name = "Camera"
 	camera.enabled = true
@@ -395,6 +394,7 @@ func create_camera():
 	camera.limit_top = 0
 	camera.limit_right = get_viewport_rect().size.x
 	camera.limit_bottom = get_viewport_rect().size.y
+	camera.limit_smoothed = true
 	add_child(camera)
 
 func zoom_camera(amount: float):
@@ -409,3 +409,7 @@ func smooth_camera(setting: String):
 			$Camera.position_smoothing_enabled = !$Camera.position_smoothing_enabled
 		elif setting == "rotation":
 			$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled
+
+func remove_camera():
+	if is_multiplayer_authority():
+		$Camera.queue_free()

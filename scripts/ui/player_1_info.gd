@@ -7,8 +7,6 @@ var falloff_ready: bool = false
 func _ready() -> void:
 	player_id = 1
 	update_display()
-	check_hp()
-	$FalloffBar.value = $HPBar.value
 
 func _process(delta: float) -> void:
 	check_hp()
@@ -19,7 +17,7 @@ func check_hp():
 		$HPBar.value = StageManager.p1_stats[0]
 
 func check_falloffbar():
-	if $FalloffBar.value != $HPBar.value and falloff_ready:
+	if $FalloffBar.value > $HPBar.value and falloff_ready:
 		$FalloffBar.value -= 1
 		if $FalloffBar.value == $HPBar.value:
 			falloff_ready = false
@@ -59,3 +57,7 @@ func update_scores():
 		$Scores/Score2.play("charging")
 	elif StageManager.p1_score == 3:
 		$Scores/Score3.play("charging")
+
+func reset_bars(value: float):
+	$HPBar.value = value
+	$FalloffBar.value = value

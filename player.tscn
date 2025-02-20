@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=69 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
@@ -737,36 +737,19 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath("Hurtbox:monitorable")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:damage")
+properties/4/path = NodePath(".:velocity")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ndcyi"]
-properties/0/path = NodePath("AnimationTree:active")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("AnimationTree:parameters/conditions/idle")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("AnimationTree:parameters/conditions/is_attacking")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("AnimationTree:parameters/conditions/is_dodging")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("AnimationTree:parameters/conditions/is_running")
-properties/4/spawn = true
-properties/4/replication_mode = 1
-properties/5/path = NodePath("AnimationTree:parameters/attack/blend_position")
+properties/5/path = NodePath(".:local_mouse_pos")
 properties/5/spawn = true
 properties/5/replication_mode = 1
-properties/6/path = NodePath("AnimationTree:parameters/dodge/blend_position")
+properties/6/path = NodePath(".:last_mouse_pos")
 properties/6/spawn = true
 properties/6/replication_mode = 1
-properties/7/path = NodePath("AnimationTree:parameters/idle/blend_position")
+properties/7/path = NodePath(".:last_input_direction")
 properties/7/spawn = true
 properties/7/replication_mode = 1
-properties/8/path = NodePath("AnimationTree:parameters/run/blend_position")
+properties/8/path = NodePath(".:is_paused")
 properties/8/spawn = true
 properties/8/replication_mode = 1
 
@@ -958,10 +941,6 @@ debug_color = Color(0, 1, 0.12549, 0.419608)
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_vnws8")
-
-[node name="ClassSynchronizer" type="MultiplayerSynchronizer" parent="."]
-root_path = NodePath("../Base")
-replication_config = SubResource("SceneReplicationConfig_ndcyi")
 
 [node name="DodgeTimer" type="Timer" parent="."]
 one_shot = true
