@@ -53,16 +53,20 @@ func _enter_tree() -> void:
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
 	dead.connect(Callable($/root/Main/MainUI,"game_over"))
 	
-	set_multiplayer_authority(int(str(name)))
+	player_id = int(str(name))
+	set_multiplayer_authority(player_id)
 
 func _ready() -> void:
 	player_manager = get_node("/root/Main/PlayerManager")
-	player_id = int(str(name))
+	
+	change_camera_focus(Vector2(get_viewport_rect().size.x / 2,\
+	get_viewport_rect().size.y / 2))
 	
 	current_class_node = get_child(0)
 	current_class = current_class_node.name
 	current_type = current_class_node.type
 	$PlayerSynchronizer.root_path = get_path()
+	$PlayerSynchronizer.set_multiplayer_authority(player_id)
 	
 	hitbox = get_node("Base/Hitbox")
 	hitbox.player_id = player_id
@@ -261,14 +265,13 @@ func class_change(class_title: String):
 		StageManager.update_game_state.rpc("In Game")
 
 func take_damage(incoming_dmg: float):
-	#if is_multiplayer_authority(): # Add this for any dmg sync errors
-	# Calculate armor into damage
-	var dmg_reduction = 1 - (armor /  10)
-	var new_dmg = incoming_dmg * dmg_reduction
-	current_health -= new_dmg
-	
-	# Update Info UI
-	StageManager.update_player_stats.rpc(player_id, current_health)
+	if is_multiplayer_authority(): # Add this for any dmg sync errors
+		# Calculate armor into damage
+		var dmg_reduction = 1 - (armor /  10)
+		var new_dmg = incoming_dmg * dmg_reduction
+		current_health -= new_dmg
+		# Update Info UI
+		StageManager.update_player_stats.rpc(player_id, current_health)
 	
 	# I-Frame and flasing effect
 	activate_i_frame(0.5)
@@ -276,14 +279,9 @@ func take_damage(incoming_dmg: float):
 	
 	# Die if equal or below 0 health
 	if current_health <= 0:
-		die() # Add RPC for dmg sync errors
+		die.rpc() # Add RPC for dmg sync errors
 		return
-	
-	# Slowdown effect
-	Engine.time_scale = 0.2
-	await get_tree().create_timer(0.1).timeout
-	Engine.time_scale = 1
-	
+		
 	# Finish flashing effect
 	await $IFrameTimer.timeout
 	current_class_node.get_child(0).modulate.s = 0
@@ -301,29 +299,25 @@ func die():
 	current_class_node.get_child(0).modulate.s = 50
 	for i in players:
 		if i.player_id != player_id:
-			i.remove_camera()
-		else:
-			if !i.is_multiplayer_authority():
-				i.create_camera()
-			i.zoom_camera(2.5)
+			if !is_multiplayer_authority():
+				i.change_camera_focus(global_position)
+		i.zoom_camera(2.5)
 	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.15).timeout
+	use_utility_timer(0.15)
+	await $UtilityTimer.timeout
 	Engine.time_scale = 1
 	for i in players:
 		if i.player_id != player_id:
-			if i.is_multiplayer_authority():
-				i.create_camera()
-				i.zoom_camera(1)
+			if !is_multiplayer_authority():
+				i.reset_camera_focus()
+				i.zoom_camera(1.0)
 		else:
-			if !i.is_multiplayer_authority():
-				i.remove_camera()
 			i.zoom_camera(1.5)
 	
 	# Yeet player across map
-	if is_multiplayer_authority():
-		for i in players:
-			if i.name != str(player_id):
-				velocity = position.direction_to(i.position) * -1500
+	for i in players:
+		if i.name != str(player_id):
+			velocity = position.direction_to(i.position) * -1500
 	
 	dead.emit(player_id)
 	
@@ -332,7 +326,6 @@ func die():
 	# Remove player node
 	queue_free()
 
-@rpc("any_peer","call_local")
 func disable_collisions():
 	$Collisionbox.set_deferred("disabled", true)
 	$Hurtbox.set_deferred("monitoring", false)
@@ -381,6 +374,10 @@ func initialize_class_children():
 	hitbox.player_id = player_id
 	current_type = current_class_node.type
 
+func use_utility_timer(duration: float):
+	$UtilityTimer.wait_time = duration
+	$UtilityTimer.start()
+
 func create_camera():
 	if $Camera:
 		return
@@ -390,11 +387,11 @@ func create_camera():
 	camera.zoom = Vector2(1.5, 1.5)
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 5
-	camera.limit_left = 0
-	camera.limit_top = 0
-	camera.limit_right = get_viewport_rect().size.x
-	camera.limit_bottom = get_viewport_rect().size.y
-	camera.limit_smoothed = true
+	#camera.limit_left = 0
+	#camera.limit_top = 0
+	#camera.limit_right = get_viewport_rect().size.x
+	#camera.limit_bottom = get_viewport_rect().size.y
+	#camera.limit_smoothed = true
 	add_child(camera)
 
 func zoom_camera(amount: float):
@@ -410,6 +407,10 @@ func smooth_camera(setting: String):
 		elif setting == "rotation":
 			$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled
 
-func remove_camera():
+func change_camera_focus(target: Vector2):
 	if is_multiplayer_authority():
-		$Camera.queue_free()
+		$Camera.global_position = target
+
+func reset_camera_focus():
+	if is_multiplayer_authority():
+		change_camera_focus(global_position)

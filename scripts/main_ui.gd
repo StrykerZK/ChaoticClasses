@@ -16,8 +16,8 @@ func start_game():
 	assign_players()
 	$Player1Info.update_display()
 	$Player2Info.update_display()
-	$Player1Info.reset_bars(player_1.max_health)
-	$Player2Info.reset_bars(player_2.max_health)
+	$Player1Info.reset_bars(200)
+	$Player2Info.reset_bars(200)
 	
 	# Start animation for countdown
 	$AnimationPlayer.play("start_game")

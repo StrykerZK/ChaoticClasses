@@ -15,6 +15,7 @@ func _on_area_entered(area: Area2D) -> void:
 	
 	if area.is_in_group("projectiles"):
 		if deflection:
+			area.player_id = player_id
 			area.velocity = -area.velocity
 			if is_instance_valid(area.get_node("Sprite2D")):
 				area.get_node("Sprite2D").flip_h = true

@@ -53,10 +53,13 @@ func display_scores():
 func update_scores():
 	if StageManager.p1_score == 1:
 		$Scores/Score1.play("charging")
-	elif StageManager.p1_score == 2:
+		$AnimationPlayer.play("score_1_fill")
+	elif StageManager.p2_score == 2:
 		$Scores/Score2.play("charging")
-	elif StageManager.p1_score == 3:
+		$AnimationPlayer.play("score_2_fill")
+	elif StageManager.p2_score == 3:
 		$Scores/Score3.play("charging")
+		$AnimationPlayer.play("score_3_fill")
 
 func reset_bars(value: float):
 	$HPBar.value = value
