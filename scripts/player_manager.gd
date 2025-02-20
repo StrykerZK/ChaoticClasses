@@ -3,6 +3,10 @@ extends Node
 @export var player_scene: PackedScene
 
 func _ready():
+	spawn_players()
+
+
+func spawn_players():
 	var index = 1
 	for i in StageManager.player_list:
 		var current_player = player_scene.instantiate()

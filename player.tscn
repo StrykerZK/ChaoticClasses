@@ -775,15 +775,6 @@ properties/9/replication_mode = 1
 properties/10/path = NodePath("AnimationTree:parameters/run/blend_position")
 properties/10/spawn = true
 properties/10/replication_mode = 1
-properties/11/path = NodePath("Hitbox/CollisionShape2D:disabled")
-properties/11/spawn = true
-properties/11/replication_mode = 1
-properties/12/path = NodePath("Hitbox/CollisionShape2D:position")
-properties/12/spawn = true
-properties/12/replication_mode = 1
-properties/13/path = NodePath("Hitbox/CollisionShape2D:scale")
-properties/13/spawn = true
-properties/13/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ktfs"]
 atlas = ExtResource("7_pl1nw")
@@ -997,6 +988,14 @@ scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4gxxo")
 
 [node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Camera" type="Camera2D" parent="."]
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720
+position_smoothing_enabled = true
+editor_draw_limits = true
 
 [connection signal="timeout" from="Base/ComboTimer" to="Base" method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]

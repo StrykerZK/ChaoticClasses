@@ -711,7 +711,6 @@ min_space = Vector2(-1, 0)
 max_space = Vector2(1, 4)
 y_label = "attack_index"
 blend_mode = 1
-sync = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5n8nb"]
 animation = &"dodge_left"
@@ -866,7 +865,7 @@ parameters/conditions/idle = false
 parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
-parameters/attack/blend_position = Vector2(-0.0656028, 4.23404)
+parameters/attack/blend_position = Vector2(-0.0478724, 1.53191)
 parameters/dodge/blend_position = 0
 parameters/idle/blend_position = Vector2(0.939, 0.875)
 parameters/run/blend_position = Vector2(0, 0)

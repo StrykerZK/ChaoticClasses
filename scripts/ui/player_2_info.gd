@@ -6,13 +6,19 @@ var falloff_ready: bool = false
 
 func _ready() -> void:
 	player_id = StageManager.get_player_2_id()
-	update_display.rpc()
+	update_display()
+	check_hp()
+	$FalloffBar.value = $HPBar.value
 
 func _process(delta: float) -> void:
+	check_hp()
+	check_falloffbar()
+
+func check_hp():
 	if !StageManager.p2_stats.is_empty():
 		$HPBar.value = StageManager.p2_stats[0]
-	
-	
+
+func check_falloffbar():
 	if $FalloffBar.value != $HPBar.value and falloff_ready:
 		$FalloffBar.value -= 1
 		if $FalloffBar.value == $HPBar.value:
@@ -26,9 +32,30 @@ func start_falloff(value):
 func _on_falloff_timer_timeout() -> void:
 	falloff_ready = true
 
-@rpc("any_peer","call_local")
 func update_display():
 	$PlayerName.text = StageManager.player_list[player_id].player_name
 	$PlayerClass.text = StageManager.player_list[player_id].class
 	$PlayerSprite.texture =\
 	load("res://art/player/sprites/"+StageManager.player_list[player_id].class+"_sprite.png")
+
+func display_scores():
+	if StageManager.p2_score == 0:
+		$Scores/Score1.play("start")
+		$Scores/Score2.play("start")
+		$Scores/Score3.play("start")
+	elif StageManager.p2_score == 1:
+		$Scores/Score1.play("full")
+		$Scores/Score2.play("empty")
+		$Scores/Score3.play("empty")
+	elif StageManager.p2_score == 2:
+		$Scores/Score1.play("full")
+		$Scores/Score2.play("full")
+		$Scores/Score3.play("empty")
+
+func update_scores():
+	if StageManager.p1_score == 1:
+		$Scores/Score1.play("charging")
+	elif StageManager.p1_score == 2:
+		$Scores/Score2.play("charging")
+	elif StageManager.p1_score == 3:
+		$Scores/Score3.play("charging")

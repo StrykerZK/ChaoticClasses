@@ -1,0 +1,24 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://blm8hjxu2exss"]
+
+[ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="1_dl0y5"]
+[ext_resource type="StyleBox" uid="uid://bjixhb1vmhjwa" path="res://art/ui/button_texture.tres" id="2_6nkeq"]
+
+[resource]
+LineEdit/colors/caret_color = Color(0, 0, 0, 1)
+LineEdit/colors/clear_button_color = Color(0, 0, 0, 1)
+LineEdit/colors/clear_button_color_pressed = Color(0, 0, 0, 1)
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_outline_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_placeholder_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_selected_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_uneditable_color = Color(0, 0, 0, 1)
+LineEdit/colors/selection_color = Color(0, 0, 0, 1)
+LineEdit/constants/caret_width = 0
+LineEdit/constants/minimum_character_width = 0
+LineEdit/constants/outline_size = 0
+LineEdit/font_sizes/font_size = 24
+LineEdit/fonts/font = ExtResource("1_dl0y5")
+LineEdit/icons/clear = null
+LineEdit/styles/focus = ExtResource("2_6nkeq")
+LineEdit/styles/normal = ExtResource("2_6nkeq")
+LineEdit/styles/read_only = ExtResource("2_6nkeq")

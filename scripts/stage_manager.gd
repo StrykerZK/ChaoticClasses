@@ -11,8 +11,15 @@ var game_state = ""
 var p1_stats = []
 var p2_stats = []
 
+var p1_score: int = 0
+var p2_score: int = 0
+
 func _ready():
 	pass
+
+func clear_list():
+	player_list.clear()
+	player_count = 0
 
 @rpc("any_peer","call_local","reliable")
 func set_target(id, target):
@@ -58,3 +65,16 @@ func update_player_stats(id: int, current_health: float):
 @rpc("any_peer","call_local")
 func update_game_state(state: String):
 	game_state = state
+
+func game_over(id):
+	if id == 1:
+		p2_score += 1
+	else:
+		p1_score += 1
+
+func reset_game():
+	game_state = ""
+	p1_stats.clear()
+	p1_score = 0
+	p2_stats.clear()
+	p2_score = 0

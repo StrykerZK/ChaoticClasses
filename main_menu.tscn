@@ -9,6 +9,7 @@
 [ext_resource type="StyleBox" uid="uid://bjixhb1vmhjwa" path="res://art/ui/button_texture.tres" id="6_32sxr"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
 [ext_resource type="Script" path="res://scripts/multiplayer_manager.gd" id="8_vv6tx"]
+[ext_resource type="Theme" uid="uid://blm8hjxu2exss" path="res://art/ui/line_edit_theme.tres" id="9_58hxh"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bdo5l"]
 texture = ExtResource("3_uwo5s")
@@ -18,26 +19,6 @@ texture = ExtResource("5_yc51r")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ptcef"]
 texture = ExtResource("5_yc51r")
-
-[sub_resource type="Theme" id="Theme_1my30"]
-LineEdit/colors/caret_color = Color(0, 0, 0, 1)
-LineEdit/colors/clear_button_color = Color(0, 0, 0, 1)
-LineEdit/colors/clear_button_color_pressed = Color(0, 0, 0, 1)
-LineEdit/colors/font_color = Color(1, 1, 1, 1)
-LineEdit/colors/font_outline_color = Color(0, 0, 0, 1)
-LineEdit/colors/font_placeholder_color = Color(1, 1, 1, 1)
-LineEdit/colors/font_selected_color = Color(0, 0, 0, 1)
-LineEdit/colors/font_uneditable_color = Color(0, 0, 0, 1)
-LineEdit/colors/selection_color = Color(0, 0, 0, 1)
-LineEdit/constants/caret_width = 0
-LineEdit/constants/minimum_character_width = 0
-LineEdit/constants/outline_size = 0
-LineEdit/font_sizes/font_size = 24
-LineEdit/fonts/font = ExtResource("8_kxojv")
-LineEdit/icons/clear = null
-LineEdit/styles/focus = ExtResource("6_32sxr")
-LineEdit/styles/normal = ExtResource("6_32sxr")
-LineEdit/styles/read_only = ExtResource("6_32sxr")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l44iw"]
 texture = ExtResource("5_yc51r")
@@ -173,10 +154,21 @@ offset_left = -179.88
 offset_top = -77.16
 offset_right = 183.12
 offset_bottom = 67.84
-theme = SubResource("Theme_1my30")
+theme = ExtResource("9_58hxh")
 placeholder_text = "Enter Name..."
 alignment = 1
 max_length = 12
+
+[node name="HostPortInput" type="LineEdit" parent="PlayMenu"]
+visible = false
+layout_mode = 0
+offset_left = 409.0
+offset_top = 285.0
+offset_right = 772.0
+offset_bottom = 430.0
+theme = ExtResource("9_58hxh")
+placeholder_text = "Enter Port..."
+alignment = 1
 
 [node name="Host" type="Button" parent="PlayMenu"]
 layout_mode = 1
@@ -236,7 +228,7 @@ offset_left = -181.48
 offset_top = -72.64
 offset_right = 181.52
 offset_bottom = 72.36
-theme = SubResource("Theme_1my30")
+theme = ExtResource("9_58hxh")
 placeholder_text = "IP Address"
 alignment = 1
 max_length = 16
@@ -254,7 +246,7 @@ offset_left = -92.4401
 offset_top = -72.64
 offset_right = 92.5599
 offset_bottom = 72.36
-theme = SubResource("Theme_1my30")
+theme = ExtResource("9_58hxh")
 placeholder_text = "Port"
 alignment = 1
 max_length = 8

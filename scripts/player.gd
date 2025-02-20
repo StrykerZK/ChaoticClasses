@@ -52,6 +52,7 @@ func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
 	dead.connect(Callable($/root/Main/MainUI,"game_over"))
+	dead.connect(Callable(StageManager,"game_over"))
 	
 	set_multiplayer_authority(int(str(name)))
 
@@ -80,9 +81,11 @@ func _ready() -> void:
 	else:
 		anim_tree["parameters/idle/blend_position"] = Vector2(-1,0)
 	
-	# Set up camera for each
+	# Set up
 	if is_multiplayer_authority():
-		create_camera()
+		StageManager.update_player_stats.rpc(player_id, current_health)
+	elif !is_multiplayer_authority():
+		$Camera.queue_free()
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
@@ -269,7 +272,6 @@ func class_change(class_title: String):
 		$/root/Main/GameManager.toggle_pause.rpc()
 		StageManager.update_game_state.rpc("In Game")
 
-@rpc("any_peer","call_local")
 func take_damage(incoming_dmg: float):
 	# Calculate armor into damage
 	var dmg_reduction = 1 - (armor /  10)
@@ -301,34 +303,43 @@ func take_damage(incoming_dmg: float):
 func die():
 	is_dead = true
 	reset_systems()
+	disable_collisions.rpc()
 	
 	# Disable ClassSynchronizer
 	class_synchronizer.process_mode = Node.PROCESS_MODE_DISABLED
 	class_synchronizer.public_visibility = false
 	class_synchronizer.root_path = get_parent().get_path()
 	
-	# Slowdown effect
+	# Get all player nodes
+	var players = get_tree().get_nodes_in_group("players")
+	
+	# Slowdown effect and zoom
 	current_class_node.get_child(0).modulate.s = 50
-	if is_instance_valid(get_node("Camera")):
-		get_node("Camera").zoom = Vector2(2.5,2.5)
+	for i in players:
+		i.zoom_camera(2.5)
 	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.1).timeout
 	Engine.time_scale = 1
-	if is_instance_valid(get_node("Camera")):
-		get_node("Camera").zoom = Vector2(1.5,1.5)
+	for i in players:
+		i.zoom_camera(1.5)
 	
 	# Yeet player across map
-	var players = get_tree().get_nodes_in_group("players")
 	for i in players:
 		if i.name != str(player_id):
-			$Collisionbox.disabled = true
 			velocity = position.direction_to(i.position) * -1500
 	
-	await get_tree().create_timer(3)
-	
-	# Emit signal and remove player node
 	dead.emit(player_id)
+	
+	await get_tree().create_timer(2).timeout
+	
+	# Remove player node
 	queue_free()
+
+@rpc("any_peer","call_local")
+func disable_collisions():
+	$Collisionbox.set_deferred("disabled", true)
+	$Hurtbox.set_deferred("monitoring", false)
+	$Hurtbox.set_deferred("monitorable", false)
 
 func update_stats(stats: Array):
 	armor = stats[0]
@@ -385,3 +396,16 @@ func create_camera():
 	camera.limit_right = get_viewport_rect().size.x
 	camera.limit_bottom = get_viewport_rect().size.y
 	add_child(camera)
+
+func zoom_camera(amount: float):
+	if $Camera:
+		$Camera.zoom = Vector2(amount,amount)
+
+func smooth_camera(setting: String):
+	if $Camera:
+		if setting == "limit":
+			$Camera.limit_smoothed = !$Camera.limit_smoothed
+		elif setting == "position":
+			$Camera.position_smoothing_enabled = !$Camera.position_smoothing_enabled
+		elif setting == "rotation":
+			$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled

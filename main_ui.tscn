@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1aj3uw0040ii"]
+[gd_scene load_steps=28 format=3 uid="uid://d1aj3uw0040ii"]
 
-[ext_resource type="Script" path="res://scripts/ui.gd" id="1_50b53"]
+[ext_resource type="Script" path="res://scripts/main_ui.gd" id="1_50b53"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
 [ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_60xrb"]
 [ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://player_2_info.tscn" id="4_dqrjs"]
+[ext_resource type="Texture2D" uid="uid://bqo32dpom6abk" path="res://art/misc/fight_text_sheet.png" id="5_1q4mj"]
 
 [sub_resource type="Theme" id="Theme_omnm7"]
 Label/colors/font_color = Color(0.1691, 0.43343, 0.89, 1)
@@ -16,25 +17,359 @@ Label/constants/shadow_outline_size = 16
 Label/font_sizes/font_size = 48
 Label/fonts/font = ExtResource("2_iropl")
 
-[node name="UI" type="CanvasLayer"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_71g2x"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(0, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6888"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(320, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7byby"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(640, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62oou"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(960, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dfuxf"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(0, 320, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alpfo"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(320, 320, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wic1u"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(640, 320, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw6e0"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(960, 320, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3chr6"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(0, 640, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f63fq"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(320, 640, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rfmw"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(640, 640, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfnps"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(960, 640, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pe1fc"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(0, 960, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vuut4"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(320, 960, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j84um"]
+atlas = ExtResource("5_1q4mj")
+region = Rect2(640, 960, 320, 320)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_okv6o"]
+animations = [{
+"frames": [{
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_71g2x")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_l6888")
+}, {
+"duration": 0.2,
+"texture": SubResource("AtlasTexture_7byby")
+}, {
+"duration": 0.3,
+"texture": SubResource("AtlasTexture_62oou")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_dfuxf")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_alpfo")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_wic1u")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_uw6e0")
+}, {
+"duration": 0.2,
+"texture": SubResource("AtlasTexture_3chr6")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_f63fq")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_6rfmw")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_rfnps")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_pe1fc")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_vuut4")
+}, {
+"duration": 0.4,
+"texture": SubResource("AtlasTexture_j84um")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"fight",
+"speed": 2.0
+}]
+
+[sub_resource type="Animation" id="Animation_7750f"]
+resource_name = "game_over"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+
+[sub_resource type="Animation" id="Animation_bu6ua"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.168627, 0.435294, 0.890196, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Label:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Label:theme_override_font_sizes/font_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Label:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Label:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Label:pivot_offset")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(400, 56)]
+}
+
+[sub_resource type="Animation" id="Animation_ghb0x"]
+resource_name = "start_game"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 3, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": ["", "3", "2", "1", ""]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:theme_override_colors/font_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(0.168627, 0.435294, 0.890196, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Label:theme_override_font_sizes/font_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [96]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Label:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 2, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Label:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(520, 304)]
+}
+
+[sub_resource type="Animation" id="Animation_f5hmg"]
+resource_name = "game_end"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Game Over!"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Label:pivot_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(400, 56)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jofjq"]
+_data = {
+"RESET": SubResource("Animation_bu6ua"),
+"game_end": SubResource("Animation_f5hmg"),
+"game_over": SubResource("Animation_7750f"),
+"start_game": SubResource("Animation_ghb0x")
+}
+
+[node name="MainUI" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_50b53")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -210.0
-offset_right = 216.0
-offset_bottom = -168.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 160.0
+offset_bottom = -248.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(120, 21)
+pivot_offset = Vector2(400, 56)
 theme = SubResource("Theme_omnm7")
 theme_override_colors/font_color = Color(0.168627, 0.435294, 0.890196, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -46,3 +381,16 @@ visible = false
 
 [node name="Player2Info" parent="." instance=ExtResource("4_dqrjs")]
 visible = false
+
+[node name="FX" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(640, 360)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_okv6o")
+animation = &"fight"
+frame = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_jofjq")
+}
