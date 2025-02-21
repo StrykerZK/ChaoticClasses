@@ -281,7 +281,7 @@ func class_change(class_title: String):
 	is_transforming = false
 
 func take_damage(incoming_dmg: float):
-	if is_multiplayer_authority(): # Add this for any dmg sync errors
+	if is_multiplayer_authority() and !is_dead: # Add this for any dmg sync errors
 		# Calculate armor into damage
 		var dmg_reduction = 1 - (armor /  10)
 		var new_dmg = incoming_dmg * dmg_reduction
@@ -333,16 +333,17 @@ func die():
 			i.zoom_camera(1.5)
 	
 	# Yeet player across map
-	if is_multiplayer_authority():
-		for i in players:
-			if i.name != str(player_id):
-				velocity = position.direction_to(i.position) * -1500
+	for i in players:
+		if i.name != str(player_id):
+			velocity = position.direction_to(i.position) * -1800
 	
 	dead.emit(player_id)
 	await get_tree().create_timer(0.7).timeout
 	
 	# Remove player node
+	$PlayerSynchronizer.process_mode = Node.PROCESS_MODE_DISABLED
 	$PlayerSynchronizer.queue_free()
+	await child_exiting_tree
 	queue_free()
 
 func disable_collisions():

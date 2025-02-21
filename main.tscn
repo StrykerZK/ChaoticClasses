@@ -250,6 +250,15 @@ frame = 15
 frame_progress = 1.0
 offset = Vector2(160, 0)
 
+[node name="Dummy" parent="World" instance=ExtResource("4_mp342")]
+position = Vector2(498, 571)
+
+[node name="Dummy2" parent="World" instance=ExtResource("4_mp342")]
+position = Vector2(750, 572)
+
+[node name="AnimatedSprite2D" parent="World/Dummy2" index="0"]
+flip_h = true
+
 [node name="GameManager" parent="." instance=ExtResource("2_t68bh")]
 
 [node name="PlayerManager" type="Node" parent="."]
@@ -257,23 +266,14 @@ process_mode = 3
 script = ExtResource("2_pwcnq")
 player_scene = ExtResource("2_lxg2x")
 
-[node name="PlayerSpawn" type="Node" parent="PlayerManager"]
+[node name="SpawnPoints" type="Node" parent="PlayerManager"]
 
-[node name="Player1Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
+[node name="Player1Spawn" type="Marker2D" parent="PlayerManager/SpawnPoints" groups=["spawnpoints"]]
 position = Vector2(240, 360)
 
-[node name="Player2Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
+[node name="Player2Spawn" type="Marker2D" parent="PlayerManager/SpawnPoints" groups=["spawnpoints"]]
 position = Vector2(1040, 360)
-
-[node name="Dummy" parent="PlayerManager/PlayerSpawn" instance=ExtResource("4_mp342")]
-position = Vector2(498, 571)
-
-[node name="Dummy2" parent="PlayerManager/PlayerSpawn" instance=ExtResource("4_mp342")]
-position = Vector2(750, 572)
-
-[node name="AnimatedSprite2D" parent="PlayerManager/PlayerSpawn/Dummy2" index="0"]
-flip_h = true
 
 [node name="MainUI" parent="." instance=ExtResource("7_rmtcc")]
 
-[editable path="PlayerManager/PlayerSpawn/Dummy2"]
+[editable path="World/Dummy2"]

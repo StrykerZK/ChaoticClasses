@@ -96,6 +96,7 @@ func start_game():
 func game_over(id):
 	if multiplayer.is_server():
 		$SwapTimer.stop()
+		$TransformTimer.stop()
 		StageManager.update_game_state.rpc("Game Over")
 	await get_tree().create_timer(7).timeout
 	if StageManager.p1_score != 3 and StageManager.p2_score != 3:
