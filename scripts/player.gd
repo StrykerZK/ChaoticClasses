@@ -30,6 +30,7 @@ var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
 var is_paused: bool = true
 var is_dead: bool = false
+var is_transforming: bool = false
 
 # Variables for dodging
 var is_dodging: bool = false
@@ -235,8 +236,12 @@ func update_animation_parameters():
 @rpc("any_peer","call_local")
 func class_change(class_title: String):
 	# Start countdown animation
+	is_transforming = true
 	$PlayerFX.play("countdown")
 	await $PlayerFX.animation_finished
+	
+	if !is_transforming:
+		return
 	
 	# Pause for transformation
 	if is_multiplayer_authority() and multiplayer.is_server():
@@ -272,6 +277,8 @@ func class_change(class_title: String):
 	if is_multiplayer_authority() and multiplayer.is_server():
 		$/root/Main/GameManager.toggle_pause.rpc()
 		StageManager.update_game_state.rpc("In Game")
+	
+	is_transforming = false
 
 func take_damage(incoming_dmg: float):
 	if is_multiplayer_authority(): # Add this for any dmg sync errors
@@ -284,8 +291,7 @@ func take_damage(incoming_dmg: float):
 	
 	# I-Frame and hit effect
 	activate_i_frame(0.5)
-	if !$PlayerFX.is_playing():
-		$PlayerFX.play("hit")
+	$HitFX.play("hit")
 	
 	# Die if equal or below 0 health
 	if current_health <= 0:
@@ -300,6 +306,7 @@ func take_damage(incoming_dmg: float):
 @rpc("any_peer","call_local","reliable")
 func die():
 	is_dead = true
+	is_transforming = false
 	reset_systems()
 	disable_collisions()
 	
