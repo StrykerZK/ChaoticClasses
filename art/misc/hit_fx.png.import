@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvr1c6l75xo20"
-path="res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"
+uid="uid://pfn5b3ug7i84"
+path="res://.godot/imported/hit_fx.png-bec21c7895ff41e5a8a15505515b3957.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/misc/ko_effect_sheet.png"
-dest_files=["res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"]
+source_file="res://art/misc/hit_fx.png"
+dest_files=["res://.godot/imported/hit_fx.png-bec21c7895ff41e5a8a15505515b3957.ctex"]
 
 [params]
 

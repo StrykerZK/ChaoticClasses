@@ -40,9 +40,7 @@ func assign_players():
 	player_2 = players[1]
 
 @rpc("any_peer")
-func class_change():
-	toggle_pause.rpc()
-	
+func class_change():	
 	StageManager.update_game_state.rpc("Transforming")
 	
 	# Randomize and get two new classes
@@ -60,6 +58,7 @@ func class_change():
 	player_2.class_change.rpc(class_title_2)
 	
 	# Update player info
+	await player_1.child_entered_tree
 	main_ui.class_change.rpc()
 
 @rpc("any_peer","call_local")
@@ -109,10 +108,6 @@ func game_over(id):
 	else:
 		game_end()
 
-func _on_swap_timer_timeout() -> void:
-	class_change()
-	$SwapTimer.start()
-
 @rpc("any_peer")
 func clear_player(id):
 	if id == 1:
@@ -136,3 +131,10 @@ func new_game():
 @rpc("any_peer","call_local")
 func game_end():
 	get_parent().game_end()
+
+func _on_swap_timer_timeout() -> void:
+	class_change()
+	$TransformTimer.start()
+
+func _on_transform_timer_timeout() -> void:
+	$SwapTimer.start()

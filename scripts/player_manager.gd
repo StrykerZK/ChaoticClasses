@@ -14,5 +14,5 @@ func spawn_players():
 		for spawn in get_tree().get_nodes_in_group("spawnpoints"):
 			if spawn.name == str("Player"+str(index)+"Spawn"):
 				current_player.position = spawn.global_position
-		$/root/Main/PlayerManager.add_child(current_player)
+		add_child(current_player)
 		index += 1

@@ -15,7 +15,7 @@ run/main_scene="res://main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="res://art/ui/bee.png"
-config/icon="res://art/player/sprites/base_sprite.png"
+config/icon="res://art/misc/beezee.png"
 
 [autoload]
 

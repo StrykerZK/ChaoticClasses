@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvr1c6l75xo20"
-path="res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"
+uid="uid://djnm5weesp8gq"
+path="res://.godot/imported/beezee.png-fed90550bc1586836b1b99962ef896bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/misc/ko_effect_sheet.png"
-dest_files=["res://.godot/imported/ko_effect_sheet.png-1749eb6095a403e12689068f56b108fb.ctex"]
+source_file="res://art/misc/beezee.png"
+dest_files=["res://.godot/imported/beezee.png-fed90550bc1586836b1b99962ef896bd.ctex"]
 
 [params]
 

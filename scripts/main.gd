@@ -5,7 +5,6 @@ var player_2
 
 func _ready() -> void:
 	start_game()
-	
 
 func assign_players():
 	var players = get_tree().get_nodes_in_group("players")
@@ -42,4 +41,28 @@ func back_to_main_menu():
 	get_tree().current_scene.show()
 	StageManager.reset_game()
 	queue_free()
-	
+
+func game_over(id):
+	if id == 1:
+		await player_1.tree_exiting
+		play_ko_effect(player_1, player_2)
+	else:
+		await player_2.tree_exiting
+		play_ko_effect(player_2, player_1)
+
+func play_ko_effect(loser, winner):
+	if loser.global_position.y <= -150: # Top
+		$World/AreaFX.global_position.y = -150
+	elif loser.global_position.y > 900: # Bottom
+		$World/AreaFX.global_position.y = 900
+	else:
+		$World/AreaFX.global_position.y = loser.global_position.y
+	if loser.global_position.x <= -150: # Left
+		$World/AreaFX.global_position.x = -150
+	elif loser.global_position.x > 1500: # Right
+		$World/AreaFX.global_position.x = 1500
+	else:
+		$World/AreaFX.global_position.x = loser.global_position.x
+	$World/AreaFX.global_rotation = $World/AreaFX.global_position.direction_to(winner.global_position).angle()
+	$World/AreaFX.show()
+	$World/AreaFX.play("ko")

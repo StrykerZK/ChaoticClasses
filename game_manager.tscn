@@ -22,8 +22,13 @@ grow_vertical = 2
 text = "Class Change"
 
 [node name="SwapTimer" type="Timer" parent="."]
-wait_time = 15.0
+wait_time = 10.0
+one_shot = true
+
+[node name="TransformTimer" type="Timer" parent="."]
+wait_time = 6.0
 one_shot = true
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="SwapTimer" to="." method="_on_swap_timer_timeout"]
+[connection signal="timeout" from="TransformTimer" to="." method="_on_transform_timer_timeout"]

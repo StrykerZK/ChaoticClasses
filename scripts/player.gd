@@ -52,6 +52,7 @@ func _enter_tree() -> void:
 	dead.connect(Callable(StageManager,"game_over"))
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
 	dead.connect(Callable($/root/Main/MainUI,"game_over"))
+	dead.connect(Callable($/root/Main,"game_over"))
 	
 	player_id = int(str(name))
 	set_multiplayer_authority(player_id)
@@ -233,6 +234,14 @@ func update_animation_parameters():
 
 @rpc("any_peer","call_local")
 func class_change(class_title: String):
+	# Start countdown animation
+	$PlayerFX.play("countdown")
+	await $PlayerFX.animation_finished
+	
+	# Pause for transformation
+	if is_multiplayer_authority() and multiplayer.is_server():
+		$/root/Main/GameManager.toggle_pause.rpc()
+	
 	# Reset variables and booleans
 	reset_systems()
 	
@@ -273,20 +282,22 @@ func take_damage(incoming_dmg: float):
 		# Update Info UI
 		StageManager.update_player_stats.rpc(player_id, current_health)
 	
-	# I-Frame and flasing effect
+	# I-Frame and hit effect
 	activate_i_frame(0.5)
-	current_class_node.get_child(0).modulate.s = 50
+	if !$PlayerFX.is_playing():
+		$PlayerFX.play("hit")
 	
 	# Die if equal or below 0 health
 	if current_health <= 0:
 		die.rpc() # Add RPC for dmg sync errors
 		return
-		
-	# Finish flashing effect
+	
+	# Flashing effect
+	current_class_node.get_child(0).modulate.s = 50
 	await $IFrameTimer.timeout
 	current_class_node.get_child(0).modulate.s = 0
 
-@rpc("any_peer","call_local","unreliable")
+@rpc("any_peer","call_local","reliable")
 func die():
 	is_dead = true
 	reset_systems()
@@ -309,21 +320,22 @@ func die():
 	for i in players:
 		if i.player_id != player_id:
 			if !is_multiplayer_authority():
-				i.reset_camera_focus()
+				i.change_camera_focus(Vector2(640,360))
 				i.zoom_camera(1.0)
 		else:
 			i.zoom_camera(1.5)
 	
 	# Yeet player across map
-	for i in players:
-		if i.name != str(player_id):
-			velocity = position.direction_to(i.position) * -1500
+	if is_multiplayer_authority():
+		for i in players:
+			if i.name != str(player_id):
+				velocity = position.direction_to(i.position) * -1500
 	
 	dead.emit(player_id)
-	
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(0.7).timeout
 	
 	# Remove player node
+	$PlayerSynchronizer.queue_free()
 	queue_free()
 
 func disable_collisions():

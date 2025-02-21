@@ -51,7 +51,7 @@ func display_scores():
 		$Scores/Score3.play("empty")
 
 func update_scores():
-	if StageManager.p1_score == 1:
+	if StageManager.p2_score == 1:
 		$Scores/Score1.play("charging")
 		$AnimationPlayer.play("score_1_fill")
 	elif StageManager.p2_score == 2:
