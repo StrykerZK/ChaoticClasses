@@ -50,7 +50,7 @@ func use_attack_timer(time: float):
 	player.is_attacking = false
 	if player.attack_index == 3:
 		player.attack_index = 1 # Reset after 3rd attack
-		$ComboTimer.wait_time = 1
+		$ComboTimer.wait_time = 0.7
 		$ComboTimer.start()
 	else:
 		player.attack_index += 1.0

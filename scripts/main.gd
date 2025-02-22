@@ -54,14 +54,14 @@ func game_over(id):
 func play_ko_effect(loser, winner):
 	if loser.global_position.y <= -150: # Top
 		$World/AreaFX.global_position.y = -150
-	elif loser.global_position.y > 900: # Bottom
-		$World/AreaFX.global_position.y = 900
+	elif loser.global_position.y > 1330: # Bottom
+		$World/AreaFX.global_position.y = 1330
 	else:
 		$World/AreaFX.global_position.y = loser.global_position.y
 	if loser.global_position.x <= -150: # Left
 		$World/AreaFX.global_position.x = -150
-	elif loser.global_position.x > 1500: # Right
-		$World/AreaFX.global_position.x = 1500
+	elif loser.global_position.x > 2070: # Right
+		$World/AreaFX.global_position.x = 2070
 	else:
 		$World/AreaFX.global_position.x = loser.global_position.x
 	$World/AreaFX.global_rotation = $World/AreaFX.global_position.direction_to(winner.global_position).angle()

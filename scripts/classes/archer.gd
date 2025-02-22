@@ -144,4 +144,5 @@ func get_animation_lengths():
 func stop_systems():
 	$ChargeAnimTimer.stop()
 	$ChargeTimer.stop()
+	$AttackTimer.stop()
 	player.speed = base_speed

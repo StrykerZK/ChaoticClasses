@@ -24,8 +24,8 @@ StageManager="*res://scripts/stage_manager.gd"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 mouse_cursor/custom_image="res://art/misc/sprite_cursor.png"
 
 [editor]

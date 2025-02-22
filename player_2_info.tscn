@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://w0ull4nc03db"]
 
-[ext_resource type="Texture2D" uid="uid://deitqwh1oneio" path="res://art/player/sprites/base_sprite.png" id="1_qm34m"]
+[ext_resource type="Texture2D" uid="uid://3polm4k7cxkp" path="res://art/player/sprites/base_sprite.png" id="1_qm34m"]
 [ext_resource type="Script" path="res://scripts/ui/player_2_info.gd" id="1_w2fjm"]
 [ext_resource type="Texture2D" uid="uid://bh4auvvdrurru" path="res://art/ui/class_info_overlay.png" id="2_82a5e"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="3_16j1o"]
@@ -34,7 +34,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1141, 131)]
+"values": [Vector2(1772, 135)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -58,7 +58,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1102, 131)]
+"values": [Vector2(1733, 135)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -82,7 +82,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1062, 131)]
+"values": [Vector2(1693, 135)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -110,7 +110,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 3.5, 4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1141, 131), Vector2(640, 200), Vector2(640, 200), Vector2(1141, 131)]
+"values": [Vector2(1772, 135), Vector2(960, 250), Vector2(960, 250), Vector2(1772, 135)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -138,7 +138,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 3.5, 4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1102, 131), Vector2(640, 200), Vector2(640, 200), Vector2(1102, 131)]
+"values": [Vector2(1733, 135), Vector2(960, 250), Vector2(960, 250), Vector2(1733, 135)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -166,7 +166,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 3.5, 4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1062, 131), Vector2(640, 200), Vector2(640, 200), Vector2(1062, 131)]
+"values": [Vector2(1693, 135), Vector2(960, 250), Vector2(960, 250), Vector2(1693, 135)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -201,28 +201,28 @@ script = ExtResource("1_w2fjm")
 
 [node name="PortraitBG" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 1176.0
-offset_top = 21.0
-offset_right = 1260.0
-offset_bottom = 101.0
+offset_left = 1811.0
+offset_top = 26.0
+offset_right = 1895.0
+offset_bottom = 106.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tq8lq")
 
 [node name="PlayerSprite" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 1171.0
-offset_top = 24.0
-offset_right = 1235.0
-offset_bottom = 88.0
+offset_left = 1806.0
+offset_top = 29.0
+offset_right = 1870.0
+offset_bottom = 93.0
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_qm34m")
 flip_h = true
 
 [node name="FalloffBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_left = 966.0
-offset_top = 89.0
-offset_right = 1153.0
-offset_bottom = 101.0
+offset_left = 1601.0
+offset_top = 94.0
+offset_right = 1788.0
+offset_bottom = 106.0
 theme_override_styles/background = SubResource("StyleBoxFlat_72isx")
 theme_override_styles/fill = SubResource("StyleBoxFlat_eqqmc")
 max_value = 200.0
@@ -231,10 +231,10 @@ show_percentage = false
 
 [node name="HPBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_left = 966.0
-offset_top = 89.0
-offset_right = 1153.0
-offset_bottom = 101.0
+offset_left = 1601.0
+offset_top = 94.0
+offset_right = 1788.0
+offset_bottom = 106.0
 theme_override_styles/background = SubResource("StyleBoxFlat_snkaw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_antiw")
 max_value = 200.0
@@ -243,19 +243,19 @@ show_percentage = false
 
 [node name="Overlay" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 955.0
-offset_top = 5.0
-offset_right = 1275.0
-offset_bottom = 117.0
+offset_left = 1590.0
+offset_top = 10.0
+offset_right = 1910.0
+offset_bottom = 122.0
 texture = ExtResource("2_82a5e")
 flip_h = true
 
 [node name="PlayerName" type="Label" parent="."]
 layout_mode = 0
-offset_left = 958.0
-offset_top = 35.0
-offset_right = 1160.0
-offset_bottom = 49.0
+offset_left = 1593.0
+offset_top = 40.0
+offset_right = 1795.0
+offset_bottom = 54.0
 theme_override_colors/font_color = Color(0.641655, 0.458806, 0.988129, 1)
 theme_override_fonts/font = ExtResource("3_16j1o")
 theme_override_font_sizes/font_size = 16
@@ -265,10 +265,10 @@ vertical_alignment = 1
 
 [node name="PlayerClass" type="Label" parent="."]
 layout_mode = 0
-offset_left = 958.0
-offset_top = 52.0
-offset_right = 1160.0
-offset_bottom = 66.0
+offset_left = 1593.0
+offset_top = 57.0
+offset_right = 1795.0
+offset_bottom = 71.0
 theme_override_fonts/font = ExtResource("4_os42c")
 theme_override_font_sizes/font_size = 8
 text = "Pyromancer"
@@ -286,17 +286,17 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Score1" type="AnimatedSprite2D" parent="Scores"]
-position = Vector2(1141, 131)
+position = Vector2(1772, 135)
 sprite_frames = ExtResource("6_np1lj")
 animation = &"empty"
 
 [node name="Score2" type="AnimatedSprite2D" parent="Scores"]
-position = Vector2(1102, 131)
+position = Vector2(1733, 135)
 sprite_frames = ExtResource("6_np1lj")
 animation = &"empty"
 
 [node name="Score3" type="AnimatedSprite2D" parent="Scores"]
-position = Vector2(1062, 131)
+position = Vector2(1693, 135)
 sprite_frames = ExtResource("6_np1lj")
 animation = &"empty"
 
