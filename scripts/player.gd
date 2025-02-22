@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
-@export var current_class: String = "Base"
-@export var current_type: String = "melee"
-@export var player_id: int = 1
+var current_class: String = "Base"
+var current_type: String = "melee"
+var player_id: int = 1
 var current_class_node: Node
+var ghost_scene = preload("res://utility/ghost.tscn")
 
 signal dead(int)
 
@@ -135,7 +136,7 @@ func handle_input():
 	
 	if Input.is_action_just_pressed("dodge"):
 		if can_dodge:
-			start_dodge()
+			start_dodge.rpc()
 	
 	if Input.is_action_just_pressed("attack"):
 		if !is_attacking and !is_dodging:
@@ -161,6 +162,7 @@ func tween_dodge_value():
 	.set_trans(Tween.TRANS_QUAD)\
 	.set_ease(Tween.EASE_OUT)
 
+@rpc("any_peer","call_local")
 func start_dodge():
 	is_attacking = false
 	is_dodging = true
@@ -174,12 +176,15 @@ func start_dodge():
 	# Tween the dodge speed to 0 smoothly
 	tween_dodge_value()
 	
+	ghost_effect()
+	$GhostTimer.start()
 	$DodgeTimer.wait_time = dodge_duration
 	$DodgeTimer.start()
 
 func end_dodge():
 	is_dodging = false
 	can_attack = true
+	$GhostTimer.stop()
 	if temp_count > 1:
 		can_dodge = true
 		temp_count -= 1
@@ -188,6 +193,19 @@ func end_dodge():
 	elif temp_count == 1:
 		$DodgeResetTimer.stop()
 		dodge_on_cooldown()
+
+func ghost_effect():
+	var ghost: Sprite2D = ghost_scene.instantiate()
+	var sprite: Sprite2D = current_class_node.get_child(0)
+	$/root/Main.add_child(ghost)
+	
+	ghost.global_position = global_position
+	ghost.texture = sprite.texture
+	ghost.vframes = sprite.vframes
+	ghost.hframes = sprite.hframes
+	ghost.frame = sprite.frame
+	ghost.flip_h = sprite.flip_h
+	ghost.scale = sprite.scale
 
 func dodge_on_cooldown():
 	can_dodge = false
@@ -198,6 +216,9 @@ func dodge_on_cooldown():
 		await get_tree().create_timer(0.1).timeout # Wait for attack to finish
 	can_dodge = true
 	temp_count = dodge_count
+
+func ghosting_effect():
+	pass
 
 func activate_i_frame(value: float):
 	$Hurtbox.set_deferred("monitorable", false)
@@ -368,6 +389,7 @@ func reset_systems():
 	can_attack = true
 	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
 	current_class_node.stop_systems()
+	$GhostTimer.stop()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()
 	$IFrameTimer.stop()

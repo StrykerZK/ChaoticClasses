@@ -240,11 +240,11 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.672219
 anchor_top = 0.650889
-anchor_right = 0.672219
+anchor_right = 0.695656
 anchor_bottom = 0.650889
 offset_left = -92.4401
 offset_top = -72.64
-offset_right = 92.5599
+offset_right = 117.56
 offset_bottom = 72.36
 theme = ExtResource("9_58hxh")
 placeholder_text = "Port"
@@ -284,11 +284,13 @@ alignment = 1
 
 [node name="Player1Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 
 [node name="Player2Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 

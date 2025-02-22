@@ -36,13 +36,13 @@ func start_game():
 
 @rpc("any_peer","call_local","reliable")
 func game_over(id):
-	if id == 1:
+	if id == StageManager.p1_id:
 		await player_1.tree_exited
-		$Label.text = str(StageManager.get_player_2_name()) + " won!"
+		$Label.text = StageManager.get_player_name(StageManager.p2_id) + " won!"
 		$Player2Info.update_scores()
 	else:
 		await player_2.tree_exited
-		$Label.text = StageManager.player_list[1].player_name + " won!"
+		$Label.text = StageManager.get_player_name(StageManager.p1_id) + " won!"
 		$Player1Info.update_scores()
 	
 	$Label.add_theme_font_size_override("font_size", 60)

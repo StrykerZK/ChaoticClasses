@@ -5,7 +5,7 @@ var player_id
 var falloff_ready: bool = false
 
 func _ready() -> void:
-	player_id = StageManager.get_player_2_id()
+	player_id = StageManager.p2_id
 	update_display()
 
 func _process(delta: float) -> void:

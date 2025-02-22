@@ -1118,6 +1118,9 @@ one_shot = true
 wait_time = 1.5
 one_shot = true
 
+[node name="GhostTimer" type="Timer" parent="."]
+wait_time = 0.03
+
 [node name="UtilityTimer" type="Timer" parent="."]
 one_shot = true
 
@@ -1142,3 +1145,4 @@ position_smoothing_enabled = true
 [connection signal="timeout" from="Base/ComboTimer" to="Base" method="_on_combo_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]
+[connection signal="timeout" from="GhostTimer" to="." method="ghost_effect"]

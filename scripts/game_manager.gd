@@ -105,7 +105,7 @@ func game_over(id):
 	await get_tree().create_timer(7).timeout
 	if StageManager.p1_score != 3 and StageManager.p2_score != 3:
 		clear_winner.rpc(id)
-		if id == 1:
+		if id == StageManager.p1_id:
 			await player_2.tree_exited
 		else:
 			await player_1.tree_exited
@@ -115,14 +115,14 @@ func game_over(id):
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_player(id):
-	if id == 1:
+	if id == StageManager.p1_id:
 		player_1.queue_free()
 	else:
 		player_2.queue_free()
 
 @rpc("any_peer","call_local","reliable")
 func clear_winner(loser_id):
-	if loser_id == 1:
+	if loser_id == StageManager.p1_id:
 		player_2.queue_free()
 	else:
 		player_1.queue_free()

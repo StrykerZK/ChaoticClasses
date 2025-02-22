@@ -44,7 +44,7 @@ func back_to_main_menu():
 
 @rpc("any_peer","call_local","reliable")
 func game_over(id):
-	if id == 1:
+	if id == StageManager.p1_id:
 		await player_1.tree_exiting
 		play_ko_effect(player_1, player_2)
 	else:
