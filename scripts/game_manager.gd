@@ -6,7 +6,6 @@ var transform_time: float = 2
 
 var is_paused = false
 
-var player_spawn: Node
 var player_manager: Node
 var player_1: CharacterBody2D
 var player_2: CharacterBody2D
@@ -32,6 +31,7 @@ func _on_players_connected():
 	player_count += 1
 	if player_count == StageManager.player_list.size():
 		assign_players.rpc()
+		$/root/Main/MainUI.assign_players.rpc()
 
 @rpc("any_peer","call_local")
 func assign_players():
@@ -94,42 +94,48 @@ func start_game():
 		$SwapTimer.start()
 
 func game_over(id):
-	if multiplayer.is_server():
-		$SwapTimer.stop()
-		$TransformTimer.stop()
-		StageManager.update_game_state.rpc("Game Over")
+	$SwapTimer.stop()
+	$TransformTimer.stop()
+	StageManager.update_game_state.rpc("Game Over")
+	StageManager.update_scores.rpc(id)
+	main_ui.game_over.rpc(id)
+	get_parent().game_over.rpc(id)
+	clear_player.rpc(id)
+	
 	await get_tree().create_timer(7).timeout
 	if StageManager.p1_score != 3 and StageManager.p2_score != 3:
-		clear_winner(id)
+		clear_winner.rpc(id)
 		if id == 1:
 			await player_2.tree_exited
 		else:
 			await player_1.tree_exited
-		new_game()
+		new_game.rpc()
 	else:
-		game_end()
+		game_end.rpc()
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local", "reliable")
 func clear_player(id):
 	if id == 1:
 		player_1.queue_free()
 	else:
 		player_2.queue_free()
 
+@rpc("any_peer","call_local","reliable")
 func clear_winner(loser_id):
 	if loser_id == 1:
 		player_2.queue_free()
 	else:
 		player_1.queue_free()
 
+@rpc("any_peer","call_local","reliable")
 func new_game():
-	player_manager.spawn_players()
+	player_manager.create_players()
 	assign_players()
 	update_player_class(player_1.player_id, "Base")
 	update_player_class(player_2.player_id, "Base")
 	get_parent().start_game()
 
-@rpc("any_peer","call_local")
+@rpc("any_peer","call_local", "reliable")
 func game_end():
 	get_parent().game_end()
 

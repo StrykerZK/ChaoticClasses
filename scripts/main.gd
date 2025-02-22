@@ -42,6 +42,7 @@ func back_to_main_menu():
 	StageManager.reset_game()
 	queue_free()
 
+@rpc("any_peer","call_local","reliable")
 func game_over(id):
 	if id == 1:
 		await player_1.tree_exiting

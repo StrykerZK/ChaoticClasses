@@ -66,7 +66,8 @@ func update_player_stats(id: int, current_health: float):
 func update_game_state(state: String):
 	game_state = state
 
-func game_over(id):
+@rpc("any_peer","call_local")
+func update_scores(id):
 	if id == 1:
 		p2_score += 1
 	else:

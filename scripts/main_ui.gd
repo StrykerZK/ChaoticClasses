@@ -4,7 +4,6 @@ var player_1
 var player_2
 
 func _ready() -> void:
-	assign_players()
 	$Label.hide()
 	$FX.hide()
 
@@ -35,6 +34,7 @@ func start_game():
 	$Player2Info.show()
 	$Player2Info.display_scores()
 
+@rpc("any_peer","call_local","reliable")
 func game_over(id):
 	if id == 1:
 		await player_1.tree_exited
@@ -58,7 +58,8 @@ func class_change():
 	$Player1Info.update_display()
 	$Player2Info.update_display()
 
-func assign_players(): # Not used
+@rpc("any_peer","call_local")
+func assign_players():
 	var players = get_tree().get_nodes_in_group("players")
 	player_1 = players[0]
 	player_2 = players[1]

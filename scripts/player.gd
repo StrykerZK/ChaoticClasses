@@ -50,10 +50,10 @@ var dash_tween: Tween
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
-	dead.connect(Callable(StageManager,"game_over"))
+	#dead.connect(Callable(StageManager,"game_over"))
 	dead.connect(Callable($/root/Main/GameManager,"game_over"))
-	dead.connect(Callable($/root/Main/MainUI,"game_over"))
-	dead.connect(Callable($/root/Main,"game_over"))
+	#dead.connect(Callable($/root/Main/MainUI,"game_over"))
+	#dead.connect(Callable($/root/Main,"game_over"))
 	
 	player_id = int(str(name))
 	set_multiplayer_authority(player_id)
@@ -327,7 +327,6 @@ func die():
 	for i in players:
 		if i.player_id != player_id:
 			if !is_multiplayer_authority():
-				i.change_camera_focus(Vector2(640,360))
 				i.zoom_camera(1.0)
 		else:
 			i.zoom_camera(1.5)
@@ -337,14 +336,9 @@ func die():
 		if i.name != str(player_id):
 			velocity = position.direction_to(i.position) * -1800
 	
-	dead.emit(player_id)
-	await get_tree().create_timer(0.7).timeout
-	
-	# Remove player node
-	$PlayerSynchronizer.process_mode = Node.PROCESS_MODE_DISABLED
-	$PlayerSynchronizer.queue_free()
-	await child_exiting_tree
-	queue_free()
+	if multiplayer.is_server():
+		await get_tree().create_timer(0.7).timeout
+		dead.emit(player_id)
 
 func disable_collisions():
 	$Collisionbox.set_deferred("disabled", true)

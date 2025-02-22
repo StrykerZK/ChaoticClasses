@@ -266,12 +266,12 @@ process_mode = 3
 script = ExtResource("2_pwcnq")
 player_scene = ExtResource("2_lxg2x")
 
-[node name="SpawnPoints" type="Node" parent="PlayerManager"]
+[node name="PlayerSpawn" type="Node" parent="PlayerManager"]
 
-[node name="Player1Spawn" type="Marker2D" parent="PlayerManager/SpawnPoints" groups=["spawnpoints"]]
+[node name="Player1Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
 position = Vector2(240, 360)
 
-[node name="Player2Spawn" type="Marker2D" parent="PlayerManager/SpawnPoints" groups=["spawnpoints"]]
+[node name="Player2Spawn" type="Marker2D" parent="PlayerManager/PlayerSpawn" groups=["spawnpoints"]]
 position = Vector2(1040, 360)
 
 [node name="MainUI" parent="." instance=ExtResource("7_rmtcc")]
