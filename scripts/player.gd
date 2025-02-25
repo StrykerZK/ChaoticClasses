@@ -49,6 +49,12 @@ var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
 var dash_tween: Tween
 
+# Variables for spells
+var spell_1_ready: bool = true
+var spell_2_ready: bool = true
+var in_spell_1: bool = false
+var in_spell_2: bool = false
+
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
 	#dead.connect(Callable(StageManager,"game_over"))
@@ -105,12 +111,14 @@ func _process(delta: float) -> void:
 			move_and_slide() # Character movement
 
 func handle_input():
+	
+	# Movement
 	if current_type == "melee": # If melee, don't move while attacking
 		if !is_dodging:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		last_input_direction = direction
 		
-		if is_attacking:
+		if is_attacking or in_spell_1 or in_spell_2:
 			velocity = position.direction_to(get_global_mouse_position()) * dash_speed
 		else:
 			if direction:
@@ -126,18 +134,23 @@ func handle_input():
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		last_input_direction = direction
 		
-		if direction:
-			velocity = direction * speed
+		if in_spell_1 or in_spell_2:
+			velocity = position.direction_to(get_global_mouse_position()) * dash_speed
 		else:
-			velocity = Vector2.ZERO
+			if direction:
+				velocity = direction * speed
+			else:
+				velocity = Vector2.ZERO
 		
 		if is_dodging:
 			velocity = last_input_direction * dodge_speed	
 	
+	# Dodging
 	if Input.is_action_just_pressed("dodge"):
 		if can_dodge:
 			start_dodge.rpc()
 	
+	# Attacking
 	if Input.is_action_just_pressed("attack"):
 		if !is_attacking and !is_dodging:
 			if can_attack:
@@ -145,6 +158,22 @@ func handle_input():
 				last_mouse_pos = local_mouse_pos
 				current_class_node.attack.rpc(attack_index)
 				can_attack = false
+	
+	# Spell 1
+	if Input.is_action_just_pressed("spell_1"):
+		if !is_dodging and spell_1_ready:
+			StageManager.set_target.rpc(player_id,mouse_pos)
+			last_mouse_pos = local_mouse_pos
+			current_class_node.spell_1.rpc()
+			spell_1_ready = false
+	
+	# Spell 2
+	if Input.is_action_just_pressed("spell_2"):
+		if !is_dodging and spell_2_ready:
+			StageManager.set_target.rpc(player_id,mouse_pos)
+			last_mouse_pos = local_mouse_pos
+			current_class_node.spell_2.rpc()
+			spell_2_ready = false
 
 func tween_dash_value():
 	if dash_tween:
@@ -165,6 +194,9 @@ func tween_dodge_value():
 @rpc("any_peer","call_local")
 func start_dodge():
 	is_attacking = false
+	in_spell_1 = false
+	in_spell_2 = false
+	current_class_node.stop_spells()
 	is_dodging = true
 	can_dodge = false
 	can_attack = false
@@ -217,9 +249,6 @@ func dodge_on_cooldown():
 	can_dodge = true
 	temp_count = dodge_count
 
-func ghosting_effect():
-	pass
-
 func activate_i_frame(value: float):
 	$Hurtbox.set_deferred("monitorable", false)
 	$IFrameTimer.start(value)
@@ -233,7 +262,7 @@ func deactivate_i_frame():
 func update_animation_parameters():
 	if !is_instance_valid(anim_tree):
 		return
-	if !is_dodging and !is_attacking:
+	if !is_dodging and !is_attacking and !in_spell_1 and !in_spell_2:
 		anim_tree.set("parameters/conditions/idle", velocity == Vector2.ZERO)
 		anim_tree.set("parameters/conditions/is_running", velocity != Vector2.ZERO)
 	else:
@@ -242,12 +271,17 @@ func update_animation_parameters():
 	
 	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
 	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
+	anim_tree.set("parameters/conditions/in_spell_1", in_spell_1)
+	anim_tree.set("parameters/conditions/in_spell_2", in_spell_2)
 	
 	if current_class == "archer":
 		anim_tree["parameters/attack/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
 	else:
 		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
 	
+	if current_class == "hero":
+		anim_tree["parameters/spell1/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
+		anim_tree["parameters/spell2/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction
@@ -387,8 +421,13 @@ func reset_systems():
 	is_attacking = false
 	is_dodging = false
 	can_attack = true
+	spell_1_ready = true
+	spell_2_ready = true
+	in_spell_1 = false
+	in_spell_2 = false
 	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
 	current_class_node.stop_systems()
+	#current_class_node.stop_spells()
 	$GhostTimer.stop()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()

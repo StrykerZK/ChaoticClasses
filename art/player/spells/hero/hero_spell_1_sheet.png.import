@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bclb55vdfna7m"
-path="res://.godot/imported/hero_sprite_sheet.png-4e2c30f9a3c8b85416732346d84e4681.ctex"
+uid="uid://cb461m4ffvri5"
+path="res://.godot/imported/hero_spell_1_sheet.png-8913c23fa7719e67e609ad3cd25a3ffc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/hero_sprite_sheet.png"
-dest_files=["res://.godot/imported/hero_sprite_sheet.png-4e2c30f9a3c8b85416732346d84e4681.ctex"]
+source_file="res://art/player/spells/hero/hero_spell_1_sheet.png"
+dest_files=["res://.godot/imported/hero_spell_1_sheet.png-8913c23fa7719e67e609ad3cd25a3ffc.ctex"]
 
 [params]
 

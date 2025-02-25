@@ -104,7 +104,7 @@ func spawn_projectile(index: float):
 	if player.attack_index == 1.5 or player.attack_index == 2.5:
 		player.attack_index -= 0.5
 	
-	if player.player_id == 1:
+	if player.player_id == StageManager.p1_id:
 		mouse_pos = StageManager.p1_target
 	else:
 		mouse_pos = StageManager.p2_target

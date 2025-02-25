@@ -16,11 +16,21 @@ func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
 	get_animation_lengths()
+	$SpellFX.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	check_property_changes()
+	if player.in_spell_2:
+		if player.is_multiplayer_authority():
+			StageManager.set_target.rpc(player.player_id,get_global_mouse_position())
+		if player.player_id == StageManager.p1_id:
+			$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p1_target,0.01)
+			$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p1_target,0.01)
+		else:
+			$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p2_target,0.01)
+			$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p2_target,0.01)
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -42,6 +52,45 @@ func attack(index: float):
 			player.damage = player.base_damage * 2
 			$Hitbox.damage = player.damage
 			use_attack_timer(attack_3_length)
+
+@rpc("any_peer","call_local")
+func spell_1(): # 50 dmg, 2 sec duration, 5 sec CD
+	player.in_spell_1 = true
+	player.dash_duration = 0.5
+	$Hitbox.damage = 50
+	$Spell1Timer.wait_time = 2.0
+	$Spell1Timer.start()
+
+func _on_spell_1_timer_timeout():
+	if player.in_spell_1:
+		player.in_spell_1 = false
+		$Spell1Timer.wait_time = 5.0
+		$Spell1Timer.start()
+	else:
+		player.spell_1_ready = true
+
+@rpc("any_peer","call_local")
+func spell_2(): # 50 dmg, 4 sec duration, 10 sec CD
+	player.in_spell_2 = true
+	$Hitbox.damage = 50
+	$SpellFX.show()
+	$SpellFX.play("spell2start")
+	await $SpellFX.animation_finished
+	$SpellFX.play("spell2")
+	$Spell2Timer.wait_time = 4.0
+	$Spell2Timer.start()
+
+func _on_spell_2_timer_timeout():
+	if player.in_spell_2:
+		player.in_spell_2 = false
+		$SpellFX.stop()
+		$SpellFX.hide()
+		$Hitbox.position = Vector2(0,0)
+		$SpellFX.position = Vector2(0,0)
+		$Spell2Timer.wait_time = 10.0
+		$Spell2Timer.start()
+	else:
+		player.spell_2_ready = true
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -66,10 +115,10 @@ func _on_combo_timer_timeout() -> void:
 	player.damage = player.base_damage
 	player.can_attack = true
 
-
 func stop_systems():
 	$ComboTimer.stop()
 	$AttackTimer.stop()
+	stop_spells()
 
 func check_property_changes():
 	if last_dash_speed != dash_speed:
@@ -78,3 +127,11 @@ func check_property_changes():
 		last_dash_speed = dash_speed
 	else:
 		pass
+
+func stop_spells():
+	$SpellFX.stop()
+	$SpellFX.hide()
+	$Spell1Timer.stop()
+	$Spell2Timer.stop()
+	$Hitbox.position = Vector2(0,0)
+	$SpellFX.position = Vector2(0,0)
