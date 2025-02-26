@@ -54,6 +54,15 @@ func use_attack_timer(time: float):
 		player.attack_index += 1.0
 		player.can_attack = true
 
+func spell_1():
+	pass
+
+func spell_2():
+	pass
+
+func stop_spells():
+	pass
+
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
 	attack_2_length = anim_player.get_animation("attack_right_2").length

@@ -4,7 +4,7 @@ class_name Hitbox
 
 var player_id: int = 1
 var damage: float
-var deflection: bool = true
+var deflection: bool = false
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.name == "Hurtbox":

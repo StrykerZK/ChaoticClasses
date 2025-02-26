@@ -79,8 +79,8 @@ func spawn_projectile(index: float):
 	else:
 		# Calculate angle offset
 		var start_angle = -60 #-60 / 2
-		var angle_step = 60 #60 / 4
-		for i in range(6):
+		var angle_step = 120 #60 / 4
+		for i in range(3):
 			var fireball = fireball_scene.instantiate()
 			main_node.add_child(fireball)
 			
@@ -97,7 +97,7 @@ func spawn_projectile(index: float):
 			if fireball:
 				fireball.start_follow_timer()
 			
-			await get_tree().create_timer(0.05).timeout
+			await get_tree().create_timer(0.1).timeout
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -114,6 +114,63 @@ func use_attack_timer(time: float):
 	player.speed = base_speed
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
+@rpc("any_peer","call_local")
+func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
+	player.in_spell_1 = true
+	await get_tree().create_timer(0.3).timeout
+	for i in range(20):
+			var fireball = fireball_scene.instantiate()
+			add_child(fireball)
+			
+			# Set projectile position and direction
+			fireball.is_spell_1 = true
+			fireball.direction = Vector2(1,0) # Initial direction
+			fireball.center_point = position
+			fireball.damage = player.damage
+			fireball.player_id = player.player_id
+			await get_tree().create_timer(0.05).timeout
+	player.in_spell_1 = false
+	$Spell1Timer.wait_time = 8.0
+	$Spell1Timer.start()
+
+func _on_spell_1_timer_timeout() -> void:
+	player.spell_1_ready = true
+
+@rpc("any_peer","call_local")
+func spell_2(): # 75 dmg, 1.3 sec duration, 5 sec cd
+	player.in_spell_2 = true
+	if player.player_id == StageManager.p1_id:
+		$SpellFX.global_position = StageManager.p1_target
+		$SpellHitbox.global_position = StageManager.p1_target
+	else:
+		$SpellFX.global_position = StageManager.p2_target
+		$SpellHitbox.global_position = StageManager.p2_target
+	$SpellFX.show()
+	$SpellFX.play("spell1")
+	$Spell2Timer.wait_time = 1.3
+	$Spell2Timer.start()
+
+func _on_spell_2_timer_timeout() -> void:
+	if player.in_spell_2:
+		player.in_spell_2 = false
+		$SpellFX.stop()
+		$SpellFX.hide()
+		$SpellHitbox/CollisionShape2D.disabled = true
+		$SpellHitbox.position = Vector2(0,0)
+		$SpellFX.position = Vector2(0,0)
+		$Spell2Timer.wait_time = 5.0
+		$Spell2Timer.start()
+	else:
+		player.spell_2_ready = true
+
+func stop_spells():
+	$SpellFX.stop()
+	$SpellFX.hide()
+	$Spell1Timer.stop()
+	$Spell2Timer.stop()
+	$Hitbox.position = Vector2(0,0)
+	$SpellFX.position = Vector2(0,0)
+
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length
 	attack_2_length = anim_player.get_animation("attack_right_2").length
@@ -127,3 +184,4 @@ func stop_systems():
 	$ComboTimer.stop()
 	$AttackTimer.stop()
 	player.speed = base_speed
+	stop_spells()

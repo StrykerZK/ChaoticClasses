@@ -17,7 +17,7 @@ func _ready() -> void:
 	anim_player = $AnimationPlayer
 	get_animation_lengths()
 	$SpellFX.hide()
-
+	$SpellHitbox.player_id = player.player_id
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -25,12 +25,7 @@ func _process(delta: float) -> void:
 	if player.in_spell_2:
 		if player.is_multiplayer_authority():
 			StageManager.set_target.rpc(player.player_id,get_global_mouse_position())
-		if player.player_id == StageManager.p1_id:
-			$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p1_target,0.01)
-			$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p1_target,0.01)
-		else:
-			$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p2_target,0.01)
-			$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p2_target,0.01)
+		spell_2_follow.rpc()
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -70,15 +65,24 @@ func _on_spell_1_timer_timeout():
 		player.spell_1_ready = true
 
 @rpc("any_peer","call_local")
-func spell_2(): # 50 dmg, 4 sec duration, 10 sec CD
+func spell_2(): # 20 dmg, 4 sec duration, 10 sec CD
 	player.in_spell_2 = true
-	$Hitbox.damage = 50
+	$Hitbox.damage = 20
 	$SpellFX.show()
 	$SpellFX.play("spell2start")
 	await $SpellFX.animation_finished
 	$SpellFX.play("spell2")
 	$Spell2Timer.wait_time = 4.0
 	$Spell2Timer.start()
+
+@rpc("any_peer","call_local")
+func spell_2_follow():
+	if player.player_id == StageManager.p1_id:
+		$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p1_target,0.005)
+		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p1_target,0.005)
+	else:
+		$Hitbox.global_position = $Hitbox.global_position.lerp(StageManager.p2_target,0.005)
+		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p2_target,0.005)
 
 func _on_spell_2_timer_timeout():
 	if player.in_spell_2:

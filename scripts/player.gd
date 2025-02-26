@@ -279,9 +279,9 @@ func update_animation_parameters():
 	else:
 		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
 	
-	if current_class == "hero":
-		anim_tree["parameters/spell1/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
-		anim_tree["parameters/spell2/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
+	if current_class == "hero" or current_class == "pyromancer":
+		anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
+		anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction
@@ -427,7 +427,7 @@ func reset_systems():
 	in_spell_2 = false
 	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
 	current_class_node.stop_systems()
-	#current_class_node.stop_spells()
+	current_class_node.stop_spells()
 	$GhostTimer.stop()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()

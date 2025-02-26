@@ -45,6 +45,12 @@ func use_attack_timer(time: float):
 		player.attack_index += 1.0
 	player.can_attack = true
 
+func spell_1():
+	pass
+
+func spel_2():
+	pass
+
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("slap_1_right").length
 	attack_2_length = anim_player.get_animation("slap_2_right").length
@@ -64,3 +70,6 @@ func check_property_changes():
 		last_dash_speed = dash_speed
 	else:
 		pass
+
+func stop_spells():
+	pass

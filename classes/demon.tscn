@@ -307,7 +307,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [0.0, 200.0]
+"values": [0.0, 400.0]
 }
 
 [sub_resource type="Animation" id="Animation_dt8i0"]
@@ -535,7 +535,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [0.0, 200.0]
+"values": [0.0, 400.0]
 }
 
 [sub_resource type="Animation" id="Animation_gcqld"]
@@ -886,7 +886,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_va33l")
 hframes = 10
 vframes = 4
-frame = 1
+frame = 4
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8

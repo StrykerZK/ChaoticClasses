@@ -135,6 +135,15 @@ func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
 	$AttackTimer.start()
 
+func spell_1():
+	pass
+
+func spell_2():
+	pass
+
+func stop_spells():
+	pass
+
 func get_animation_lengths():
 	release_length = anim_player.get_animation("release_right").length
 	ready_length = anim_player.get_animation("ready_right").length
