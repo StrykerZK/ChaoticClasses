@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8oxsb8vfkoly"
-path="res://.godot/imported/demon_sprite_sheet.png-6a48ea8505fff099932199c67c002a41.ctex"
+uid="uid://bo6idghpcuvl8"
+path="res://.godot/imported/debuff_sheet.png-a0d6c542e3dde5d3117ea5306bf43df3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/demon_sprite_sheet.png"
-dest_files=["res://.godot/imported/demon_sprite_sheet.png-6a48ea8505fff099932199c67c002a41.ctex"]
+source_file="res://art/misc/debuff_sheet.png"
+dest_files=["res://.godot/imported/debuff_sheet.png-a0d6c542e3dde5d3117ea5306bf43df3.ctex"]
 
 [params]
 

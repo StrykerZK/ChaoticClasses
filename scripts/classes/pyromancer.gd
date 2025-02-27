@@ -30,7 +30,7 @@ func _process(delta: float) -> void:
 
 @rpc("any_peer","call_local")
 func attack(index: float):
-	player.speed = 30
+	player.speed = player.speed * 0.1
 	player.can_dodge = false
 	player.is_attacking = true
 	$ComboTimer.stop()
@@ -111,14 +111,15 @@ func use_attack_timer(time: float):
 	else:
 		player.attack_index += 1.0
 		player.can_attack = true
-	player.speed = base_speed
+	if !player.is_slowed and !player.is_rooted:
+		player.speed = base_speed
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
 @rpc("any_peer","call_local")
 func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
 	player.in_spell_1 = true
 	await get_tree().create_timer(0.3).timeout
-	for i in range(20):
+	for i in range(12):
 			var fireball = fireball_scene.instantiate()
 			add_child(fireball)
 			
@@ -128,7 +129,7 @@ func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
 			fireball.center_point = position
 			fireball.damage = player.damage
 			fireball.player_id = player.player_id
-			await get_tree().create_timer(0.05).timeout
+			await get_tree().create_timer(0.1).timeout
 	player.in_spell_1 = false
 	$Spell1Timer.wait_time = 8.0
 	$Spell1Timer.start()
@@ -183,5 +184,6 @@ func _on_combo_timer_timeout() -> void:
 func stop_systems():
 	$ComboTimer.stop()
 	$AttackTimer.stop()
-	player.speed = base_speed
+	if !player.is_slowed and !player.is_rooted:
+		player.speed = base_speed
 	stop_spells()

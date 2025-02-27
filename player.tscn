@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=102 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
 [ext_resource type="Texture2D" uid="uid://pfn5b3ug7i84" path="res://art/misc/hit_fx.png" id="5_0f1a5"]
 [ext_resource type="Texture2D" uid="uid://ce2rvjqjyvskw" path="res://art/misc/transform_charge_sheet.png" id="5_7o0tp"]
+[ext_resource type="Texture2D" uid="uid://bo6idghpcuvl8" path="res://art/misc/debuff_sheet.png" id="6_a40kg"]
 [ext_resource type="Texture2D" uid="uid://btdbrpkiwayqq" path="res://art/misc/transform-sheet.png" id="7_pl1nw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00hg6"]
@@ -1036,6 +1037,87 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8cut"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h712r"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mvso"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fopui"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p64d2"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg8mw"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vdn2"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44g88"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7sjn"]
+atlas = ExtResource("6_a40kg")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x4l17"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8cut")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h712r")
+}, {
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_1mvso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fopui")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p64d2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wg8mw")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_2vdn2")
+}],
+"loop": true,
+"name": &"slow",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44g88")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h7sjn")
+}],
+"loop": true,
+"name": &"stun",
+"speed": 2.0
+}]
+
 [node name="Player" type="CharacterBody2D" groups=["players"]]
 process_mode = 3
 z_index = 1
@@ -1118,6 +1200,9 @@ one_shot = true
 wait_time = 1.5
 one_shot = true
 
+[node name="DebuffTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="GhostTimer" type="Timer" parent="."]
 wait_time = 0.03
 
@@ -1131,6 +1216,11 @@ sprite_frames = SubResource("SpriteFrames_4gxxo")
 [node name="HitFX" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_uwrur")
+
+[node name="DebuffFX" type="AnimatedSprite2D" parent="."]
+visible = false
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_x4l17")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

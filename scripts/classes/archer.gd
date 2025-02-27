@@ -54,7 +54,7 @@ func shoot():
 
 @rpc("any_peer","call_local")
 func attack(index: float):
-	player.speed = 40
+	player.speed = player.speed * 0.2
 	player.can_dodge = false
 	can_shoot = false
 	if !player.is_dodging:
@@ -126,7 +126,8 @@ func spawn_projectile(index: float):
 	player.is_attacking = false
 	player.attack_index = 1.0
 	player.damage = player.base_damage
-	player.speed = base_speed
+	if !player.is_slowed and !player.is_rooted:
+		player.speed = base_speed
 	player.can_attack = true
 	if dodge_timer.is_stopped(): player.can_dodge = true
 	early_shot = false
@@ -154,4 +155,5 @@ func stop_systems():
 	$ChargeAnimTimer.stop()
 	$ChargeTimer.stop()
 	$AttackTimer.stop()
-	player.speed = base_speed
+	if !player.is_slowed and !player.is_rooted:
+		player.speed = base_speed

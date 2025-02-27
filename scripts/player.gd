@@ -13,7 +13,8 @@ var current_health: float = max_health
 var armor: float = 0
 var base_damage: float = 5
 var damage: float = base_damage
-var speed: float = 150.0
+var base_speed: float = 150.0
+var speed: float = base_speed
 var dodge_speed_mult: float = 4
 var dodge_duration: float = 0.6
 @export var dodge_cooldown: float = 1.0
@@ -54,6 +55,9 @@ var spell_1_ready: bool = true
 var spell_2_ready: bool = true
 var in_spell_1: bool = false
 var in_spell_2: bool = false
+var is_slowed: bool = false
+var is_stunned: bool = false
+var is_rooted: bool = false
 
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
@@ -279,7 +283,7 @@ func update_animation_parameters():
 	else:
 		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
 	
-	if current_class == "hero" or current_class == "pyromancer":
+	if current_class == "hero" or current_class == "pyromancer" or current_class == "demon":
 		anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
 		anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
 	
@@ -292,6 +296,8 @@ func update_animation_parameters():
 func class_change(class_title: String):
 	# Start countdown animation
 	is_transforming = true
+	$PlayerFX.stop()
+	$PlayerFX.show()
 	$PlayerFX.play("countdown")
 	await $PlayerFX.animation_finished
 	
@@ -334,6 +340,26 @@ func class_change(class_title: String):
 		StageManager.update_game_state.rpc("In Game")
 	
 	is_transforming = false
+	$PlayerFX.hide()
+
+func debuff(type: String, amount: float, duration: float):
+	match type:
+		"slow":
+			is_slowed = true
+			$DebuffFX.play("slow")
+			$DebuffFX.show()
+			speed = speed * (1 - amount)
+			$DebuffTimer.wait_time = duration
+			$DebuffTimer.start()
+			await $DebuffTimer.timeout
+			speed = base_speed
+			is_slowed = false
+			$DebuffFX.stop()
+			$DebuffFX.hide()
+		"root":
+			pass
+		"stun":
+			$DebuffFX.play("stun")
 
 func take_damage(incoming_dmg: float):
 	if is_multiplayer_authority() and !is_dead: # Add this for any dmg sync errors
@@ -404,7 +430,8 @@ func update_stats(stats: Array):
 	armor = stats[0]
 	base_damage = stats[1]
 	damage = base_damage
-	speed =  stats[2]
+	base_speed =  stats[2]
+	speed = base_speed
 	dodge_speed_mult = stats[3]
 	dodge_duration = stats[4]
 	dodge_count = stats[5]
@@ -432,6 +459,8 @@ func reset_systems():
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()
 	$IFrameTimer.stop()
+	$UtilityTimer.stop()
+	$DebuffTimer.stop()
 	deactivate_i_frame()
 	attack_index = 1
 	damage = base_damage
@@ -450,6 +479,7 @@ func initialize_class_children():
 	current_type = current_class_node.type
 
 func use_utility_timer(duration: float):
+	$UtilityTimer.stop()
 	$UtilityTimer.wait_time = duration
 	$UtilityTimer.start()
 

@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_spell_1:
-		direction = direction.rotated(6.0 * delta)
+		direction = direction.rotated(5.0 * delta)
 		position = center_point + direction * 70.0
 		rotation = direction.angle() + PI/2
 	else:
