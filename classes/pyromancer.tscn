@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://dypflun7yn05e"]
+[gd_scene load_steps=92 format=3 uid="uid://dypflun7yn05e"]
 
 [ext_resource type="Script" path="res://scripts/classes/pyromancer.gd" id="1_1qsv3"]
 [ext_resource type="Texture2D" uid="uid://cit7m8i11ie2n" path="res://art/player/pyromancer_sprite_sheet.png" id="2_0qbia"]
@@ -577,46 +577,6 @@ tracks/1/keys = {
 "values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 }
 
-[sub_resource type="Animation" id="Animation_6u608"]
-resource_name = "spell1_right"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:flip_h")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [40, 41, 42, 43]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Marker2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-
 [sub_resource type="Animation" id="Animation_b2j6u"]
 resource_name = "spell1_left"
 length = 0.6
@@ -657,9 +617,9 @@ tracks/2/keys = {
 "values": [Vector2(-1, -39)]
 }
 
-[sub_resource type="Animation" id="Animation_x3c6b"]
-resource_name = "spell2_right"
-length = 1.1
+[sub_resource type="Animation" id="Animation_6u608"]
+resource_name = "spell1_right"
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -671,6 +631,46 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [40, 41, 42, 43]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Marker2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_a3oh7"]
+resource_name = "spell2_left"
+length = 1.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:flip_h")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -697,8 +697,8 @@ tracks/2/keys = {
 "values": [true, false]
 }
 
-[sub_resource type="Animation" id="Animation_a3oh7"]
-resource_name = "spell2_left"
+[sub_resource type="Animation" id="Animation_x3c6b"]
+resource_name = "spell2_right"
 length = 1.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -710,7 +710,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -970,6 +970,14 @@ advance_condition = &"is_running"
 advance_mode = 2
 advance_condition = &"is_dodging"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k3lic"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v67c2"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gyaw1"]
 states/End/position = Vector2(900, 183)
 states/Start/position = Vector2(197, 183)
@@ -984,8 +992,8 @@ states/run/position = Vector2(349, 100)
 states/spell1/node = SubResource("AnimationNodeBlendSpace1D_birvr")
 states/spell1/position = Vector2(526, 100)
 states/spell2/node = SubResource("AnimationNodeBlendSpace1D_w5kom")
-states/spell2/position = Vector2(687, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_jhnuf"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_pfu40"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_kytys"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_v25lp"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_ycrsy"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_wp40i"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_p1jy6"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_okeuj"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_gqbmm"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_h77px"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_utfkt")]
+states/spell2/position = Vector2(685, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_jhnuf"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_pfu40"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_kytys"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_v25lp"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_ycrsy"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_wp40i"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_p1jy6"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_okeuj"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_gqbmm"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_h77px"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_utfkt"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_k3lic"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_v67c2")]
 graph_offset = Vector2(-50, -17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ikj4u"]

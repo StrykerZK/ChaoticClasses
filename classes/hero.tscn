@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://cxeud2sgthd17"]
+[gd_scene load_steps=90 format=3 uid="uid://cxeud2sgthd17"]
 
 [ext_resource type="Script" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bclb55vdfna7m" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
@@ -1355,6 +1355,14 @@ advance_condition = &"is_running"
 advance_mode = 2
 advance_condition = &"is_dodging"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e8srk"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uil7a"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_2oee8"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_eea0a")
 states/attack/position = Vector2(349, -72)
@@ -1368,8 +1376,8 @@ states/spell1/node = SubResource("AnimationNodeBlendSpace1D_ftd8u")
 states/spell1/position = Vector2(516, 7)
 states/spell2/node = SubResource("AnimationNodeBlendSpace1D_1cdv5")
 states/spell2/position = Vector2(655, 7)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_fuuo2"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_cgso1"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_3rlbt"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_7h3t3"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_4rfsd"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_ijm5u"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_scepp"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_chuyo"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_78ju6"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_fagyu"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_on8f1")]
-graph_offset = Vector2(-46.3317, -93)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_fuuo2"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_cgso1"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_3rlbt"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_7h3t3"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_4rfsd"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_ijm5u"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_scepp"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_chuyo"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_78ju6"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_fagyu"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_on8f1"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_e8srk"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_uil7a")]
+graph_offset = Vector2(-29.3317, -120)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5cs66"]
 atlas = ExtResource("4_p0awa")

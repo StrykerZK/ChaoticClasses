@@ -1,0 +1,111 @@
+[gd_scene load_steps=15 format=3 uid="uid://cd8hkd2jqe8ff"]
+
+[ext_resource type="Script" path="res://scripts/classes/misc/smoke_bomb.gd" id="1_ccecb"]
+[ext_resource type="Texture2D" uid="uid://mhixg2stct0s" path="res://art/player/spells/archer/archer_fx_sheet.png" id="2_jxyk5"]
+[ext_resource type="Script" path="res://scripts/classes/misc/root_spell_hitbox.gd" id="3_h62jw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obe0h"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(0, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgygq"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(64, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aucbx"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(128, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w0gw0"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(192, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ei31q"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(256, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgsj8"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(320, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ai4e3"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(384, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nedil"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(448, 0, 64, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h6a66"]
+atlas = ExtResource("2_jxyk5")
+region = Rect2(512, 0, 64, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jxike"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obe0h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rgygq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aucbx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w0gw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ei31q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rgsj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ai4e3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nedil")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h6a66")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"spell1",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjdbr"]
+radius = 33.0151
+
+[node name="smoke_bomb" type="Node2D"]
+script = ExtResource("1_ccecb")
+
+[node name="SpellFX" type="AnimatedSprite2D" parent="."]
+z_index = 3
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_jxike")
+animation = &"spell1"
+frame = 4
+frame_progress = 0.691842
+offset = Vector2(0, -32)
+
+[node name="SpellHitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 16
+monitorable = false
+script = ExtResource("3_h62jw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitbox"]
+rotation = 1.5708
+shape = SubResource("CircleShape2D_fjdbr")
+
+[connection signal="area_entered" from="SpellHitbox" to="SpellHitbox" method="_on_area_entered"]

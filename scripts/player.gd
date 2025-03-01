@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var current_class: String = "Base"
+var current_class: String = "base"
 var current_type: String = "melee"
 var player_id: int = 1
 var current_class_node: Node
@@ -81,7 +81,7 @@ func _ready() -> void:
 	$PlayerSynchronizer.root_path = get_path()
 	$PlayerSynchronizer.set_multiplayer_authority(player_id)
 	
-	hitbox = get_node("Base/Hitbox")
+	hitbox = get_node("base/Hitbox")
 	hitbox.player_id = player_id
 	
 	initialize_class_children()
@@ -109,7 +109,8 @@ func _process(delta: float) -> void:
 			local_mouse_pos = get_local_mouse_position()
 			
 			if !is_dead:
-				handle_input() # Input data
+				if !is_stunned:
+					handle_input() # Input data
 				update_animation_parameters.rpc() # Update animations
 			
 			move_and_slide() # Character movement
@@ -122,41 +123,51 @@ func handle_input():
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		last_input_direction = direction
 		
-		if is_attacking or in_spell_1 or in_spell_2:
-			velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-		else:
-			if direction:
-				velocity = direction * speed
+		if !is_rooted:
+			if is_attacking or in_spell_1 or in_spell_2:
+				if position.distance_to(get_global_mouse_position()) > 50:
+					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
+					last_mouse_pos = get_global_mouse_position()
+				else:
+					velocity = position.direction_to(last_mouse_pos) * dash_speed
 			else:
-				velocity = Vector2.ZERO
-		
-		if is_dodging:
-			velocity = last_input_direction * dodge_speed
+				if direction:
+					velocity = direction * speed
+				else:
+					velocity = Vector2.ZERO
+			
+			if is_dodging:
+				velocity = last_input_direction * dodge_speed
 		
 	else: # If ranged, move while attacking
 		if !is_dodging:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 		last_input_direction = direction
 		
-		if in_spell_1 or in_spell_2:
-			velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-		else:
-			if direction:
-				velocity = direction * speed
+		if !is_rooted:
+			if in_spell_1 or in_spell_2:
+				if position.distance_to(get_global_mouse_position()) > 50:
+					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
+					last_mouse_pos = get_global_mouse_position()
+				else:
+					velocity = position.direction_to(last_mouse_pos) * dash_speed
 			else:
-				velocity = Vector2.ZERO
-		
-		if is_dodging:
-			velocity = last_input_direction * dodge_speed	
+				if direction:
+					velocity = direction * speed
+				else:
+					velocity = Vector2.ZERO
+			
+			if is_dodging:
+				velocity = last_input_direction * dodge_speed	
 	
 	# Dodging
-	if Input.is_action_just_pressed("dodge"):
+	if Input.is_action_just_pressed("dodge") and !is_rooted:
 		if can_dodge:
 			start_dodge.rpc()
 	
 	# Attacking
 	if Input.is_action_just_pressed("attack"):
-		if !is_attacking and !is_dodging:
+		if !is_attacking and !is_dodging and !in_spell_1 and !in_spell_2:
 			if can_attack:
 				StageManager.set_target.rpc(player_id,mouse_pos)
 				last_mouse_pos = local_mouse_pos
@@ -165,7 +176,7 @@ func handle_input():
 	
 	# Spell 1
 	if Input.is_action_just_pressed("spell_1"):
-		if !is_dodging and spell_1_ready:
+		if !is_attacking and !is_dodging and spell_1_ready and !in_spell_2:
 			StageManager.set_target.rpc(player_id,mouse_pos)
 			last_mouse_pos = local_mouse_pos
 			current_class_node.spell_1.rpc()
@@ -173,7 +184,7 @@ func handle_input():
 	
 	# Spell 2
 	if Input.is_action_just_pressed("spell_2"):
-		if !is_dodging and spell_2_ready:
+		if !is_attacking and !is_dodging and spell_2_ready and !in_spell_1:
 			StageManager.set_target.rpc(player_id,mouse_pos)
 			last_mouse_pos = local_mouse_pos
 			current_class_node.spell_2.rpc()
@@ -198,9 +209,10 @@ func tween_dodge_value():
 @rpc("any_peer","call_local")
 func start_dodge():
 	is_attacking = false
+	if in_spell_1 or in_spell_2:
+		current_class_node.stop_spells()
 	in_spell_1 = false
 	in_spell_2 = false
-	current_class_node.stop_spells()
 	is_dodging = true
 	can_dodge = false
 	can_attack = false
@@ -283,7 +295,7 @@ func update_animation_parameters():
 	else:
 		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
 	
-	if current_class == "hero" or current_class == "pyromancer" or current_class == "demon":
+	if current_class != "base":
 		anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
 		anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
 	
@@ -340,28 +352,56 @@ func class_change(class_title: String):
 		StageManager.update_game_state.rpc("In Game")
 	
 	is_transforming = false
+	await $PlayerFX.animation_finished
 	$PlayerFX.hide()
 
 func debuff(type: String, amount: float, duration: float):
+	var remaining_debuff: String = ""
+	var debuff_time: float = 0
+	var prev_amount: float = 0
+	if is_slowed:
+		remaining_debuff = "slow"
+		prev_amount = speed / base_speed
+	elif is_rooted:
+		remaining_debuff = "root"
+	elif is_stunned:
+		remaining_debuff = "stun"
+	debuff_time = $DebuffTimer.time_left - duration
 	match type:
 		"slow":
 			is_slowed = true
+			$DebuffFX.stop()
 			$DebuffFX.play("slow")
 			$DebuffFX.show()
 			speed = speed * (1 - amount)
+			$DebuffTimer.stop()
 			$DebuffTimer.wait_time = duration
 			$DebuffTimer.start()
 			await $DebuffTimer.timeout
 			speed = base_speed
 			is_slowed = false
-			$DebuffFX.stop()
-			$DebuffFX.hide()
 		"root":
-			pass
+			is_rooted = true
+			$DebuffFX.stop()
+			$DebuffFX.play("root")
+			$DebuffFX.show()
+			$DebuffTimer.stop()
+			$DebuffTimer.wait_time = duration
+			$DebuffTimer.start()
+			await $DebuffTimer.timeout
+			is_rooted = false
 		"stun":
+			is_stunned = true
 			$DebuffFX.play("stun")
+	$DebuffFX.stop()
+	$DebuffFX.hide()
+	if !remaining_debuff.is_empty():
+		debuff(remaining_debuff,prev_amount,debuff_time)
 
 func take_damage(incoming_dmg: float):
+	if incoming_dmg <= 0:
+		return
+	
 	if is_multiplayer_authority() and !is_dead: # Add this for any dmg sync errors
 		# Calculate armor into damage
 		var dmg_reduction = 1 - (armor /  10)
@@ -460,7 +500,12 @@ func reset_systems():
 	$DodgeResetTimer.stop()
 	$IFrameTimer.stop()
 	$UtilityTimer.stop()
+	$DebuffFX.stop()
+	$DebuffFX.hide()
 	$DebuffTimer.stop()
+	is_stunned = false
+	is_rooted = false
+	is_slowed = false
 	deactivate_i_frame()
 	attack_index = 1
 	damage = base_damage

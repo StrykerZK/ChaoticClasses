@@ -45,10 +45,12 @@ func use_attack_timer(time: float):
 		player.attack_index += 1.0
 	player.can_attack = true
 
+@rpc("any_peer","call_local")
 func spell_1():
 	pass
 
-func spel_2():
+@rpc("any_peer","call_local")
+func spell_2():
 	pass
 
 func get_animation_lengths():

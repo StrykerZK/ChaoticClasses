@@ -18,6 +18,8 @@ func start_game():
 	
 	await get_tree().create_timer(4).timeout
 	assign_players()
+	player_1.smooth_camera("position")
+	player_2.smooth_camera("position")
 	player_1.reset_camera_focus()
 	player_2.reset_camera_focus()
 	player_1.zoom_camera(1.5)
