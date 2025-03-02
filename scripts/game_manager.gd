@@ -71,6 +71,7 @@ func toggle_pause():
 	if is_instance_valid(player_2):
 		player_2.toggle_pause()
 	$SwapTimer.paused = !$SwapTimer.paused
+	main_ui.toggle_pause()
 
 func _on_button_pressed() -> void:
 	if multiplayer.is_server():

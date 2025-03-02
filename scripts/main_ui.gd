@@ -3,6 +3,8 @@ extends CanvasLayer
 var player_1
 var player_2
 
+var is_paused: bool = false
+
 func _ready() -> void:
 	$Label.hide()
 	$FX.hide()
@@ -63,3 +65,10 @@ func assign_players():
 	var players = get_tree().get_nodes_in_group("players")
 	player_1 = players[0]
 	player_2 = players[1]
+
+func toggle_pause():
+	is_paused = !is_paused
+	if is_paused:
+		$PauseMenu.show()
+	else:
+		$PauseMenu.hide()

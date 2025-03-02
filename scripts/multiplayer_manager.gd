@@ -79,7 +79,7 @@ func peer_disconnected(pid):
 				$Start.hide()
 
 func connected_to_server():
-	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id(), "Base")
+	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id(), "base")
 	update_player_panel.rpc_id(1, $NameInput.text)
 
 func connection_failed():
@@ -175,7 +175,7 @@ func _on_host_pressed() -> void:
 	if $HostPortInput.text.is_empty():
 		$HostPortInput.text = str(default_port)
 	host(int($HostPortInput.text))
-	send_player_information($NameInput.text, multiplayer.get_unique_id(), "Base")
+	send_player_information($NameInput.text, multiplayer.get_unique_id(), "base")
 	$NameInput.editable = false
 	$Host.disabled = true
 	$Join.disabled = true

@@ -49,6 +49,7 @@ var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
 var last_mouse_pos: Vector2 = Vector2.ZERO
 var dash_tween: Tween
+var last_dash_pos
 
 # Variables for spells
 var spell_1_ready: bool = true
@@ -127,9 +128,9 @@ func handle_input():
 			if is_attacking or in_spell_1 or in_spell_2:
 				if position.distance_to(get_global_mouse_position()) > 50:
 					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-					last_mouse_pos = get_global_mouse_position()
+					last_dash_pos = get_global_mouse_position()
 				else:
-					velocity = position.direction_to(last_mouse_pos) * dash_speed
+					velocity = position.direction_to(last_dash_pos) * dash_speed
 			else:
 				if direction:
 					velocity = direction * speed
@@ -148,9 +149,9 @@ func handle_input():
 			if in_spell_1 or in_spell_2:
 				if position.distance_to(get_global_mouse_position()) > 50:
 					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-					last_mouse_pos = get_global_mouse_position()
+					last_dash_pos = get_global_mouse_position()
 				else:
-					velocity = position.direction_to(last_mouse_pos) * dash_speed
+					velocity = position.direction_to(last_dash_pos) * dash_speed
 			else:
 				if direction:
 					velocity = direction * speed

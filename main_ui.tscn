@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://d1aj3uw0040ii"]
+[gd_scene load_steps=29 format=3 uid="uid://d1aj3uw0040ii"]
 
 [ext_resource type="Script" path="res://scripts/main_ui.gd" id="1_50b53"]
+[ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_2tfbj"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
 [ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_60xrb"]
 [ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://player_2_info.tscn" id="4_dqrjs"]
@@ -501,7 +502,11 @@ visible = false
 [node name="Player2Info" parent="." instance=ExtResource("4_dqrjs")]
 visible = false
 
+[node name="PauseMenu" parent="." instance=ExtResource("2_2tfbj")]
+visible = false
+
 [node name="FX" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(960, 540)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_okv6o")
