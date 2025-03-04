@@ -1,11 +1,11 @@
 [gd_scene load_steps=90 format=3 uid="uid://dpn1uarsdks0w"]
 
-[ext_resource type="Script" path="res://scripts/classes/archer.gd" id="1_jrsw8"]
+[ext_resource type="Script" uid="uid://b1okp1w0u6kx2" path="res://scripts/classes/archer.gd" id="1_jrsw8"]
 [ext_resource type="Texture2D" uid="uid://dysv50fd30o74" path="res://art/player/archer_sprite_sheet.png" id="1_s1fos"]
 [ext_resource type="PackedScene" uid="uid://bv8fshqu3ehhy" path="res://classes/misc/arrow.tscn" id="2_4rt7k"]
 [ext_resource type="PackedScene" uid="uid://cd8hkd2jqe8ff" path="res://classes/misc/smoke_bomb.tscn" id="3_4nr05"]
 [ext_resource type="PackedScene" uid="uid://cv55d24dq4g1d" path="res://classes/misc/arrow_rain.tscn" id="3_f64dt"]
-[ext_resource type="Script" path="res://scripts/classes/misc/archer_hitbox.gd" id="4_6wuos"]
+[ext_resource type="Script" uid="uid://dsvj3l2ypvfsq" path="res://scripts/classes/misc/archer_hitbox.gd" id="4_6wuos"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1uyvq"]
 size = Vector2(22, 46)
@@ -809,29 +809,29 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wvasd"]
 _data = {
-"RESET": SubResource("Animation_x84ry"),
-"charge_1_hold_left": SubResource("Animation_oiktu"),
-"charge_1_hold_right": SubResource("Animation_ffcwo"),
-"charge_1_left": SubResource("Animation_lkdjg"),
-"charge_1_right": SubResource("Animation_xx2p0"),
-"charge_2_hold_left": SubResource("Animation_dblhs"),
-"charge_2_hold_right": SubResource("Animation_xtj3s"),
-"charge_2_left": SubResource("Animation_3s4kj"),
-"charge_2_right": SubResource("Animation_08v8j"),
-"dodge_left": SubResource("Animation_b5ox7"),
-"dodge_right": SubResource("Animation_dd73v"),
-"idle_left": SubResource("Animation_wirt6"),
-"idle_right": SubResource("Animation_6k4cr"),
-"ready_left": SubResource("Animation_s3qhj"),
-"ready_right": SubResource("Animation_kshgk"),
-"release_left": SubResource("Animation_je8wm"),
-"release_right": SubResource("Animation_8fp7d"),
-"run_left": SubResource("Animation_44j8x"),
-"run_right": SubResource("Animation_x45o2"),
-"spell1_left": SubResource("Animation_huw2c"),
-"spell1_right": SubResource("Animation_oieu0"),
-"spell2_left": SubResource("Animation_12qqm"),
-"spell2_right": SubResource("Animation_dgnb8")
+&"RESET": SubResource("Animation_x84ry"),
+&"charge_1_hold_left": SubResource("Animation_oiktu"),
+&"charge_1_hold_right": SubResource("Animation_ffcwo"),
+&"charge_1_left": SubResource("Animation_lkdjg"),
+&"charge_1_right": SubResource("Animation_xx2p0"),
+&"charge_2_hold_left": SubResource("Animation_dblhs"),
+&"charge_2_hold_right": SubResource("Animation_xtj3s"),
+&"charge_2_left": SubResource("Animation_3s4kj"),
+&"charge_2_right": SubResource("Animation_08v8j"),
+&"dodge_left": SubResource("Animation_b5ox7"),
+&"dodge_right": SubResource("Animation_dd73v"),
+&"idle_left": SubResource("Animation_wirt6"),
+&"idle_right": SubResource("Animation_6k4cr"),
+&"ready_left": SubResource("Animation_s3qhj"),
+&"ready_right": SubResource("Animation_kshgk"),
+&"release_left": SubResource("Animation_je8wm"),
+&"release_right": SubResource("Animation_8fp7d"),
+&"run_left": SubResource("Animation_44j8x"),
+&"run_right": SubResource("Animation_x45o2"),
+&"spell1_left": SubResource("Animation_huw2c"),
+&"spell1_right": SubResource("Animation_oieu0"),
+&"spell2_left": SubResource("Animation_12qqm"),
+&"spell2_right": SubResource("Animation_dgnb8")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5riut"]
@@ -1129,7 +1129,7 @@ debug_color = Color(0.946795, 0.23205, 0, 0.42)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_wvasd")
+&"": SubResource("AnimationLibrary_wvasd")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

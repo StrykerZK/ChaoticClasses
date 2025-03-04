@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://bve17go2qhj4t"]
 
-[ext_resource type="Script" path="res://scripts/classes/misc/fireball.gd" id="1_23x3y"]
+[ext_resource type="Script" uid="uid://br88mmgm0bl5e" path="res://scripts/classes/misc/fireball.gd" id="1_23x3y"]
 [ext_resource type="Texture2D" uid="uid://j6r3hbmn5idf" path="res://art/misc/fireball-sheet.png" id="2_0bo41"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_18jf8"]

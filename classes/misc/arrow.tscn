@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bv8fshqu3ehhy"]
 
 [ext_resource type="Texture2D" uid="uid://whocqq5uxbyf" path="res://art/misc/arrow_sheet.png" id="1_7lkev"]
-[ext_resource type="Script" path="res://scripts/classes/misc/arrow.gd" id="1_or1te"]
+[ext_resource type="Script" uid="uid://bsegliujjijlu" path="res://scripts/classes/misc/arrow.gd" id="1_or1te"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_28tu0"]
 radius = 5.0
@@ -264,10 +264,10 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yoix7"]
 _data = {
-"RESET": SubResource("Animation_gicdd"),
-"charge_1": SubResource("Animation_me6hf"),
-"charge_2": SubResource("Animation_ug6lf"),
-"default": SubResource("Animation_ikhbe")
+&"RESET": SubResource("Animation_gicdd"),
+&"charge_1": SubResource("Animation_me6hf"),
+&"charge_2": SubResource("Animation_ug6lf"),
+&"default": SubResource("Animation_ikhbe")
 }
 
 [node name="arrow" type="Area2D" groups=["projectiles"]]

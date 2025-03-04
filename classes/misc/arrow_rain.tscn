@@ -1,8 +1,8 @@
 [gd_scene load_steps=26 format=3 uid="uid://cv55d24dq4g1d"]
 
-[ext_resource type="Script" path="res://scripts/classes/misc/arrow_rain.gd" id="1_ns3jr"]
+[ext_resource type="Script" uid="uid://doc8ol2tajt0y" path="res://scripts/classes/misc/arrow_rain.gd" id="1_ns3jr"]
 [ext_resource type="Texture2D" uid="uid://mhixg2stct0s" path="res://art/player/spells/archer/archer_fx_sheet.png" id="1_tm2g3"]
-[ext_resource type="Script" path="res://scripts/classes/misc/hitbox.gd" id="3_87yov"]
+[ext_resource type="Script" uid="uid://bu3llqiv1ts5u" path="res://scripts/classes/misc/hitbox.gd" id="3_87yov"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rkun0"]
 atlas = ExtResource("1_tm2g3")

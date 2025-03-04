@@ -1,9 +1,9 @@
 [gd_scene load_steps=130 format=3 uid="uid://cuw7fymmodn3b"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
+[ext_resource type="Script" uid="uid://bnpiendf6brk1" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
-[ext_resource type="Script" path="res://scripts/classes/base.gd" id="2_u12l6"]
-[ext_resource type="Script" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
+[ext_resource type="Script" uid="uid://bpwyaxv6x1trf" path="res://scripts/classes/base.gd" id="2_u12l6"]
+[ext_resource type="Script" uid="uid://bwenr1vu6f8uf" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
 [ext_resource type="Texture2D" uid="uid://pfn5b3ug7i84" path="res://art/misc/hit_fx.png" id="5_0f1a5"]
 [ext_resource type="Texture2D" uid="uid://ce2rvjqjyvskw" path="res://art/misc/transform_charge_sheet.png" id="5_7o0tp"]
 [ext_resource type="Texture2D" uid="uid://bo6idghpcuvl8" path="res://art/misc/debuff_sheet.png" id="6_a40kg"]
@@ -617,19 +617,19 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lguxv"]
 _data = {
-"RESET": SubResource("Animation_bbg1b"),
-"dodge_left": SubResource("Animation_fcle3"),
-"dodge_right": SubResource("Animation_feww2"),
-"idle_left": SubResource("Animation_04271"),
-"idle_right": SubResource("Animation_35hhr"),
-"run_left": SubResource("Animation_m7toa"),
-"run_right": SubResource("Animation_b6fse"),
-"slap_1_left": SubResource("Animation_s1wl0"),
-"slap_1_right": SubResource("Animation_7h3yq"),
-"slap_2_left": SubResource("Animation_iu8ib"),
-"slap_2_right": SubResource("Animation_1fci3"),
-"spell_left": SubResource("Animation_vankb"),
-"spell_right": SubResource("Animation_dhj2o")
+&"RESET": SubResource("Animation_bbg1b"),
+&"dodge_left": SubResource("Animation_fcle3"),
+&"dodge_right": SubResource("Animation_feww2"),
+&"idle_left": SubResource("Animation_04271"),
+&"idle_right": SubResource("Animation_35hhr"),
+&"run_left": SubResource("Animation_m7toa"),
+&"run_right": SubResource("Animation_b6fse"),
+&"slap_1_left": SubResource("Animation_s1wl0"),
+&"slap_1_right": SubResource("Animation_7h3yq"),
+&"slap_2_left": SubResource("Animation_iu8ib"),
+&"slap_2_right": SubResource("Animation_1fci3"),
+&"spell_left": SubResource("Animation_vankb"),
+&"spell_right": SubResource("Animation_dhj2o")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_biudh"]
@@ -1346,7 +1346,7 @@ debug_color = Color(0.996078, 0, 0, 0.419608)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="base"]
 root_node = NodePath("../..")
 libraries = {
-"": SubResource("AnimationLibrary_lguxv")
+&"": SubResource("AnimationLibrary_lguxv")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="base"]

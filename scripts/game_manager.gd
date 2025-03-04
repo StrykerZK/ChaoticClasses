@@ -63,8 +63,7 @@ func class_change():
 	main_ui.class_change.rpc()
 
 @rpc("any_peer","call_local")
-func toggle_pause(id: int):
-	# ADD CONDITIONS FOR OTHER PLAYER PAUSE, CLASS SWAPPING, ETC.
+func toggle_pause(id: int): # Use 0 as id for standard rpc calling
 	if id != 0:
 		if !is_paused:
 			pause_id = id

@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://drllpc87p44ga"]
 
-[ext_resource type="Shader" path="res://utility/ghost.gdshader" id="1_5g5lm"]
+[ext_resource type="Shader" uid="uid://c3mhek8p5qfm0" path="res://utility/ghost.gdshader" id="1_5g5lm"]
 [ext_resource type="Texture2D" uid="uid://3tyy8y71ij2y" path="res://art/ui/bee.png" id="1_fxj5i"]
-[ext_resource type="Script" path="res://scripts/utility/ghost.gd" id="2_3nl1i"]
+[ext_resource type="Script" uid="uid://qqqs2un1hca3" path="res://scripts/utility/ghost.gd" id="2_3nl1i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vcptn"]
 shader = ExtResource("1_5g5lm")

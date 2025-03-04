@@ -1,8 +1,8 @@
 [gd_scene load_steps=90 format=3 uid="uid://cxeud2sgthd17"]
 
-[ext_resource type="Script" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
+[ext_resource type="Script" uid="uid://msmnsu61jcc0" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bclb55vdfna7m" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
-[ext_resource type="Script" path="res://scripts/classes/misc/hero_hitbox.gd" id="3_4bifk"]
+[ext_resource type="Script" uid="uid://d1g1yfu1eet2l" path="res://scripts/classes/misc/hero_hitbox.gd" id="3_4bifk"]
 [ext_resource type="Texture2D" uid="uid://cb461m4ffvri5" path="res://art/player/spells/hero/hero_spell_1_sheet.png" id="4_p0awa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i36nm"]
@@ -1125,23 +1125,23 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vknum"]
 _data = {
-"RESET": SubResource("Animation_v1x4c"),
-"attack_left_1": SubResource("Animation_2laf6"),
-"attack_left_2": SubResource("Animation_vec5t"),
-"attack_left_3": SubResource("Animation_n44h0"),
-"attack_right_1": SubResource("Animation_n7mbm"),
-"attack_right_2": SubResource("Animation_q8keb"),
-"attack_right_3": SubResource("Animation_erhcn"),
-"dodge_left": SubResource("Animation_hyed7"),
-"dodge_right": SubResource("Animation_7jldm"),
-"idle_left": SubResource("Animation_ram8d"),
-"idle_right": SubResource("Animation_vx87u"),
-"run_left": SubResource("Animation_17ug3"),
-"run_right": SubResource("Animation_p4vi2"),
-"spell1_left": SubResource("Animation_micm7"),
-"spell1_right": SubResource("Animation_tstrm"),
-"spell2_left": SubResource("Animation_kmuca"),
-"spell2_right": SubResource("Animation_gysdh")
+&"RESET": SubResource("Animation_v1x4c"),
+&"attack_left_1": SubResource("Animation_2laf6"),
+&"attack_left_2": SubResource("Animation_vec5t"),
+&"attack_left_3": SubResource("Animation_n44h0"),
+&"attack_right_1": SubResource("Animation_n7mbm"),
+&"attack_right_2": SubResource("Animation_q8keb"),
+&"attack_right_3": SubResource("Animation_erhcn"),
+&"dodge_left": SubResource("Animation_hyed7"),
+&"dodge_right": SubResource("Animation_7jldm"),
+&"idle_left": SubResource("Animation_ram8d"),
+&"idle_right": SubResource("Animation_vx87u"),
+&"run_left": SubResource("Animation_17ug3"),
+&"run_right": SubResource("Animation_p4vi2"),
+&"spell1_left": SubResource("Animation_micm7"),
+&"spell1_right": SubResource("Animation_tstrm"),
+&"spell2_left": SubResource("Animation_kmuca"),
+&"spell2_right": SubResource("Animation_gysdh")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f4jaw"]

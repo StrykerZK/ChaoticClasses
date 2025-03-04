@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://w0ull4nc03db"]
 
 [ext_resource type="Texture2D" uid="uid://3polm4k7cxkp" path="res://art/player/sprites/base_sprite.png" id="1_qm34m"]
-[ext_resource type="Script" path="res://scripts/ui/player_2_info.gd" id="1_w2fjm"]
+[ext_resource type="Script" uid="uid://d2vnd1ykhvc2s" path="res://scripts/ui/player_2_info.gd" id="1_w2fjm"]
 [ext_resource type="Texture2D" uid="uid://bh4auvvdrurru" path="res://art/ui/class_info_overlay.png" id="2_82a5e"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="3_16j1o"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="4_os42c"]
@@ -183,10 +183,10 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3xk4s"]
 _data = {
-"RESET": SubResource("Animation_1ic1s"),
-"score_1_fill": SubResource("Animation_af66q"),
-"score_2_fill": SubResource("Animation_ih88e"),
-"score_3_fill": SubResource("Animation_lxru6")
+&"RESET": SubResource("Animation_1ic1s"),
+&"score_1_fill": SubResource("Animation_af66q"),
+&"score_2_fill": SubResource("Animation_ih88e"),
+&"score_3_fill": SubResource("Animation_lxru6")
 }
 
 [node name="Player2Info" type="Control"]

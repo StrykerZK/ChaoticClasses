@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://d1aj3uw0040ii"]
 
-[ext_resource type="Script" path="res://scripts/main_ui.gd" id="1_50b53"]
+[ext_resource type="Script" uid="uid://byrhy1vvpbw1r" path="res://scripts/main_ui.gd" id="1_50b53"]
 [ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_2tfbj"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
 [ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_60xrb"]
@@ -463,10 +463,10 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jofjq"]
 _data = {
-"RESET": SubResource("Animation_bu6ua"),
-"game_end": SubResource("Animation_f5hmg"),
-"game_over": SubResource("Animation_7750f"),
-"start_game": SubResource("Animation_ghb0x")
+&"RESET": SubResource("Animation_bu6ua"),
+&"game_end": SubResource("Animation_f5hmg"),
+&"game_over": SubResource("Animation_7750f"),
+&"start_game": SubResource("Animation_ghb0x")
 }
 
 [node name="MainUI" type="CanvasLayer"]
@@ -516,7 +516,7 @@ frame_progress = 1.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_jofjq")
+&"": SubResource("AnimationLibrary_jofjq")
 }
 
 [node name="Base" type="Button" parent="."]

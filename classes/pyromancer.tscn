@@ -1,11 +1,11 @@
 [gd_scene load_steps=92 format=3 uid="uid://dypflun7yn05e"]
 
-[ext_resource type="Script" path="res://scripts/classes/pyromancer.gd" id="1_1qsv3"]
+[ext_resource type="Script" uid="uid://djhbayfxbc1kl" path="res://scripts/classes/pyromancer.gd" id="1_1qsv3"]
 [ext_resource type="Texture2D" uid="uid://cit7m8i11ie2n" path="res://art/player/pyromancer_sprite_sheet.png" id="2_0qbia"]
 [ext_resource type="PackedScene" uid="uid://bve17go2qhj4t" path="res://classes/misc/fireball.tscn" id="2_ty1lp"]
-[ext_resource type="Script" path="res://scripts/classes/misc/pyro_hitbox.gd" id="4_cf2yf"]
+[ext_resource type="Script" uid="uid://duvucbnihptnk" path="res://scripts/classes/misc/pyro_hitbox.gd" id="4_cf2yf"]
 [ext_resource type="Texture2D" uid="uid://bss5f0pjwgvlj" path="res://art/player/spells/pyromancer/pyro_circle_sheet.png" id="5_rgvha"]
-[ext_resource type="Script" path="res://scripts/classes/misc/pyro_spell_hitbox.gd" id="6_hj7i8"]
+[ext_resource type="Script" uid="uid://dhejvdvtuctx1" path="res://scripts/classes/misc/pyro_spell_hitbox.gd" id="6_hj7i8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d2ciw"]
 size = Vector2(22, 46)
@@ -739,23 +739,23 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wpyet"]
 _data = {
-"RESET": SubResource("Animation_mjxwe"),
-"attack_left_1": SubResource("Animation_eyvmm"),
-"attack_left_2": SubResource("Animation_go7cc"),
-"attack_left_3": SubResource("Animation_qyb1p"),
-"attack_right_1": SubResource("Animation_id736"),
-"attack_right_2": SubResource("Animation_7mh68"),
-"attack_right_3": SubResource("Animation_2ss87"),
-"dodge_left": SubResource("Animation_u420o"),
-"dodge_right": SubResource("Animation_f0xpq"),
-"idle_left": SubResource("Animation_ly7fw"),
-"idle_right": SubResource("Animation_krylx"),
-"run_left": SubResource("Animation_nu4uf"),
-"run_right": SubResource("Animation_m16on"),
-"spell1_left": SubResource("Animation_b2j6u"),
-"spell1_right": SubResource("Animation_6u608"),
-"spell2_left": SubResource("Animation_a3oh7"),
-"spell2_right": SubResource("Animation_x3c6b")
+&"RESET": SubResource("Animation_mjxwe"),
+&"attack_left_1": SubResource("Animation_eyvmm"),
+&"attack_left_2": SubResource("Animation_go7cc"),
+&"attack_left_3": SubResource("Animation_qyb1p"),
+&"attack_right_1": SubResource("Animation_id736"),
+&"attack_right_2": SubResource("Animation_7mh68"),
+&"attack_right_3": SubResource("Animation_2ss87"),
+&"dodge_left": SubResource("Animation_u420o"),
+&"dodge_right": SubResource("Animation_f0xpq"),
+&"idle_left": SubResource("Animation_ly7fw"),
+&"idle_right": SubResource("Animation_krylx"),
+&"run_left": SubResource("Animation_nu4uf"),
+&"run_right": SubResource("Animation_m16on"),
+&"spell1_left": SubResource("Animation_b2j6u"),
+&"spell1_right": SubResource("Animation_6u608"),
+&"spell2_left": SubResource("Animation_a3oh7"),
+&"spell2_right": SubResource("Animation_x3c6b")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f4jaw"]
@@ -1130,7 +1130,7 @@ debug_color = Color(0.946795, 0.23205, 0, 0.42)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_wpyet")
+&"": SubResource("AnimationLibrary_wpyet")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

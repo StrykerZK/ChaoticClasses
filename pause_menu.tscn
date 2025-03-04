@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bno4es4cdgtqm"]
 
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="1_2tq84"]
-[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_p7v2e"]
+[ext_resource type="Script" uid="uid://bmb6hlp20il8k" path="res://scripts/ui/pause_menu.gd" id="1_p7v2e"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="2_j1880"]
 
 [node name="PauseMenu" type="Control"]

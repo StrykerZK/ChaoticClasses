@@ -322,9 +322,9 @@ func class_change(class_title: String):
 		return
 	
 	# Pause for transformation
-	if is_multiplayer_authority() and multiplayer.is_server():
-		StageManager.update_game_state.rpc("Transforming")
-		$/root/Main/GameManager.toggle_pause.rpc(0)
+	#if is_multiplayer_authority() and multiplayer.is_server():
+	StageManager.update_game_state.rpc("Transforming")
+	$/root/Main/GameManager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
 	reset_systems()
@@ -353,9 +353,9 @@ func class_change(class_title: String):
 	
 	initialize_class_children()
 	
-	if is_multiplayer_authority() and multiplayer.is_server():
-		$/root/Main/GameManager.toggle_pause.rpc(0)
-		StageManager.update_game_state.rpc("In Game")
+	#if is_multiplayer_authority() and multiplayer.is_server():
+	$/root/Main/GameManager.toggle_pause.rpc(0)
+	StageManager.update_game_state.rpc("In Game")
 	
 	is_transforming = false
 	await $PlayerFX.animation_finished
