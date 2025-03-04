@@ -29,7 +29,7 @@ func start_game():
 	player_1.is_paused = false
 	player_2.is_paused = false
 	$GameManager.start_game()
-	StageManager.update_game_state("In Match")
+	StageManager.update_game_state("In Game")
 
 func game_end():
 	StageManager.update_game_state("Game Ended")

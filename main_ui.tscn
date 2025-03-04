@@ -518,3 +518,88 @@ frame_progress = 1.0
 libraries = {
 "": SubResource("AnimationLibrary_jofjq")
 }
+
+[node name="Base" type="Button" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 901.0
+offset_top = -226.0
+offset_right = 946.0
+offset_bottom = -195.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Base"
+
+[node name="Hero" type="Button" parent="."]
+process_mode = 3
+z_index = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 901.0
+offset_top = -187.0
+offset_right = 947.0
+offset_bottom = -156.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Hero"
+
+[node name="Demon" type="Button" parent="."]
+process_mode = 3
+z_index = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 883.0
+offset_top = -148.0
+offset_right = 948.0
+offset_bottom = -117.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Demon"
+
+[node name="Pyro" type="Button" parent="."]
+process_mode = 3
+z_index = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 847.0
+offset_top = -110.0
+offset_right = 949.0
+offset_bottom = -79.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Pyromancer"
+
+[node name="Archer" type="Button" parent="."]
+process_mode = 3
+z_index = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 889.0
+offset_top = -71.0
+offset_right = 949.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Archer
+"
+
+[connection signal="pressed" from="Hero" to="." method="_on_hero_pressed"]
+[connection signal="pressed" from="Demon" to="." method="_on_demon_pressed"]
+[connection signal="pressed" from="Pyro" to="." method="_on_pyro_pressed"]
+[connection signal="pressed" from="Archer" to="." method="_on_archer_pressed"]

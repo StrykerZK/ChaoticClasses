@@ -72,3 +72,24 @@ func toggle_pause():
 		$PauseMenu.show()
 	else:
 		$PauseMenu.hide()
+
+
+func _on_base_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_base").call()
+	$Base.release_focus()
+
+func _on_hero_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_hero").call()
+	$Hero.release_focus()
+
+func _on_demon_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_demon").call()
+	$Demon.release_focus()
+
+func _on_pyro_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_pyro").call()
+	$Pyro.release_focus()
+
+func _on_archer_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_archer").call()
+	$Archer.release_focus()

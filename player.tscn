@@ -1,4 +1,4 @@
-[gd_scene load_steps=110 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=130 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
@@ -559,6 +559,62 @@ tracks/5/keys = {
 "values": [0.0, 50.0]
 }
 
+[sub_resource type="Animation" id="Animation_vankb"]
+resource_name = "spell_left"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("base/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [50, 51, 52, 53, 54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("base/Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_dhj2o"]
+resource_name = "spell_right"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("base/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [50, 51, 52, 53, 54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("base/Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lguxv"]
 _data = {
 "RESET": SubResource("Animation_bbg1b"),
@@ -571,7 +627,9 @@ _data = {
 "slap_1_left": SubResource("Animation_s1wl0"),
 "slap_1_right": SubResource("Animation_7h3yq"),
 "slap_2_left": SubResource("Animation_iu8ib"),
-"slap_2_right": SubResource("Animation_1fci3")
+"slap_2_right": SubResource("Animation_1fci3"),
+"spell_left": SubResource("Animation_vankb"),
+"spell_right": SubResource("Animation_dhj2o")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_biudh"]
@@ -660,6 +718,33 @@ blend_point_3/node = SubResource("AnimationNodeAnimation_lmflw")
 blend_point_3/pos = Vector2(1, -1)
 blend_mode = 1
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tvq6r"]
+animation = &"spell_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wcpa7"]
+animation = &"spell_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_bfxm0"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_tvq6r")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_wcpa7")
+blend_point_1/pos = 1.0
+value_label = "x"
+sync = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oqt3p"]
+animation = &"spell_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yg48q"]
+animation = &"spell_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_48q41"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_oqt3p")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_yg48q")
+blend_point_1/pos = 1.0
+sync = true
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xwajg"]
 advance_mode = 2
 
@@ -707,17 +792,69 @@ advance_condition = &"is_running"
 advance_mode = 2
 advance_condition = &"is_dodging"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wm6xu"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_awlxp"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sebi1"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ds4aw"]
+advance_mode = 2
+advance_condition = &"is_running"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0qutq"]
+advance_mode = 2
+advance_condition = &"is_running"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4exet"]
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_83o8p"]
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dro45"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0ew6a"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7di3m"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p06o5"]
+advance_mode = 2
+advance_condition = &"in_spell_2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p4mkf"]
+advance_mode = 2
+advance_condition = &"in_spell_1"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_av542"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_o5134")
-states/attack/position = Vector2(510, -12)
+states/attack/position = Vector2(316, -51)
 states/dodge/node = SubResource("AnimationNodeBlendSpace1D_cud0b")
-states/dodge/position = Vector2(510, 214)
+states/dodge/position = Vector2(447, 100)
 states/idle/node = SubResource("AnimationNodeBlendSpace2D_mvp6a")
 states/idle/position = Vector2(316, 100)
 states/run/node = SubResource("AnimationNodeBlendSpace2D_f8d1m")
-states/run/position = Vector2(454, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_xwajg"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_di6st"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_hcja6"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_oyq00"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_2bqjw"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_0sxf1"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_s51qo"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_fresa"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_076my"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_0y7k7"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_qvqo2"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_v0loq")]
-graph_offset = Vector2(-77, -24)
+states/run/position = Vector2(316, 20)
+states/spell1/node = SubResource("AnimationNodeBlendSpace1D_bfxm0")
+states/spell1/position = Vector2(447, 20)
+states/spell2/node = SubResource("AnimationNodeBlendSpace1D_48q41")
+states/spell2/position = Vector2(594, 20)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_xwajg"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_di6st"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_hcja6"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_oyq00"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_2bqjw"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_0sxf1"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_s51qo"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_fresa"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_076my"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_0y7k7"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_qvqo2"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_v0loq"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_wm6xu"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_awlxp"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_sebi1"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_ds4aw"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_0qutq"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_4exet"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_83o8p"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_dro45"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_0ew6a"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_7di3m"), "attack", "spell2", SubResource("AnimationNodeStateMachineTransition_p06o5"), "attack", "spell1", SubResource("AnimationNodeStateMachineTransition_p4mkf")]
+graph_offset = Vector2(-122, -151)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_83ret"]
 radius = 15.0
@@ -1193,7 +1330,7 @@ script = ExtResource("2_u12l6")
 scale = Vector2(2, 2)
 texture = ExtResource("2_4omiv")
 hframes = 10
-vframes = 5
+vframes = 6
 frame = 1
 
 [node name="Hitbox" type="Area2D" parent="base"]
@@ -1217,6 +1354,8 @@ root_node = NodePath("../..")
 tree_root = SubResource("AnimationNodeStateMachine_av542")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
+parameters/conditions/in_spell_1 = false
+parameters/conditions/in_spell_2 = false
 parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
@@ -1224,6 +1363,8 @@ parameters/attack/blend_position = Vector2(-0.83156, 0.0353982)
 parameters/dodge/blend_position = 0
 parameters/idle/blend_position = Vector2(0, 0)
 parameters/run/blend_position = Vector2(0, 0)
+parameters/spell1/blend_position = 0
+parameters/spell2/blend_position = 0
 
 [node name="ComboTimer" type="Timer" parent="base"]
 one_shot = true

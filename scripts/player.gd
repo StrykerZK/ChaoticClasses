@@ -139,6 +139,8 @@ func handle_input():
 			
 			if is_dodging:
 				velocity = last_input_direction * dodge_speed
+		else:
+			velocity = Vector2.ZERO
 		
 	else: # If ranged, move while attacking
 		if !is_dodging:
@@ -159,7 +161,9 @@ func handle_input():
 					velocity = Vector2.ZERO
 			
 			if is_dodging:
-				velocity = last_input_direction * dodge_speed	
+				velocity = last_input_direction * dodge_speed
+		else:
+			velocity = Vector2.ZERO
 	
 	# Dodging
 	if Input.is_action_just_pressed("dodge") and !is_rooted:
@@ -296,9 +300,9 @@ func update_animation_parameters():
 	else:
 		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
 	
-	if current_class != "base":
-		anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
-		anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
+	# Spells
+	anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
+	anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction
@@ -319,7 +323,8 @@ func class_change(class_title: String):
 	
 	# Pause for transformation
 	if is_multiplayer_authority() and multiplayer.is_server():
-		$/root/Main/GameManager.toggle_pause.rpc()
+		StageManager.update_game_state.rpc("Transforming")
+		$/root/Main/GameManager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
 	reset_systems()
@@ -349,7 +354,7 @@ func class_change(class_title: String):
 	initialize_class_children()
 	
 	if is_multiplayer_authority() and multiplayer.is_server():
-		$/root/Main/GameManager.toggle_pause.rpc()
+		$/root/Main/GameManager.toggle_pause.rpc(0)
 		StageManager.update_game_state.rpc("In Game")
 	
 	is_transforming = false

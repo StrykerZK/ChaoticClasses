@@ -5,6 +5,7 @@ signal paused(is_paused)
 var transform_time: float = 2
 
 var is_paused = false
+var pause_id: int
 
 var player_manager: Node
 var player_1: CharacterBody2D
@@ -22,7 +23,7 @@ func _input(event: InputEvent) -> void:
 	and StageManager.game_state != "Game Over"\
 	and StageManager.game_state != "Transforming":
 		if event.is_action_pressed("back"):
-			toggle_pause.rpc()
+			toggle_pause.rpc(multiplayer.get_unique_id())
 
 func _process(delta: float) -> void:
 	pass
@@ -62,25 +63,23 @@ func class_change():
 	main_ui.class_change.rpc()
 
 @rpc("any_peer","call_local")
-func toggle_pause():
+func toggle_pause(id: int):
 	# ADD CONDITIONS FOR OTHER PLAYER PAUSE, CLASS SWAPPING, ETC.
-	get_tree().paused = !get_tree().paused
+	if id != 0:
+		if !is_paused:
+			pause_id = id
+		else:
+			if id != pause_id:
+				return
 	is_paused = !is_paused
+	get_tree().paused = !get_tree().paused
 	if is_instance_valid(player_1):
 		player_1.toggle_pause()
 	if is_instance_valid(player_2):
 		player_2.toggle_pause()
 	$SwapTimer.paused = !$SwapTimer.paused
-	main_ui.toggle_pause()
-
-func _on_button_pressed() -> void:
-	if multiplayer.is_server():
-		class_change()
-		$SwapTimer.stop()
-		$SwapTimer.start()
-	else:
-		class_change.rpc_id(1)
-	$Button.release_focus()
+	if StageManager.game_state == "In Game":
+		main_ui.toggle_pause()
 
 @rpc("any_peer", "call_local")
 func update_player_class(id, class_title):
@@ -91,8 +90,9 @@ func update_player_class(id, class_title):
 		return
 
 func start_game():
-	if multiplayer.is_server():
-		$SwapTimer.start()
+	pass
+	#if multiplayer.is_server():
+	#	$SwapTimer.start()
 
 func game_over(id):
 	$SwapTimer.stop()
@@ -110,6 +110,7 @@ func game_over(id):
 			await player_2.tree_exited
 		else:
 			await player_1.tree_exited
+		await get_tree().create_timer(0.1).timeout
 		new_game.rpc()
 	else:
 		game_end.rpc()
@@ -132,8 +133,8 @@ func clear_winner(loser_id):
 func new_game():
 	player_manager.create_players()
 	assign_players()
-	update_player_class(player_1.player_id, "Base")
-	update_player_class(player_2.player_id, "Base")
+	update_player_class(player_1.player_id, "base")
+	update_player_class(player_2.player_id, "base")
 	get_parent().start_game()
 
 @rpc("any_peer","call_local", "reliable")
@@ -146,3 +147,63 @@ func _on_swap_timer_timeout() -> void:
 
 func _on_transform_timer_timeout() -> void:
 	$SwapTimer.start()
+
+func change_base() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "base")
+		player_1.class_change.rpc("base")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "base")
+		player_2.class_change.rpc("base")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()
+
+func change_hero() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "hero")
+		player_1.class_change.rpc("hero")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "hero")
+		player_2.class_change.rpc("hero")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()
+
+func change_demon() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "demon")
+		player_1.class_change.rpc("demon")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "demon")
+		player_2.class_change.rpc("demon")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()
+
+func change_pyro() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "pyromancer")
+		player_1.class_change.rpc("pyromancer")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "pyromancer")
+		player_2.class_change.rpc("pyromancer")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()
+
+func change_archer() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "archer")
+		player_1.class_change.rpc("archer")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "archer")
+		player_2.class_change.rpc("archer")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()

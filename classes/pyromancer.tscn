@@ -992,7 +992,7 @@ states/run/position = Vector2(349, 100)
 states/spell1/node = SubResource("AnimationNodeBlendSpace1D_birvr")
 states/spell1/position = Vector2(526, 100)
 states/spell2/node = SubResource("AnimationNodeBlendSpace1D_w5kom")
-states/spell2/position = Vector2(685, 100)
+states/spell2/position = Vector2(700, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_jhnuf"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_pfu40"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_kytys"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_v25lp"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_ycrsy"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_wp40i"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_p1jy6"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_okeuj"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_gqbmm"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_h77px"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_utfkt"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_k3lic"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_v67c2")]
 graph_offset = Vector2(-50, -17)
 
@@ -1146,7 +1146,7 @@ parameters/attack/blend_position = Vector2(0, 0)
 parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
-parameters/spell1/blend_position = 0
+parameters/spell1/blend_position = -0.814483
 parameters/spell2/blend_position = 0
 
 [node name="Marker2D" type="Marker2D" parent="."]
