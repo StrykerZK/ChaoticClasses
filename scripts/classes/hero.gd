@@ -59,7 +59,7 @@ func spell_1(): # 50 dmg, 2 sec duration, 5 sec CD
 func _on_spell_1_timer_timeout():
 	if player.in_spell_1:
 		player.in_spell_1 = false
-		$Spell1Timer.wait_time = 5.0
+		$Spell1Timer.wait_time = 3.0
 		$Spell1Timer.start()
 	else:
 		player.spell_1_ready = true
@@ -91,7 +91,7 @@ func _on_spell_2_timer_timeout():
 		$SpellFX.hide()
 		$Hitbox.position = Vector2(0,0)
 		$SpellFX.position = Vector2(0,0)
-		$Spell2Timer.wait_time = 10.0
+		$Spell2Timer.wait_time = 6.0
 		$Spell2Timer.start()
 	else:
 		player.spell_2_ready = true
@@ -101,6 +101,7 @@ func use_attack_timer(time: float):
 	$AttackTimer.start()
 	await $AttackTimer.timeout
 	player.is_attacking = false
+	await get_tree().create_timer(0.01).timeout
 	if player.attack_index == 3:
 		player.attack_index = 1 # Reset after 3rd attack
 		$ComboTimer.wait_time = 0.7

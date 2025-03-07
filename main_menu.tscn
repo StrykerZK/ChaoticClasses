@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://dj1u1l2gmtbga"]
+[gd_scene load_steps=16 format=3 uid="uid://dj1u1l2gmtbga"]
 
 [ext_resource type="Script" uid="uid://c7lr53wegp3rk" path="res://scripts/main_menu.gd" id="1_uioiv"]
 [ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://main.tscn" id="2_eagnm"]
 [ext_resource type="Texture2D" uid="uid://cfsy2wx0gdfy1" path="res://art/ui/randombg.png" id="3_uwo5s"]
+[ext_resource type="FontFile" uid="uid://csdujbakdh57r" path="res://fonts/Supersonic Rocketship.ttf" id="4_0k4wn"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="4_2x3gf"]
 [ext_resource type="Theme" uid="uid://ccigqb3qq002y" path="res://art/ui/button_theme.tres" id="5_ojkxa"]
 [ext_resource type="Texture2D" uid="uid://ch8jwip7mklxs" path="res://art/ui/menu_buttons.png" id="5_yc51r"]
@@ -36,6 +37,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_bdo5l")
 
 [node name="TitleMenu" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,9 +49,9 @@ grow_vertical = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.388542
-anchor_top = 0.231481
+anchor_top = 0.241667
 anchor_right = 0.388542
-anchor_bottom = 0.231481
+anchor_bottom = 0.252778
 offset_left = -560.0
 offset_top = -150.0
 offset_right = 560.0
@@ -58,11 +60,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.105676, 0.332768, 0.60645, 1)
 theme_override_constants/line_spacing = 20
-theme_override_fonts/font = ExtResource("4_2x3gf")
+theme_override_fonts/font = ExtResource("4_0k4wn")
 theme_override_font_sizes/font_size = 160
 text = "CHAOTIC
 CLASSES"
-horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -125,7 +126,6 @@ theme = ExtResource("5_ojkxa")
 text = "Quit"
 
 [node name="PlayMenu" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -79,8 +79,8 @@ func spawn_projectile(index: float):
 	else:
 		# Calculate angle offset
 		var start_angle = -60 #-60 / 2
-		var angle_step = 120 #60 / 4
-		for i in range(3):
+		var angle_step = 60 #60 / 4
+		for i in range(6):
 			var fireball = fireball_scene.instantiate()
 			main_node.add_child(fireball)
 			
@@ -97,7 +97,7 @@ func spawn_projectile(index: float):
 			if fireball:
 				fireball.start_follow_timer()
 			
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.01).timeout
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -131,7 +131,7 @@ func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
 			fireball.player_id = player.player_id
 			await get_tree().create_timer(0.1).timeout
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 8.0
+	$Spell1Timer.wait_time = 6.5
 	$Spell1Timer.start()
 
 func _on_spell_1_timer_timeout() -> void:
@@ -159,7 +159,7 @@ func _on_spell_2_timer_timeout() -> void:
 		$SpellHitbox/CollisionShape2D.disabled = true
 		$SpellHitbox.position = Vector2(0,0)
 		$SpellFX.position = Vector2(0,0)
-		$Spell2Timer.wait_time = 5.0
+		$Spell2Timer.wait_time = 3.7
 		$Spell2Timer.start()
 	else:
 		player.spell_2_ready = true

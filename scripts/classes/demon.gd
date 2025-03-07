@@ -71,13 +71,13 @@ func _on_spell_1_timer_timeout() -> void:
 		player.in_spell_1 = false
 		$SpellFX.stop()
 		$SpellFX.hide()
-		$Spell2Timer.wait_time = 5.0
+		$Spell2Timer.wait_time = 3.7
 		$Spell2Timer.start()
 	else:
 		player.spell_1_ready = true
 
 @rpc("any_peer","call_local")
-func spell_2(): # 80 dmg, 2.8 sec duration, 4 sec cd
+func spell_2(): # 80 dmg, 2.8 sec duration, 5 sec cd
 	player.in_spell_2 = true
 	player.dash_duration = 1.2
 	$Hitbox.damage = 80
@@ -87,7 +87,7 @@ func spell_2(): # 80 dmg, 2.8 sec duration, 4 sec cd
 func _on_spell_2_timer_timeout():
 	if player.in_spell_2:
 		player.in_spell_2 = false
-		$Spell1Timer.wait_time = 4.0
+		$Spell1Timer.wait_time = 2.2
 		$Spell1Timer.start()
 	else:
 		player.spell_2_ready = true

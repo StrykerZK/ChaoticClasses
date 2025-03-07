@@ -142,7 +142,7 @@ func use_attack_timer(time: float):
 	$AttackTimer.start()
 
 @rpc("any_peer","call_local")
-func spell_1(): # 30 dmg, 3 sec root, 5 sec cd
+func spell_1(): # 30 dmg, 3 sec root, 6 sec cd
 	player.in_spell_1 = true
 	player.dash_duration = 1.0
 	$Spell1Timer.wait_time = 1.2
@@ -156,7 +156,7 @@ func spell_1(): # 30 dmg, 3 sec root, 5 sec cd
 func _on_spell_1_timer_timeout():
 	if player.in_spell_1:
 		player.in_spell_1 = false
-		$Spell1Timer.wait_time = 5.0
+		$Spell1Timer.wait_time = 4.8
 		$Spell1Timer.start()
 	else:
 		player.spell_1_ready = true
@@ -164,20 +164,23 @@ func _on_spell_1_timer_timeout():
 @rpc("any_peer","call_local")
 func spell_2(): # 25 dmg, 4 sec duration, 8 sec cd
 	player.in_spell_2 = true
-	await get_tree().create_timer(1).timeout
-	player.in_spell_2 = false
-	var spell_2_instance = spell_2_scene.instantiate()
-	spell_2_instance.player_id = player.player_id
-	if player.player_id == StageManager.p1_id:
-		spell_2_instance.position = StageManager.p1_target
-	else:
-		spell_2_instance.position = StageManager.p2_target
-	main_node.add_child(spell_2_instance)
-	$Spell2Timer.wait_time = 8
+	$Spell2Timer.wait_time = 1
 	$Spell2Timer.start()
 
 func _on_spell_2_timer_timeout() -> void:
-	player.spell_2_ready = true
+	if player.in_spell_2:
+		player.in_spell_2 = false
+		var spell_2_instance = spell_2_scene.instantiate()
+		spell_2_instance.player_id = player.player_id
+		if player.player_id == StageManager.p1_id:
+			spell_2_instance.position = StageManager.p1_target
+		else:
+			spell_2_instance.position = StageManager.p2_target
+		main_node.add_child(spell_2_instance)
+		$Spell2Timer.wait_time = 7
+		$Spell2Timer.start()
+	else:
+		player.spell_2_ready = true
 
 func stop_spells():
 	$Spell1Timer.stop()

@@ -13,7 +13,7 @@ var current_health: float = max_health
 var armor: float = 0
 var base_damage: float = 5
 var damage: float = base_damage
-var base_speed: float = 150.0
+var base_speed: float = 250.0
 var speed: float = base_speed
 var dodge_speed_mult: float = 4
 var dodge_duration: float = 0.6
@@ -122,7 +122,8 @@ func handle_input():
 	if current_type == "melee": # If melee, don't move while attacking
 		if !is_dodging:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
-		last_input_direction = direction
+		if direction != Vector2.ZERO:
+			last_input_direction = direction
 		
 		if !is_rooted:
 			if is_attacking or in_spell_1 or in_spell_2:
@@ -145,7 +146,8 @@ func handle_input():
 	else: # If ranged, move while attacking
 		if !is_dodging:
 			direction = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
-		last_input_direction = direction
+		if direction != Vector2.ZERO:
+			last_input_direction = direction
 		
 		if !is_rooted:
 			if in_spell_1 or in_spell_2:
@@ -322,9 +324,9 @@ func class_change(class_title: String):
 		return
 	
 	# Pause for transformation
-	#if is_multiplayer_authority() and multiplayer.is_server():
 	StageManager.update_game_state.rpc("Transforming")
-	$/root/Main/GameManager.toggle_pause.rpc(0)
+	if is_multiplayer_authority(): #and multiplayer.is_server():
+		$/root/Main/GameManager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
 	reset_systems()
@@ -353,13 +355,13 @@ func class_change(class_title: String):
 	
 	initialize_class_children()
 	
-	#if is_multiplayer_authority() and multiplayer.is_server():
-	$/root/Main/GameManager.toggle_pause.rpc(0)
-	StageManager.update_game_state.rpc("In Game")
+	if is_multiplayer_authority(): #and multiplayer.is_server():
+		$/root/Main/GameManager.toggle_pause.rpc(0)
 	
 	is_transforming = false
 	await $PlayerFX.animation_finished
 	$PlayerFX.hide()
+	StageManager.update_game_state.rpc("In Game")
 
 func debuff(type: String, amount: float, duration: float):
 	var remaining_debuff: String = ""

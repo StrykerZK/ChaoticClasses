@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://byrhy1vvpbw1r" path="res://scripts/main_ui.gd" id="1_50b53"]
 [ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_2tfbj"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
-[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://player_1_info.tscn" id="3_60xrb"]
-[ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://player_2_info.tscn" id="4_dqrjs"]
+[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://scenes/ui/player_1_info.tscn" id="3_60xrb"]
+[ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://scenes/ui/player_2_info.tscn" id="4_dqrjs"]
 [ext_resource type="Texture2D" uid="uid://bqo32dpom6abk" path="res://art/misc/fight_text_sheet.png" id="5_1q4mj"]
 
 [sub_resource type="Theme" id="Theme_omnm7"]

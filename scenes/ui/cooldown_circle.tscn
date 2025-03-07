@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://hwkhx5qrvn8v"]
+
+[ext_resource type="Texture2D" uid="uid://diyikeebog1im" path="res://art/player/spells/hero/hero_spell_1_icon.png" id="1_tvydd"]
+[ext_resource type="Script" uid="uid://rmma7f4reg18" path="res://scripts/ui/cooldown_circle.gd" id="2_ffgkk"]
+
+[node name="CooldownCircle" type="TextureProgressBar"]
+offset_right = 819.0
+offset_bottom = 819.0
+scale = Vector2(0.05, 0.05)
+value = 60.0
+fill_mode = 4
+texture_progress = ExtResource("1_tvydd")
+script = ExtResource("2_ffgkk")
