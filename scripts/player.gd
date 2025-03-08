@@ -468,7 +468,7 @@ func die():
 	# Yeet player across map
 	for i in players:
 		if i.name != str(player_id):
-			velocity = position.direction_to(i.position) * -1800
+			velocity = position.direction_to(i.position) * -2500
 	
 	if multiplayer.is_server():
 		await get_tree().create_timer(0.7).timeout

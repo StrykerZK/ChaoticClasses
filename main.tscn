@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://ggc1ugsf42y5"]
+[gd_scene load_steps=28 format=4 uid="uid://ggc1ugsf42y5"]
 
 [ext_resource type="Script" uid="uid://blawyvwcuspd2" path="res://scripts/main.gd" id="1_gdby6"]
 [ext_resource type="Texture2D" uid="uid://dxjiws2ai34r3" path="res://art/tiles/tilemap_32.png" id="1_kqhmq"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cvr1c6l75xo20" path="res://art/misc/ko_effect_sheet.png" id="3_v81xn"]
 [ext_resource type="PackedScene" uid="uid://dyuactdutwld2" path="res://dummy.tscn" id="4_mp342"]
 [ext_resource type="PackedScene" uid="uid://d1aj3uw0040ii" path="res://main_ui.tscn" id="7_rmtcc"]
+[ext_resource type="AudioStream" uid="uid://hvu33ywq1jl4" path="res://sounds/music/battle_music.ogg" id="9_kek77"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dkp5t"]
 texture = ExtResource("1_kqhmq")
@@ -320,5 +321,13 @@ position = Vector2(400, 540)
 position = Vector2(1580, 540)
 
 [node name="MainUI" parent="." instance=ExtResource("7_rmtcc")]
+
+[node name="BattleMusic" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("9_kek77")
+volume_db = -15.0
+autoplay = true
+playback_type = 1
+parameters/looping = true
 
 [editable path="World/Dummy2"]

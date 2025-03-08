@@ -112,7 +112,7 @@ func use_attack_timer(time: float):
 	await $AttackTimer.timeout
 	player.is_attacking = false
 	$Weapon.hide()
-	$AttackTimer.wait_time = 0.05
+	$AttackTimer.wait_time = 0.01
 	$AttackTimer.start()
 	await $AttackTimer.timeout
 	if player.attack_index == 3:

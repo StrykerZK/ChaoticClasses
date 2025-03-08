@@ -19,6 +19,14 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	check_property_changes()
+	rotate_weapon()
+
+func rotate_weapon():
+	$Weapon.look_at(player.get_node("Target").global_position)
+	if !player.in_spell_2:
+		$Hitbox.look_at(player.get_node("Target").global_position)
+	else:
+		$Hitbox.rotation_degrees = 0
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -26,26 +34,34 @@ func attack(index: float):
 	$ComboTimer.stop()
 	$ComboTimer.wait_time = combo_timer
 	$Hitbox.damage = player.damage
+	$Weapon.show()
 	match index:
 		1.0:
 			player.dash_duration = attack_1_length - 0.4
 			$ComboTimer.start()
 			use_attack_timer(attack_1_length)
+			$Weapon.play("attack_1")
 		2.0:
 			player.dash_duration = attack_2_length - 0.4
 			$ComboTimer.start()
 			use_attack_timer(attack_2_length)
+			$Weapon.play("attack_2")
 		3.0:
 			player.dash_duration = attack_3_length - 0.5
 			player.damage = player.base_damage * 2
 			$Hitbox.damage = player.damage
 			use_attack_timer(attack_3_length)
+			$Weapon.play("attack_3")
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
 	$AttackTimer.start()
 	await $AttackTimer.timeout
 	player.is_attacking = false
+	$Weapon.hide()
+	$AttackTimer.wait_time = 0.01
+	$AttackTimer.start()
+	await $AttackTimer.timeout
 	if player.attack_index == 3:
 		player.attack_index = 1 # Reset after 3rd attack
 		$ComboTimer.wait_time = 0.7
