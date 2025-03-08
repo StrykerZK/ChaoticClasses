@@ -30,7 +30,7 @@ var dodge_speed: float = 0.0
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
-var is_paused: bool = true
+var is_paused: bool = false
 var is_dead: bool = false
 var is_transforming: bool = false
 
@@ -283,17 +283,17 @@ func update_animation_parameters():
 	if !is_instance_valid(anim_tree):
 		return
 	
-	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
-	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
-	anim_tree.set("parameters/conditions/in_spell_1", in_spell_1)
-	anim_tree.set("parameters/conditions/in_spell_2", in_spell_2)
-	
 	if !is_dodging and !is_attacking and !in_spell_1 and !in_spell_2:
 		anim_tree.set("parameters/conditions/idle", velocity == Vector2.ZERO)
 		anim_tree.set("parameters/conditions/is_running", velocity != Vector2.ZERO)
 	else:
 		anim_tree.set("parameters/conditions/idle", false)
 		anim_tree.set("parameters/conditions/is_running", false)
+	
+	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
+	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
+	anim_tree.set("parameters/conditions/in_spell_1", in_spell_1)
+	anim_tree.set("parameters/conditions/in_spell_2", in_spell_2)
 	
 	if current_class == "archer":
 		anim_tree["parameters/attack/blend_position"] = Vector2(local_mouse_pos.x, attack_index)

@@ -1350,7 +1350,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_va33l")
 hframes = 10
 vframes = 7
-frame = 32
+frame = 1
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bc32e4aem48ae"
-path="res://.godot/imported/hero_spell_1_sheet.png-8913c23fa7719e67e609ad3cd25a3ffc.ctex"
+uid="uid://72832mkuyl4s"
+path="res://.godot/imported/weapon_sheet.png-95f41b74588a589e82088cf4a7db06d0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/spells/hero/hero_spell_1_sheet.png"
-dest_files=["res://.godot/imported/hero_spell_1_sheet.png-8913c23fa7719e67e609ad3cd25a3ffc.ctex"]
+source_file="res://art/player/weapon_sheet.png"
+dest_files=["res://.godot/imported/weapon_sheet.png-95f41b74588a589e82088cf4a7db06d0.ctex"]
 
 [params]
 

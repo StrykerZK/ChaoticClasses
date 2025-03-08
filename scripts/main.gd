@@ -13,11 +13,14 @@ func assign_players():
 
 func start_game():
 	StageManager.update_game_state("Starting Game")
+	assign_players()
+	player_1.is_paused = true
+	player_2.is_paused = true
 	
 	$MainUI.start_game()
 	
 	await get_tree().create_timer(4).timeout
-	assign_players()
+	
 	player_1.smooth_camera("position")
 	player_2.smooth_camera("position")
 	player_1.reset_camera_focus()
