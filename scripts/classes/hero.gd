@@ -52,7 +52,8 @@ func attack(index: float):
 func spell_1(): # 50 dmg, 2 sec duration, 5 sec CD
 	player.in_spell_1 = true
 	player.dash_duration = 0.5
-	$Hitbox.damage = 50
+	$SpellHitbox.damage = 50
+	$SpellHitbox.player_id = player.player_id
 	$Spell1Timer.wait_time = 2.0
 	$Spell1Timer.start()
 
@@ -127,6 +128,7 @@ func stop_systems():
 
 func check_property_changes():
 	if last_dash_speed != dash_speed:
+		player.get_node("Target").global_position = player.get_global_mouse_position()
 		player.dash_speed = dash_speed
 		player.tween_dash_value()
 		last_dash_speed = dash_speed

@@ -47,9 +47,8 @@ var can_attack: bool = true
 var attack_index: float = 1.0
 var mouse_pos: Vector2 = Vector2.ZERO
 var local_mouse_pos: Vector2 = Vector2.ZERO
-var last_mouse_pos: Vector2 = Vector2.ZERO
+var last_attack_pos: Vector2 = Vector2.ZERO
 var dash_tween: Tween
-var last_dash_pos
 
 # Variables for spells
 var spell_1_ready: bool = true
@@ -127,11 +126,10 @@ func handle_input():
 		
 		if !is_rooted:
 			if is_attacking or in_spell_1 or in_spell_2:
-				if position.distance_to(get_global_mouse_position()) > 50:
-					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-					last_dash_pos = get_global_mouse_position()
+				if dash_speed != 0:
+					velocity = position.direction_to($Target.global_position) * dash_speed
 				else:
-					velocity = position.direction_to(last_dash_pos) * dash_speed
+					velocity = Vector2.ZERO
 			else:
 				if direction:
 					velocity = direction * speed
@@ -151,11 +149,10 @@ func handle_input():
 		
 		if !is_rooted:
 			if in_spell_1 or in_spell_2:
-				if position.distance_to(get_global_mouse_position()) > 50:
-					velocity = position.direction_to(get_global_mouse_position()) * dash_speed
-					last_dash_pos = get_global_mouse_position()
+				if dash_speed != 0:
+					velocity = position.direction_to($Target.global_position) * dash_speed
 				else:
-					velocity = position.direction_to(last_dash_pos) * dash_speed
+					velocity = Vector2.ZERO
 			else:
 				if direction:
 					velocity = direction * speed
@@ -177,7 +174,7 @@ func handle_input():
 		if !is_attacking and !is_dodging and !in_spell_1 and !in_spell_2:
 			if can_attack:
 				StageManager.set_target.rpc(player_id,mouse_pos)
-				last_mouse_pos = local_mouse_pos
+				$Target.global_position = get_global_mouse_position()
 				current_class_node.attack.rpc(attack_index)
 				can_attack = false
 	
@@ -185,7 +182,7 @@ func handle_input():
 	if Input.is_action_just_pressed("spell_1"):
 		if !is_attacking and !is_dodging and spell_1_ready and !in_spell_2:
 			StageManager.set_target.rpc(player_id,mouse_pos)
-			last_mouse_pos = local_mouse_pos
+			$Target.global_position = get_global_mouse_position()
 			current_class_node.spell_1.rpc()
 			spell_1_ready = false
 	
@@ -193,7 +190,7 @@ func handle_input():
 	if Input.is_action_just_pressed("spell_2"):
 		if !is_attacking and !is_dodging and spell_2_ready and !in_spell_1:
 			StageManager.set_target.rpc(player_id,mouse_pos)
-			last_mouse_pos = local_mouse_pos
+			$Target.global_position = get_global_mouse_position()
 			current_class_node.spell_2.rpc()
 			spell_2_ready = false
 
@@ -285,6 +282,12 @@ func deactivate_i_frame():
 func update_animation_parameters():
 	if !is_instance_valid(anim_tree):
 		return
+	
+	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
+	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
+	anim_tree.set("parameters/conditions/in_spell_1", in_spell_1)
+	anim_tree.set("parameters/conditions/in_spell_2", in_spell_2)
+	
 	if !is_dodging and !is_attacking and !in_spell_1 and !in_spell_2:
 		anim_tree.set("parameters/conditions/idle", velocity == Vector2.ZERO)
 		anim_tree.set("parameters/conditions/is_running", velocity != Vector2.ZERO)
@@ -292,19 +295,21 @@ func update_animation_parameters():
 		anim_tree.set("parameters/conditions/idle", false)
 		anim_tree.set("parameters/conditions/is_running", false)
 	
-	anim_tree.set("parameters/conditions/is_dodging", is_dodging)
-	anim_tree.set("parameters/conditions/is_attacking", is_attacking)
-	anim_tree.set("parameters/conditions/in_spell_1", in_spell_1)
-	anim_tree.set("parameters/conditions/in_spell_2", in_spell_2)
-	
 	if current_class == "archer":
 		anim_tree["parameters/attack/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
 	else:
-		anim_tree["parameters/attack/blend_position"] = Vector2(last_mouse_pos.x, attack_index)
+		if dash_speed != 0:
+			anim_tree["parameters/attack/blend_position"] = Vector2($Target.position.x, attack_index)
+		else:
+			anim_tree["parameters/attack/blend_position"] = Vector2(local_mouse_pos.x, attack_index)
 	
 	# Spells
-	anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
-	anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
+	if dash_speed != 0:
+		anim_tree["parameters/spell1/blend_position"] = $Target.position.x
+		anim_tree["parameters/spell2/blend_position"] = $Target.position.x
+	else:
+		anim_tree["parameters/spell1/blend_position"] = local_mouse_pos.x
+		anim_tree["parameters/spell2/blend_position"] = local_mouse_pos.x
 	
 	if velocity != Vector2.ZERO:
 		anim_tree["parameters/idle/blend_position"] = last_input_direction

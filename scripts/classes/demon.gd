@@ -115,6 +115,7 @@ func stop_systems():
 
 func check_property_changes():
 	if last_dash_speed != dash_speed:
+		player.get_node("Target").global_position = player.get_global_mouse_position()
 		player.dash_speed = dash_speed
 		player.tween_dash_value()
 		last_dash_speed = dash_speed

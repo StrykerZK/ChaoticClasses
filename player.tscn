@@ -883,15 +883,12 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath(".:local_mouse_pos")
 properties/5/spawn = true
 properties/5/replication_mode = 1
-properties/6/path = NodePath(".:last_mouse_pos")
+properties/6/path = NodePath(".:last_input_direction")
 properties/6/spawn = true
 properties/6/replication_mode = 1
-properties/7/path = NodePath(".:last_input_direction")
+properties/7/path = NodePath(".:is_paused")
 properties/7/spawn = true
 properties/7/replication_mode = 1
-properties/8/path = NodePath(".:is_paused")
-properties/8/spawn = true
-properties/8/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2h8ut"]
 atlas = ExtResource("5_7o0tp")
@@ -1410,6 +1407,8 @@ wait_time = 0.03
 
 [node name="UtilityTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Target" type="Marker2D" parent="."]
 
 [node name="PlayerFX" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)

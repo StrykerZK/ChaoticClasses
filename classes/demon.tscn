@@ -1193,7 +1193,7 @@ advance_condition = &"in_spell_1"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_b38tv"]
 states/attack/node = SubResource("AnimationNodeBlendSpace2D_eea0a")
-states/attack/position = Vector2(349, -68)
+states/attack/position = Vector2(349, -64)
 states/dodge/node = SubResource("AnimationNodeBlendSpace1D_bmfui")
 states/dodge/position = Vector2(512, 100)
 states/idle/node = SubResource("AnimationNodeBlendSpace2D_86tsb")
@@ -1350,7 +1350,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("1_va33l")
 hframes = 10
 vframes = 7
-frame = 35
+frame = 32
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
@@ -1377,7 +1377,7 @@ parameters/conditions/in_spell_2 = false
 parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
-parameters/attack/blend_position = Vector2(0.297872, 0.371681)
+parameters/attack/blend_position = Vector2(0.984057, 2.96703)
 parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
