@@ -206,3 +206,15 @@ func change_archer() -> void:
 		player_2.class_change.rpc("archer")
 		await player_2.child_entered_tree
 	main_ui.class_change.rpc()
+
+func change_gladiator() -> void:
+	var id = multiplayer.get_unique_id()
+	if id == StageManager.p1_id:
+		update_player_class.rpc(player_1.player_id, "gladiator")
+		player_1.class_change.rpc("gladiator")
+		await player_1.child_entered_tree
+	elif id == StageManager.p2_id:
+		update_player_class.rpc(player_2.player_id, "gladiator")
+		player_2.class_change.rpc("gladiator")
+		await player_2.child_entered_tree
+	main_ui.class_change.rpc()

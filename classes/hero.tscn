@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://msmnsu61jcc0" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bdftejhyia2fb" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
 [ext_resource type="Script" uid="uid://d1g1yfu1eet2l" path="res://scripts/classes/misc/hero_hitbox.gd" id="3_4bifk"]
-[ext_resource type="Texture2D" uid="uid://covjqsfix8ygc" path="res://art/player/weapon_sheet.png" id="3_l51yp"]
+[ext_resource type="Texture2D" uid="uid://6g671p5r1cga" path="res://art/player/weapon_sheet.png" id="3_l51yp"]
 [ext_resource type="Script" uid="uid://ddgnt3482w4tf" path="res://scripts/classes/misc/weapon.gd" id="4_mfh2y"]
 [ext_resource type="Texture2D" uid="uid://bc32e4aem48ae" path="res://art/player/spells/hero/hero_spell_1_sheet.png" id="4_p0awa"]
 
@@ -114,7 +114,7 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(0, 0)]
 }
 tracks/3/type = "value"
@@ -126,7 +126,7 @@ tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(17, 42)]
 }
 tracks/4/type = "value"
@@ -150,7 +150,7 @@ tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [0.0]
 }
 tracks/6/type = "value"
@@ -162,7 +162,7 @@ tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [34.0]
 }
 tracks/7/type = "value"
@@ -174,44 +174,32 @@ tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [68.0]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("SpellHitbox/CollisionShape2D:disabled")
+tracks/8/path = NodePath("SpellHitbox/CollisionShape2D:shape")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [SubResource("CapsuleShape2D_d1d4g")]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("SpellHitbox/CollisionShape2D:position")
+tracks/9/path = NodePath("SpellHitbox/CollisionShape2D:disabled")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("SpellHitbox/CollisionShape2D:shape")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [SubResource("CapsuleShape2D_d1d4g")]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_l51yp"]
@@ -782,8 +770,9 @@ tracks/1/keys = {
 "values": [1, 2, 3, 4, 5]
 }
 
-[sub_resource type="Animation" id="Animation_17ug3"]
+[sub_resource type="Animation" id="Animation_4uixu"]
 resource_name = "run_left"
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -804,7 +793,7 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -812,6 +801,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_p4vi2"]
 resource_name = "run_right"
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -832,7 +822,7 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -1014,49 +1004,9 @@ tracks/6/keys = {
 "values": [Vector2(0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_bvqro"]
-resource_name = "spell2_left"
-length = 1.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.166667, 0.4, 0.5, 1, 1.4, 1.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [60, 61, 62, 63, 64, 65, 66]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:flip_h")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpellHitbox/CollisionShape2D:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 1.43333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-
 [sub_resource type="Animation" id="Animation_gysdh"]
 resource_name = "spell2_right"
-length = 1.5
+length = 5.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1088,10 +1038,50 @@ tracks/2/path = NodePath("SpellHitbox/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1.43333),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 1.6, 5.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [true, false]
+"values": [true, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_bvqro"]
+resource_name = "spell2_left"
+length = 5.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.4, 0.5, 1, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [60, 61, 62, 63, 64, 65, 66]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpellHitbox/CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.6, 5.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vknum"]
@@ -1107,7 +1097,7 @@ _data = {
 &"dodge_right": SubResource("Animation_7jldm"),
 &"idle_left": SubResource("Animation_ram8d"),
 &"idle_right": SubResource("Animation_vx87u"),
-&"run_left": SubResource("Animation_17ug3"),
+&"run_left": SubResource("Animation_4uixu"),
 &"run_right": SubResource("Animation_p4vi2"),
 &"spell1_left": SubResource("Animation_saefx"),
 &"spell1_right": SubResource("Animation_tstrm"),
@@ -1348,7 +1338,7 @@ states/spell1/position = Vector2(516, 7)
 states/spell2/node = SubResource("AnimationNodeBlendSpace1D_1cdv5")
 states/spell2/position = Vector2(655, 7)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_4du4o"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_6svtw"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_ij5h4"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_qnvgn"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_w3ru7"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_356yb"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_2odae"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_3e2ru"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_sirnm"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_37pc4"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_228o4"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_fuuo2"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_cgso1"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_3rlbt"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_7h3t3"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_4rfsd"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_ijm5u"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_scepp"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_chuyo"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_78ju6"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_fagyu"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_on8f1"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_e8srk"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_uil7a")]
-graph_offset = Vector2(-29.3317, -120)
+graph_offset = Vector2(-93.3317, -95)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5cs66"]
 atlas = ExtResource("4_p0awa")
@@ -1508,7 +1498,7 @@ parameters/conditions/is_running = false
 parameters/attack/blend_position = Vector2(0.9879, 1.89011)
 parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
-parameters/run/blend_position = Vector2(-0.937173, 0.817391)
+parameters/run/blend_position = Vector2(-0.614005, -0.135803)
 parameters/spell1/blend_position = -0.0366151
 parameters/spell2/blend_position = -1.0
 
@@ -1523,8 +1513,7 @@ visible = false
 z_index = 3
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_j2he3")
-animation = &"spell2"
-frame_progress = 0.138828
+animation = &"spell2start"
 offset = Vector2(0, -48)
 
 [node name="SpellHitbox" type="Area2D" parent="."]

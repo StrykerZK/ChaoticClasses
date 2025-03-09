@@ -1,11 +1,14 @@
 extends Node2D
 
+@export var spell_2_scene: PackedScene
+
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
+@onready var main_node: Node
 
-var attack_1_length: float = 0.4
-var attack_2_length: float = 0.4
-var attack_3_length: float = 0.5
+var attack_1_length: float = 0.3
+var attack_2_length: float = 0.3
+var attack_3_length: float = 0.6
 var combo_timer = 1.5
 @export var dash_speed: float = 0
 var last_dash_speed: float = 0
@@ -14,20 +17,19 @@ var type = "melee"
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
+	main_node = get_tree().root.get_node("Main")
 	get_animation_lengths()
 	$SpellHitbox.player_id = player.player_id
 
 func _process(delta: float) -> void:
 	check_property_changes()
 	rotate_weapon()
-	if player.in_spell_2:
-		if player.is_multiplayer_authority():
-			StageManager.set_target.rpc(player.player_id,get_global_mouse_position())
-		spell_2_follow.rpc()
 
 func rotate_weapon():
 	$Weapon.look_at(player.get_node("Target").global_position)
 	$Hitbox.look_at(player.get_node("Target").global_position)
+	$SpellHitbox.look_at(player.get_node("Target").global_position)
+	$SpellFX.look_at(player.get_node("Target").global_position)
 
 @rpc("any_peer","call_local")
 func attack(index: float):
@@ -48,66 +50,11 @@ func attack(index: float):
 			use_attack_timer(attack_2_length)
 			$Weapon.play("attack_2")
 		3.0:
-			player.dash_duration = attack_3_length - 0.3
+			player.dash_duration = attack_3_length - 0.6
 			player.damage = player.base_damage * 2
 			$Hitbox.damage = player.damage
 			use_attack_timer(attack_3_length)
 			$Weapon.play("attack_3")
-
-@rpc("any_peer","call_local")
-func spell_1(): # 50 dmg, 2 sec duration, 5 sec CD
-	player.in_spell_1 = true
-	player.dash_duration = 0.5
-	$SpellHitbox.damage = 50
-	$SpellHitbox.player_id = player.player_id
-	$Spell1Timer.wait_time = 2.0
-	$Spell1Timer.start()
-
-func _on_spell_1_timer_timeout():
-	if player.in_spell_1:
-		start_spell_1_cooldown()
-	else:
-		player.spell_1_ready = true
-
-func start_spell_1_cooldown():
-	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 5.0
-	$Spell1Timer.start()
-
-@rpc("any_peer","call_local")
-func spell_2(): # 20 dmg, 4 sec duration, 10 sec CD
-	player.in_spell_2 = true
-	$SpellHitbox.damage = 20
-	$SpellFX.show()
-	$SpellFX.play("spell2start")
-	await $SpellFX.animation_finished
-	$SpellFX.play("spell2")
-	$Spell2Timer.wait_time = 4.0
-	$Spell2Timer.start()
-
-@rpc("any_peer","call_local")
-func spell_2_follow():
-	if player.player_id == StageManager.p1_id:
-		$SpellHitbox.global_position = $SpellHitbox.global_position.lerp(StageManager.p1_target,0.01)
-		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p1_target,0.01)
-	else:
-		$SpellHitbox.global_position = $SpellHitbox.global_position.lerp(StageManager.p2_target,0.01)
-		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p2_target,0.01)
-
-func _on_spell_2_timer_timeout():
-	if player.in_spell_2:
-		$SpellFX.stop()
-		$SpellFX.hide()
-		$SpellHitbox.position = Vector2(0,0)
-		$SpellFX.position = Vector2(0,0)
-		start_spell_2_cooldown()
-	else:
-		player.spell_2_ready = true
-
-func start_spell_2_cooldown():
-	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 6.0
-	$Spell2Timer.start()
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -120,16 +67,11 @@ func use_attack_timer(time: float):
 	await $AttackTimer.timeout
 	if player.attack_index == 3:
 		player.attack_index = 1 # Reset after 3rd attack
-		$ComboTimer.wait_time = 0.7
+		$ComboTimer.wait_time = 0.5
 		$ComboTimer.start()
 	else:
 		player.attack_index += 1.0
 		player.can_attack = true
-
-func get_animation_lengths():
-	attack_1_length = anim_player.get_animation("attack_right_1").length
-	attack_2_length = anim_player.get_animation("attack_right_2").length
-	attack_3_length = anim_player.get_animation("attack_right_3").length
 
 func _on_combo_timer_timeout() -> void:
 	player.attack_index = 1.0
@@ -141,6 +83,76 @@ func stop_systems():
 	$AttackTimer.stop()
 	stop_spells()
 
+@rpc("any_peer","call_local")
+func spell_1(): # 20 dmg, 1.5 sec stun, 5 sec cd
+	player.in_spell_1 = true
+	player.dash_duration = 0.3
+	$SpellHitbox.damage = 20
+	$SpellHitbox.player_id = player.player_id
+	$SpellHitbox.stun_duration = 1.5
+	$SpellFX.show()
+	$SpellFX.play("spell_1")
+	await $SpellFX.animation_finished
+	$SpellFX.hide()
+	$Weapon.show()
+	$Weapon.play("spell_1")
+	$Hitbox.damage = 20
+	$Spell1Timer.wait_time = 1.5
+	$Spell1Timer.start()
+
+func _on_spell_1_timer_timeout():
+	if player.in_spell_1:
+		$Weapon.hide()
+		start_spell_1_cooldown()
+	else:
+		player.spell_1_ready = true
+
+func start_spell_1_cooldown():
+	player.in_spell_1 = false
+	$Spell1Timer.wait_time = 5
+	$Spell1Timer.start()
+
+@rpc("any_peer","call_local")
+func spell_2(): # 50 dmg, 0.3 sec duration, 5 sec cd
+	player.in_spell_2 = true
+	$Spell2Timer.wait_time = 0.3
+	$Spell2Timer.start()
+
+func _on_spell_2_timer_timeout():
+	if player.in_spell_2:
+		var spell_2_instance = spell_2_scene.instantiate()
+		spell_2_instance.player_id = player.player_id
+		spell_2_instance.damage = 50
+		spell_2_instance.position = global_position
+		if player.player_id == StageManager.p1_id:
+			spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.p1_target)
+		else:
+			spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.p2_target)
+		main_node.add_child(spell_2_instance)
+		start_spell_2_cooldown()
+	else:
+		player.spell_2_ready = true
+
+func start_spell_2_cooldown():
+	player.in_spell_2 = false
+	$Spell2Timer.wait_time = 5
+	$Spell2Timer.start()
+
+func stop_spells():
+	$Weapon.stop()
+	$Weapon.hide()
+	$SpellFX.stop()
+	$SpellFX.hide()
+	$Spell1Timer.stop()
+	$Spell2Timer.stop()
+	if player.in_spell_1: start_spell_1_cooldown()
+	if player.in_spell_2: start_spell_2_cooldown()
+
+func get_animation_lengths():
+	attack_1_length = anim_player.get_animation("attack_right_1").length
+	attack_2_length = anim_player.get_animation("attack_right_2").length
+	attack_3_length = anim_player.get_animation("attack_right_3").length
+
 func check_property_changes():
 	if last_dash_speed != dash_speed:
 		player.get_node("Target").global_position = player.get_global_mouse_position()
@@ -149,13 +161,3 @@ func check_property_changes():
 		last_dash_speed = dash_speed
 	else:
 		pass
-
-func stop_spells():
-	$SpellFX.stop()
-	$SpellFX.hide()
-	$Spell1Timer.stop()
-	$Spell2Timer.stop()
-	if player.in_spell_1: start_spell_1_cooldown()
-	if player.in_spell_2: start_spell_2_cooldown()
-	$SpellHitbox.position = Vector2(0,0)
-	$SpellFX.position = Vector2(0,0)

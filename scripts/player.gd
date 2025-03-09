@@ -117,6 +117,9 @@ func _process(delta: float) -> void:
 
 func handle_input():
 	
+	if is_stunned: # No input during stun
+		return
+	
 	# Movement
 	if current_type == "melee": # If melee, don't move while attacking
 		if !is_dodging:
@@ -215,8 +218,6 @@ func start_dodge():
 	is_attacking = false
 	if in_spell_1 or in_spell_2:
 		current_class_node.stop_spells()
-	in_spell_1 = false
-	in_spell_2 = false
 	is_dodging = true
 	can_dodge = false
 	can_attack = false
@@ -369,6 +370,8 @@ func class_change(class_title: String):
 	StageManager.update_game_state.rpc("In Game")
 
 func debuff(type: String, amount: float, duration: float):
+	if duration <= 0:
+		duration = 1
 	var remaining_debuff: String = ""
 	var debuff_time: float = 0
 	var prev_amount: float = 0
@@ -405,7 +408,25 @@ func debuff(type: String, amount: float, duration: float):
 			is_rooted = false
 		"stun":
 			is_stunned = true
+			# Stop what they're doing
+			is_attacking = false
+			is_dodging = false
+			can_attack = true
+			spell_1_ready = true
+			spell_2_ready = true
+			in_spell_1 = false
+			in_spell_2 = false
+			current_class_node.stop_systems()
+			current_class_node.stop_spells()
+			
+			$DebuffFX.stop()
 			$DebuffFX.play("stun")
+			$DebuffFX.show()
+			$DebuffTimer.stop()
+			$DebuffTimer.wait_time = duration
+			$DebuffTimer.start()
+			await $DebuffTimer.timeout
+			is_stunned = false
 	$DebuffFX.stop()
 	$DebuffFX.hide()
 	if !remaining_debuff.is_empty():
@@ -505,9 +526,9 @@ func reset_systems():
 	spell_2_ready = true
 	in_spell_1 = false
 	in_spell_2 = false
-	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
 	current_class_node.stop_systems()
 	current_class_node.stop_spells()
+	current_class_node.get_child(0).modulate.s = 0 # Reset iframe red flash
 	$GhostTimer.stop()
 	$DodgeTimer.stop()
 	$DodgeResetTimer.stop()

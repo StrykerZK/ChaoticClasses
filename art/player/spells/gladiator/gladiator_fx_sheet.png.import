@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6g671p5r1cga"
-path="res://.godot/imported/weapon_sheet.png-95f41b74588a589e82088cf4a7db06d0.ctex"
+uid="uid://c6k4o2ruj3wj8"
+path="res://.godot/imported/gladiator_fx_sheet.png-d57d49eed9ac70d8ac9262698ee37331.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/weapon_sheet.png"
-dest_files=["res://.godot/imported/weapon_sheet.png-95f41b74588a589e82088cf4a7db06d0.ctex"]
+source_file="res://art/player/spells/gladiator/gladiator_fx_sheet.png"
+dest_files=["res://.godot/imported/gladiator_fx_sheet.png-d57d49eed9ac70d8ac9262698ee37331.ctex"]
 
 [params]
 

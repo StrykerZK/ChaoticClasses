@@ -15,6 +15,7 @@ func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
 	get_animation_lengths()
+	$SpellHitbox.player_id = player.player_id
 
 
 func _process(delta: float) -> void:
@@ -75,7 +76,6 @@ func spell_1(): # 25 dmg, 1.3 sec duration, 5 sec cd
 	player.in_spell_1 = true
 	$SpellFX.show()
 	$SpellFX.play("spell1")
-	$SpellHitbox.player_id = player.player_id
 	$SpellHitbox.damage = 25.0
 	$SpellHitbox.slow_amount = 0.5
 	$SpellHitbox.slow_duration = 3.0
@@ -84,13 +84,16 @@ func spell_1(): # 25 dmg, 1.3 sec duration, 5 sec cd
 
 func _on_spell_1_timer_timeout() -> void:
 	if player.in_spell_1:
-		player.in_spell_1 = false
 		$SpellFX.stop()
 		$SpellFX.hide()
-		$Spell2Timer.wait_time = 3.7
-		$Spell2Timer.start()
+		start_spell_1_cooldown()
 	else:
 		player.spell_1_ready = true
+
+func start_spell_1_cooldown():
+	player.in_spell_1 = false
+	$Spell1Timer.wait_time = 5
+	$Spell1Timer.start()
 
 @rpc("any_peer","call_local")
 func spell_2(): # 80 dmg, 2.8 sec duration, 5 sec cd
@@ -102,18 +105,23 @@ func spell_2(): # 80 dmg, 2.8 sec duration, 5 sec cd
 
 func _on_spell_2_timer_timeout():
 	if player.in_spell_2:
-		player.in_spell_2 = false
-		$Spell1Timer.wait_time = 2.2
-		$Spell1Timer.start()
+		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true
+
+func start_spell_2_cooldown():
+	player.in_spell_2 = false
+	$Spell2Timer.wait_time = 2.2
+	$Spell2Timer.start()
 
 func stop_spells():
 	$SpellFX.stop()
 	$SpellFX.hide()
 	$Spell1Timer.stop()
 	$Spell2Timer.stop()
-	$Hitbox.position = Vector2(0,0)
+	if player.in_spell_1: start_spell_1_cooldown()
+	if player.in_spell_2: start_spell_2_cooldown()
+	$Hitbox.position = Vector2(0,10)
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length

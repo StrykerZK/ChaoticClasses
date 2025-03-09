@@ -593,8 +593,9 @@ tracks/1/keys = {
 "values": [60, 61, 62]
 }
 
-[sub_resource type="Animation" id="Animation_44j8x"]
+[sub_resource type="Animation" id="Animation_bd7mq"]
 resource_name = "run_left"
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -615,7 +616,7 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -623,6 +624,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_x45o2"]
 resource_name = "run_right"
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -643,7 +645,7 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
@@ -826,7 +828,7 @@ _data = {
 &"ready_right": SubResource("Animation_kshgk"),
 &"release_left": SubResource("Animation_je8wm"),
 &"release_right": SubResource("Animation_8fp7d"),
-&"run_left": SubResource("Animation_44j8x"),
+&"run_left": SubResource("Animation_bd7mq"),
 &"run_right": SubResource("Animation_x45o2"),
 &"spell1_left": SubResource("Animation_huw2c"),
 &"spell1_right": SubResource("Animation_oieu0"),

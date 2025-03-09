@@ -599,7 +599,23 @@ grow_vertical = 2
 text = "Archer
 "
 
+[node name="Gladiator" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 867.0
+offset_top = -33.0
+offset_right = 948.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Gladiator
+"
+
 [connection signal="pressed" from="Hero" to="." method="_on_hero_pressed"]
 [connection signal="pressed" from="Demon" to="." method="_on_demon_pressed"]
 [connection signal="pressed" from="Pyro" to="." method="_on_pyro_pressed"]
 [connection signal="pressed" from="Archer" to="." method="_on_archer_pressed"]
+[connection signal="pressed" from="Gladiator" to="." method="_on_gladiator_pressed"]

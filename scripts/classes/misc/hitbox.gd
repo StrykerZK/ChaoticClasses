@@ -6,6 +6,10 @@ var player_id: int = 1
 var damage: float
 var deflection: bool = false
 
+func _ready() -> void:
+	area_entered.connect(Callable(self,"_on_area_entered"))
+	body_entered.connect(Callable(self,"_on_body_entered"))
+
 func _on_area_entered(area: Area2D) -> void:
 	if area.name == "Hurtbox":
 		if area.get_parent().has_method("take_damage")\

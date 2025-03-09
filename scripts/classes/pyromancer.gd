@@ -116,7 +116,7 @@ func use_attack_timer(time: float):
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
 @rpc("any_peer","call_local")
-func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
+func spell_1(): # 25 dmg, 3 sec duration, 7 sec cd
 	player.in_spell_1 = true
 	await get_tree().create_timer(0.3).timeout
 	for i in range(12):
@@ -130,12 +130,15 @@ func spell_1(): # 25 dmg, 3 sec duration, 8 sec cd
 			fireball.damage = player.damage
 			fireball.player_id = player.player_id
 			await get_tree().create_timer(0.1).timeout
-	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 6.5
-	$Spell1Timer.start()
+	start_spell_1_cooldown()
 
 func _on_spell_1_timer_timeout() -> void:
 	player.spell_1_ready = true
+
+func start_spell_1_cooldown():
+	player.in_spell_1 = false
+	$Spell1Timer.wait_time = 7
+	$Spell1Timer.start()
 
 @rpc("any_peer","call_local")
 func spell_2(): # 75 dmg, 1.3 sec duration, 5 sec cd
@@ -153,22 +156,27 @@ func spell_2(): # 75 dmg, 1.3 sec duration, 5 sec cd
 
 func _on_spell_2_timer_timeout() -> void:
 	if player.in_spell_2:
-		player.in_spell_2 = false
 		$SpellFX.stop()
 		$SpellFX.hide()
 		$SpellHitbox/CollisionShape2D.disabled = true
 		$SpellHitbox.position = Vector2(0,0)
 		$SpellFX.position = Vector2(0,0)
-		$Spell2Timer.wait_time = 3.7
-		$Spell2Timer.start()
+		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true
+
+func start_spell_2_cooldown():
+	player.in_spell_2 = false
+	$Spell2Timer.wait_time = 3.7
+	$Spell2Timer.start()
 
 func stop_spells():
 	$SpellFX.stop()
 	$SpellFX.hide()
 	$Spell1Timer.stop()
 	$Spell2Timer.stop()
+	if player.in_spell_1: start_spell_1_cooldown()
+	if player.in_spell_2: start_spell_2_cooldown()
 	$Hitbox.position = Vector2(0,0)
 	$SpellFX.position = Vector2(0,0)
 

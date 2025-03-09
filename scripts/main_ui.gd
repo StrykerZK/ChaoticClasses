@@ -93,3 +93,8 @@ func _on_pyro_pressed() -> void:
 func _on_archer_pressed() -> void:
 	Callable($/root/Main/GameManager,"change_archer").call()
 	$Archer.release_focus()
+
+
+func _on_gladiator_pressed() -> void:
+	Callable($/root/Main/GameManager,"change_gladiator").call()
+	$Gladiator.release_focus()
