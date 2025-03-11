@@ -588,6 +588,8 @@ func smooth_camera(setting: String):
 			$Camera.limit_smoothed = !$Camera.limit_smoothed
 		elif setting == "position":
 			$Camera.position_smoothing_enabled = !$Camera.position_smoothing_enabled
+			if $Camera.position_smoothing_enabled:
+				$Camera.position_smoothing_speed = 3
 		elif setting == "rotation":
 			$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled
 

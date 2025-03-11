@@ -1004,8 +1004,8 @@ tracks/6/keys = {
 "values": [Vector2(0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_gysdh"]
-resource_name = "spell2_right"
+[sub_resource type="Animation" id="Animation_bvqro"]
+resource_name = "spell2_left"
 length = 5.5
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1044,8 +1044,8 @@ tracks/2/keys = {
 "values": [true, false, true]
 }
 
-[sub_resource type="Animation" id="Animation_bvqro"]
-resource_name = "spell2_left"
+[sub_resource type="Animation" id="Animation_gysdh"]
+resource_name = "spell2_right"
 length = 5.5
 tracks/0/type = "value"
 tracks/0/imported = false

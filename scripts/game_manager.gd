@@ -102,7 +102,7 @@ func game_over(id):
 	get_parent().game_over.rpc(id)
 	clear_player.rpc(id)
 	
-	await get_tree().create_timer(7).timeout
+	await get_tree().create_timer(6).timeout
 	if StageManager.p1_score != 3 and StageManager.p2_score != 3:
 		clear_winner.rpc(id)
 		if id == StageManager.p1_id:

@@ -9,7 +9,7 @@ script/source = "extends CharacterBody2D
 
 @export var ghost_scene: PackedScene
 
-var speed: float = 1200
+var speed: float = 1500
 var direction: Vector2 = Vector2.ZERO
 
 var player_id: int = 1
@@ -17,6 +17,9 @@ var damage: float
 
 func _ready() -> void:
 	$AnimatedSprite2D.play()
+
+func _process(delta: float) -> void:
+	ghost_effect()
 
 func _physics_process(delta: float) -> void:
 	var collision = move_and_collide(velocity * speed * delta)
@@ -115,10 +118,5 @@ wait_time = 4.0
 one_shot = true
 autostart = true
 
-[node name="GhostTimer" type="Timer" parent="."]
-wait_time = 0.001
-autostart = true
-
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
-[connection signal="timeout" from="GhostTimer" to="." method="ghost_effect"]
