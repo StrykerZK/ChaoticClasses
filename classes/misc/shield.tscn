@@ -20,6 +20,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	ghost_effect()
+	$AnimatedSprite2D.rotation = velocity.angle()
 
 func _physics_process(delta: float) -> void:
 	var collision = move_and_collide(velocity * speed * delta)
@@ -27,7 +28,8 @@ func _physics_process(delta: float) -> void:
 	if collision:
 		var collider = collision.get_collider()
 		velocity = velocity.bounce(collision.get_normal())
-
+	
+	rotation = velocity.angle()
 
 func _on_life_timer_timeout() -> void:
 	queue_free()
@@ -54,25 +56,28 @@ radius = 16.0312
 [sub_resource type="CircleShape2D" id="CircleShape2D_445r4"]
 radius = 16.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qpgrd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_uu7xt"]
 atlas = ExtResource("2_uu7xt")
 region = Rect2(0, 64, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_lx4bg"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qpgrd"]
 atlas = ExtResource("2_uu7xt")
 region = Rect2(64, 64, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_86nr0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_lx4bg"]
 atlas = ExtResource("2_uu7xt")
 region = Rect2(128, 64, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ebehv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_86nr0"]
 atlas = ExtResource("2_uu7xt")
 region = Rect2(192, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_durnn"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uu7xt")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qpgrd")
 }, {
@@ -81,13 +86,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_86nr0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ebehv")
 }],
 "loop": true,
 "name": &"default",
-"speed": 14.0
+"speed": 18.0
 }]
 
 [node name="Shield" type="CharacterBody2D"]
@@ -110,8 +112,8 @@ debug_color = Color(0.99982, 0, 0.0999764, 0.42)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_durnn")
-frame = 2
-frame_progress = 0.719263
+frame = 1
+frame_progress = 0.35429
 
 [node name="LifeTimer" type="Timer" parent="."]
 wait_time = 4.0

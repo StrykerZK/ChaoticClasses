@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d4dl6erj4nq5m"]
+
+[ext_resource type="Shader" uid="uid://buqtgm2d1y7kq" path="res://utility/scrolling_shine_effect.gdshader" id="1_iggxh"]
+
+[resource]
+shader = ExtResource("1_iggxh")
+shader_parameter/shine_active = false
+shader_parameter/time_speed = 2.0
+shader_parameter/sheen_color = Vector4(1, 1, 1, 1)
+shader_parameter/sheen_width = 0.2
+shader_parameter/sheen_progress = 0.0
+shader_parameter/sheen_intensity = 0.5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene load_steps=134 format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" uid="uid://bnpiendf6brk1" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://bwenr1vu6f8uf" path="res://scripts/classes/misc/base_hitbox.gd" id="3_xqdpe"]
 [ext_resource type="Texture2D" uid="uid://pfn5b3ug7i84" path="res://art/misc/hit_fx.png" id="5_0f1a5"]
 [ext_resource type="Texture2D" uid="uid://ce2rvjqjyvskw" path="res://art/misc/transform_charge_sheet.png" id="5_7o0tp"]
+[ext_resource type="Texture2D" uid="uid://fnn2ggo5piup" path="res://art/player/spells/base/base_fx_sheet.png" id="5_b26j0"]
 [ext_resource type="Texture2D" uid="uid://bo6idghpcuvl8" path="res://art/misc/debuff_sheet.png" id="6_a40kg"]
+[ext_resource type="Texture2D" uid="uid://cfdo1apvg6ffj" path="res://art/player/spells/base/base_emote_sheet.png" id="6_n7ghd"]
 [ext_resource type="Texture2D" uid="uid://btdbrpkiwayqq" path="res://art/misc/transform-sheet.png" id="7_pl1nw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00hg6"]
@@ -85,6 +87,90 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("base:spell_direction")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("base/SpellFX:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(23, -25)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("base/SpellFX:flip_h")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("base/SpellFX:frame")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("base/SpellFX:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("base/TextFX:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(23, -25)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("base/TextFX:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_fcle3"]
@@ -561,36 +647,8 @@ tracks/5/keys = {
 "values": [0.0, 50.0]
 }
 
-[sub_resource type="Animation" id="Animation_vankb"]
-resource_name = "spell_left"
-length = 0.7
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("base/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [50, 51, 52, 53, 54]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("base/Sprite2D:flip_h")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="Animation" id="Animation_dhj2o"]
-resource_name = "spell_right"
+resource_name = "spell_1_right"
 length = 0.7
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -616,6 +674,426 @@ tracks/1/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("base:spell_direction")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("base/SpellFX:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(34, -37)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("base/SpellFX:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("base/SpellFX:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("base/SpellFX:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("base/TextFX:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(34, -37)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("base/TextFX:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_nvl01"]
+resource_name = "spell_1_left"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("base/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [50, 51, 52, 53, 54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("base/Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("base:spell_direction")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("base/SpellFX:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-34, -37)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("base/SpellFX:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("base/SpellFX:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("base/SpellFX:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("base/TextFX:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-34, -37)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("base/TextFX:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_n7ghd"]
+resource_name = "spell_2_right"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("base/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [50, 51, 52, 53, 54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("base/Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("base:spell_direction")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("base/SpellFX:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(34, -37)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("base/SpellFX:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("base/SpellFX:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [2, 3, 2]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("base/SpellFX:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("base/TextFX:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(34, -37)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("base/TextFX:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_ivps1"]
+resource_name = "spell_2_left"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("base/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [50, 51, 52, 53, 54]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("base/Sprite2D:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("base:spell_direction")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("base/SpellFX:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-34, -37)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("base/SpellFX:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("base/SpellFX:frame")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [2, 3, 2]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("base/SpellFX:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("base/TextFX:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-34, -37)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("base/TextFX:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.2, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lguxv"]
 _data = {
@@ -630,8 +1108,10 @@ _data = {
 &"slap_1_right": SubResource("Animation_7h3yq"),
 &"slap_2_left": SubResource("Animation_iu8ib"),
 &"slap_2_right": SubResource("Animation_1fci3"),
-&"spell_left": SubResource("Animation_vankb"),
-&"spell_right": SubResource("Animation_dhj2o")
+&"spell_1_left": SubResource("Animation_nvl01"),
+&"spell_1_right": SubResource("Animation_dhj2o"),
+&"spell_2_left": SubResource("Animation_ivps1"),
+&"spell_2_right": SubResource("Animation_n7ghd")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_biudh"]
@@ -721,10 +1201,10 @@ blend_point_3/pos = Vector2(1, -1)
 blend_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tvq6r"]
-animation = &"spell_left"
+animation = &"spell_1_left"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wcpa7"]
-animation = &"spell_right"
+animation = &"spell_1_right"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_bfxm0"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_tvq6r")
@@ -732,19 +1212,22 @@ blend_point_0/pos = -1.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_wcpa7")
 blend_point_1/pos = 1.0
 value_label = "x"
+blend_mode = 1
 sync = true
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oqt3p"]
-animation = &"spell_left"
+animation = &"spell_2_left"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yg48q"]
-animation = &"spell_right"
+animation = &"spell_2_right"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_48q41"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_oqt3p")
 blend_point_0/pos = -1.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_yg48q")
 blend_point_1/pos = 1.0
+value_label = "x"
+blend_mode = 1
 sync = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xwajg"]
@@ -856,7 +1339,7 @@ states/spell1/position = Vector2(447, 20)
 states/spell2/node = SubResource("AnimationNodeBlendSpace1D_48q41")
 states/spell2/position = Vector2(594, 20)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_xwajg"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_di6st"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_hcja6"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_oyq00"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_2bqjw"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_0sxf1"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_s51qo"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_fresa"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_076my"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_0y7k7"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_qvqo2"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_v0loq"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_wm6xu"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_awlxp"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_sebi1"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_ds4aw"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_0qutq"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_4exet"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_83o8p"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_dro45"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_0ew6a"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_7di3m"), "attack", "spell2", SubResource("AnimationNodeStateMachineTransition_p06o5"), "attack", "spell1", SubResource("AnimationNodeStateMachineTransition_p4mkf")]
-graph_offset = Vector2(-122, -151)
+graph_offset = Vector2(-92, -70)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_83ret"]
 radius = 15.0
@@ -1362,14 +1845,32 @@ parameters/attack/blend_position = Vector2(-0.83156, 0.0353982)
 parameters/dodge/blend_position = 0
 parameters/idle/blend_position = Vector2(0, 0)
 parameters/run/blend_position = Vector2(0, 0)
-parameters/spell1/blend_position = 0
-parameters/spell2/blend_position = 0
+parameters/spell1/blend_position = -1.09865
+parameters/spell2/blend_position = 0.137629
 
 [node name="ComboTimer" type="Timer" parent="base"]
 one_shot = true
 
 [node name="AttackTimer" type="Timer" parent="base"]
 one_shot = true
+
+[node name="SpellFX" type="Sprite2D" parent="base"]
+visible = false
+position = Vector2(23, -25)
+scale = Vector2(2, 2)
+texture = ExtResource("5_b26j0")
+hframes = 2
+vframes = 2
+
+[node name="TextFX" type="Sprite2D" parent="base"]
+visible = false
+position = Vector2(23, -25)
+scale = Vector2(2, 2)
+texture = ExtResource("6_n7ghd")
+hframes = 5
+
+[node name="SpellTimer" type="Timer" parent="base"]
+wait_time = 0.7
 
 [node name="Collisionbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)
@@ -1433,6 +1934,7 @@ limit_bottom = 1150
 limit_smoothed = true
 
 [connection signal="timeout" from="base/ComboTimer" to="base" method="_on_combo_timer_timeout"]
+[connection signal="timeout" from="base/SpellTimer" to="base" method="_on_spell_timer_timeout"]
 [connection signal="timeout" from="DodgeTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="DodgeResetTimer" to="." method="end_dodge"]
 [connection signal="timeout" from="GhostTimer" to="." method="ghost_effect"]

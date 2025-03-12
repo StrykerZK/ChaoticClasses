@@ -1,7 +1,9 @@
 extends CanvasLayer
 
-var player_1
-var player_2
+var player_1: CharacterBody2D
+var player_2: CharacterBody2D
+var player_3: CharacterBody2D
+var player_4: CharacterBody2D
 
 var is_paused: bool = false
 
@@ -15,10 +17,8 @@ func _process(delta: float) -> void:
 func start_game():
 	# Assign player nodes
 	assign_players()
-	$Player1Info.update_display()
-	$Player2Info.update_display()
-	$Player1Info.reset_bars(200)
-	$Player2Info.reset_bars(200)
+	$MainPlayerInfo.start_game()
+	$PeerInfoPanel.start_game()
 	
 	# Start animation for countdown
 	$AnimationPlayer.play("start_game")
@@ -31,40 +31,47 @@ func start_game():
 	$FX.hide()
 	
 	# Setup player info tabs
-	$Player1Info.show()
-	$Player1Info.display_scores()
-	$Player2Info.show()
-	$Player2Info.display_scores()
+	
+	$MainPlayerInfo.show()
+	$PeerInfoPanel.show()
+
+@rpc("any_peer","call_local")
+func player_dead(id):
+	if id == multiplayer.get_unique_id():
+		$MainPlayerInfo.dead()
+	else:
+		$PeerInfoPanel.player_dead(id)
 
 @rpc("any_peer","call_local","reliable")
-func game_over(id):
-	if id == StageManager.p1_id:
-		await player_1.tree_exited
-		$Label.text = StageManager.get_player_name(StageManager.p2_id) + " won!"
-		$Player2Info.update_scores()
-	else:
-		await player_2.tree_exited
-		$Label.text = StageManager.get_player_name(StageManager.p1_id) + " won!"
-		$Player1Info.update_scores()
-	
+func match_over(id):
+	$Label.text = StageManager.get_player_name(id) + " won!"
 	$Label.add_theme_font_size_override("font_size", 60)
 	$Label.add_theme_color_override("font_color",Color.CRIMSON)
 	$Label.position = $ScreenCenter.global_position - Vector2($Label.size.x / 2, $Label.size.y / 2)
 	$Label.show()
+	
+	if id == multiplayer.get_unique_id():
+		$MainPlayerInfo.update_scores()
+	else:
+		$PeerInfoPanel.update_scores(id)
 
 func game_end():
 	$AnimationPlayer.play("game_end")
 
 @rpc("any_peer","call_local")
 func class_change():
-	$Player1Info.update_display()
-	$Player2Info.update_display()
+	$MainPlayerInfo.update_display()
+	$PeerInfoPanel.update_displays()
 
 @rpc("any_peer","call_local")
 func assign_players():
 	var players = get_tree().get_nodes_in_group("players")
 	player_1 = players[0]
 	player_2 = players[1]
+	if players.size() >= 3:
+		player_3 = players[2]
+	if players.size() >= 4:
+		player_4 = players[3]
 
 func toggle_pause():
 	is_paused = !is_paused
@@ -73,28 +80,26 @@ func toggle_pause():
 	else:
 		$PauseMenu.hide()
 
-
 func _on_base_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_base").call()
-	$Base.release_focus()
+	Callable($/root/Main/GameManager,"dev_class_change").call("base")
+	$DevButtons/Base.release_focus()
 
 func _on_hero_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_hero").call()
-	$Hero.release_focus()
+	Callable($/root/Main/GameManager,"dev_class_change").call("hero")
+	$DevButtons/Hero.release_focus()
 
 func _on_demon_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_demon").call()
-	$Demon.release_focus()
+	Callable($/root/Main/GameManager,"dev_class_change").call("demon")
+	$DevButtons/Demon.release_focus()
 
 func _on_pyro_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_pyro").call()
-	$Pyro.release_focus()
+	Callable($/root/Main/GameManager,"dev_class_change").call("pyromancer")
+	$DevButtons/Pyro.release_focus()
 
 func _on_archer_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_archer").call()
-	$Archer.release_focus()
-
+	Callable($/root/Main/GameManager,"dev_class_change").call("archer")
+	$DevButtons/Archer.release_focus()
 
 func _on_gladiator_pressed() -> void:
-	Callable($/root/Main/GameManager,"change_gladiator").call()
-	$Gladiator.release_focus()
+	Callable($/root/Main/GameManager,"dev_class_change").call("gladiator")
+	$DevButtons/Gladiator.release_focus()

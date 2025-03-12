@@ -84,7 +84,7 @@ func stop_systems():
 	stop_spells()
 
 @rpc("any_peer","call_local")
-func spell_1(): # 20 dmg, 1.5 sec stun, 5 sec cd
+func spell_1(): # 20 dmg, 1.5 sec stun
 	player.in_spell_1 = true
 	player.dash_duration = 0.3
 	$SpellHitbox.damage = 20
@@ -107,10 +107,12 @@ func _on_spell_1_timer_timeout():
 	else:
 		player.spell_1_ready = true
 
-func start_spell_1_cooldown():
+func start_spell_1_cooldown(): # 5 sec cd
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 5
+	var duration = 5.0
+	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
+	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
 func spell_2(): # 50 dmg, 0.3 sec duration, 5 sec cd
@@ -124,19 +126,18 @@ func _on_spell_2_timer_timeout():
 		spell_2_instance.player_id = player.player_id
 		spell_2_instance.damage = 50
 		spell_2_instance.position = global_position
-		if player.player_id == StageManager.p1_id:
-			spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.p1_target)
-		else:
-			spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.p2_target)
+		spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.get_target(player.player_id))
 		main_node.add_child(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true
 
-func start_spell_2_cooldown():
+func start_spell_2_cooldown(): # 5 sec cd
 	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 5
+	var duration = 5.0
+	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
+	player.queue_spell_cooldown(duration, 2)
 
 func stop_spells():
 	$Weapon.stop()

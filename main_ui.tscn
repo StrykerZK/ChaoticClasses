@@ -1,11 +1,16 @@
-[gd_scene load_steps=29 format=3 uid="uid://d1aj3uw0040ii"]
+[gd_scene load_steps=35 format=3 uid="uid://d1aj3uw0040ii"]
 
 [ext_resource type="Script" uid="uid://byrhy1vvpbw1r" path="res://scripts/main_ui.gd" id="1_50b53"]
 [ext_resource type="PackedScene" uid="uid://bno4es4cdgtqm" path="res://pause_menu.tscn" id="2_2tfbj"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="2_iropl"]
-[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://scenes/ui/player_1_info.tscn" id="3_60xrb"]
-[ext_resource type="PackedScene" uid="uid://w0ull4nc03db" path="res://scenes/ui/player_2_info.tscn" id="4_dqrjs"]
+[ext_resource type="PackedScene" uid="uid://3sey3la8odjp" path="res://scenes/ui/main_player_info.tscn" id="3_60xrb"]
+[ext_resource type="PackedScene" uid="uid://cr2uveu77qxg6" path="res://scenes/ui/peer_info.tscn" id="4_il2or"]
 [ext_resource type="Texture2D" uid="uid://bqo32dpom6abk" path="res://art/misc/fight_text_sheet.png" id="5_1q4mj"]
+[ext_resource type="Texture2D" uid="uid://i6p1u6vmhnxa" path="res://art/player/sprites/hero_sprite.png" id="7_8yam0"]
+[ext_resource type="Texture2D" uid="uid://bfw8gl5qdt41m" path="res://art/player/sprites/demon_sprite.png" id="8_81ket"]
+[ext_resource type="Texture2D" uid="uid://dppex4837udm6" path="res://art/player/sprites/pyromancer_sprite.png" id="9_mcdcf"]
+[ext_resource type="Texture2D" uid="uid://cwel80m2cjoeu" path="res://art/player/sprites/archer_sprite.png" id="10_sd2ej"]
+[ext_resource type="Texture2D" uid="uid://dsikwm2tukewo" path="res://art/player/sprites/gladiator_sprite.png" id="11_dnsp1"]
 
 [sub_resource type="Theme" id="Theme_omnm7"]
 Label/colors/font_color = Color(0.1691, 0.43343, 0.89, 1)
@@ -17,6 +22,64 @@ Label/constants/shadow_offset_y = 2
 Label/constants/shadow_outline_size = 16
 Label/font_sizes/font_size = 48
 Label/fonts/font = ExtResource("2_iropl")
+
+[sub_resource type="GDScript" id="GDScript_n1q3t"]
+resource_name = "peer_info_panel"
+script/source = "extends Control
+
+@export var peer_info_scene: PackedScene
+
+var info_1
+var info_2
+var info_3
+
+var id_array: Array
+
+func _ready() -> void:
+	for keys in StageManager.player_list:
+		if keys != multiplayer.get_unique_id():
+			id_array.append(keys)
+	
+	if StageManager.player_count >= 2:
+		info_1 = peer_info_scene.instantiate()
+		info_1.name = str(id_array[0])
+		info_1.player_id = id_array[0]
+		info_1.update_display()
+		info_1.reset_bars(200)
+		$PeerContainer.add_child(info_1)
+	if StageManager.player_count >= 3:
+		info_2 = peer_info_scene.instantiate()
+		info_2.name = str(id_array[1])
+		info_2.player_id = id_array[1]
+		info_2.update_display()
+		info_2.reset_bars(200)
+		$PeerContainer.add_child(info_2)
+	if StageManager.player_count >= 4:
+		info_3 = peer_info_scene.instantiate()
+		info_3.name = str(id_array[2])
+		info_3.player_id = id_array[2]
+		info_3.update_display()
+		info_3.reset_bars(200)
+		$PeerContainer.add_child(info_3)
+
+func start_game():
+	var array = $PeerContainer.get_children()
+	for i in array.size():
+		array[i].update_display()
+		array[i].reset_bars(200)
+		array[i].reset_display()
+
+func update_displays():
+	var array = $PeerContainer.get_children()
+	for i in array.size():
+		array[i].update_display()
+
+func player_dead(id):
+	$PeerContainer.get_node(str(id)).dead()
+
+func update_scores(id):
+	$PeerContainer.get_node(str(id)).update_score()
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_71g2x"]
 atlas = ExtResource("5_1q4mj")
@@ -496,11 +559,38 @@ vertical_alignment = 1
 [node name="ScreenCenter" type="Marker2D" parent="."]
 position = Vector2(960, 540)
 
-[node name="Player1Info" parent="." instance=ExtResource("3_60xrb")]
+[node name="MainPlayerInfo" parent="." instance=ExtResource("3_60xrb")]
 visible = false
+pivot_offset = Vector2(960, 1080)
 
-[node name="Player2Info" parent="." instance=ExtResource("4_dqrjs")]
+[node name="PeerInfoPanel" type="Control" parent="."]
 visible = false
+layout_mode = 3
+anchor_left = 1.0
+anchor_top = 0.335
+anchor_right = 1.0
+anchor_bottom = 0.335
+offset_left = -40.0
+offset_top = -19.8
+offset_bottom = 20.2
+grow_horizontal = 0
+grow_vertical = 2
+script = SubResource("GDScript_n1q3t")
+peer_info_scene = ExtResource("4_il2or")
+
+[node name="PeerContainer" type="VBoxContainer" parent="PeerInfoPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -265.0
+offset_top = -136.0
+offset_bottom = 136.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 96
 
 [node name="PauseMenu" parent="." instance=ExtResource("2_2tfbj")]
 visible = false
@@ -519,103 +609,63 @@ libraries = {
 &"": SubResource("AnimationLibrary_jofjq")
 }
 
-[node name="Base" type="Button" parent="."]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 901.0
-offset_top = -226.0
-offset_right = 946.0
-offset_bottom = -195.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Base"
+[node name="DevButtons" type="GridContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.932
+anchor_top = 0.916
+anchor_right = 0.932
+anchor_bottom = 0.916
+offset_left = -99.4401
+offset_top = -100.28
+offset_right = 100.56
+offset_bottom = 31.7199
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 3
+metadata/_edit_use_anchors_ = true
 
-[node name="Hero" type="Button" parent="."]
+[node name="Hero" type="TextureButton" parent="DevButtons"]
 process_mode = 3
 z_index = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 901.0
-offset_top = -187.0
-offset_right = 947.0
-offset_bottom = -156.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Hero"
+layout_mode = 2
+texture_normal = ExtResource("7_8yam0")
+texture_pressed = ExtResource("7_8yam0")
+texture_hover = ExtResource("7_8yam0")
 
-[node name="Demon" type="Button" parent="."]
+[node name="Demon" type="TextureButton" parent="DevButtons"]
 process_mode = 3
 z_index = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 883.0
-offset_top = -148.0
-offset_right = 948.0
-offset_bottom = -117.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Demon"
+layout_mode = 2
+texture_normal = ExtResource("8_81ket")
+texture_pressed = ExtResource("8_81ket")
+texture_hover = ExtResource("8_81ket")
 
-[node name="Pyro" type="Button" parent="."]
+[node name="Pyro" type="TextureButton" parent="DevButtons"]
 process_mode = 3
 z_index = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 847.0
-offset_top = -110.0
-offset_right = 949.0
-offset_bottom = -79.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Pyromancer"
+layout_mode = 2
+texture_normal = ExtResource("9_mcdcf")
+texture_pressed = ExtResource("9_mcdcf")
+texture_hover = ExtResource("9_mcdcf")
 
-[node name="Archer" type="Button" parent="."]
+[node name="Archer" type="TextureButton" parent="DevButtons"]
 process_mode = 3
 z_index = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 889.0
-offset_top = -71.0
-offset_right = 949.0
-offset_bottom = -40.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Archer
-"
+layout_mode = 2
+texture_normal = ExtResource("10_sd2ej")
+texture_pressed = ExtResource("10_sd2ej")
+texture_hover = ExtResource("10_sd2ej")
 
-[node name="Gladiator" type="Button" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 867.0
-offset_top = -33.0
-offset_right = 948.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Gladiator
-"
+[node name="Gladiator" type="TextureButton" parent="DevButtons"]
+layout_mode = 2
+texture_normal = ExtResource("11_dnsp1")
+texture_pressed = ExtResource("11_dnsp1")
+texture_hover = ExtResource("11_dnsp1")
 
-[connection signal="pressed" from="Hero" to="." method="_on_hero_pressed"]
-[connection signal="pressed" from="Demon" to="." method="_on_demon_pressed"]
-[connection signal="pressed" from="Pyro" to="." method="_on_pyro_pressed"]
-[connection signal="pressed" from="Archer" to="." method="_on_archer_pressed"]
-[connection signal="pressed" from="Gladiator" to="." method="_on_gladiator_pressed"]
+[connection signal="pressed" from="DevButtons/Hero" to="." method="_on_hero_pressed"]
+[connection signal="pressed" from="DevButtons/Demon" to="." method="_on_demon_pressed"]
+[connection signal="pressed" from="DevButtons/Pyro" to="." method="_on_pyro_pressed"]
+[connection signal="pressed" from="DevButtons/Archer" to="." method="_on_archer_pressed"]
+[connection signal="pressed" from="DevButtons/Gladiator" to="." method="_on_gladiator_pressed"]

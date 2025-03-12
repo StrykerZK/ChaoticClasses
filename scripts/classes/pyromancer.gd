@@ -49,10 +49,7 @@ func attack(index: float):
 			use_attack_timer(attack_3_length)
 
 func spawn_projectile(index: float):
-	if player.player_id == 1:
-		mouse_pos = StageManager.p1_target
-	elif player.player_id != 1:
-		mouse_pos = StageManager.p2_target
+	mouse_pos = StageManager.get_target(player.player_id)
 	
 	var spawn_time = 0.3
 	match index:
@@ -116,7 +113,7 @@ func use_attack_timer(time: float):
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
 @rpc("any_peer","call_local")
-func spell_1(): # 25 dmg, 3 sec duration, 7 sec cd
+func spell_1(): # 25 dmg, 3 sec duration
 	player.in_spell_1 = true
 	await get_tree().create_timer(0.3).timeout
 	for i in range(12):
@@ -135,20 +132,18 @@ func spell_1(): # 25 dmg, 3 sec duration, 7 sec cd
 func _on_spell_1_timer_timeout() -> void:
 	player.spell_1_ready = true
 
-func start_spell_1_cooldown():
+func start_spell_1_cooldown(): # 7 sec cd
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 7
+	var duration = 7.0
+	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
+	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2(): # 75 dmg, 1.3 sec duration, 5 sec cd
+func spell_2(): # 75 dmg, 1.3 sec duration
 	player.in_spell_2 = true
-	if player.player_id == StageManager.p1_id:
-		$SpellFX.global_position = StageManager.p1_target
-		$SpellHitbox.global_position = StageManager.p1_target
-	else:
-		$SpellFX.global_position = StageManager.p2_target
-		$SpellHitbox.global_position = StageManager.p2_target
+	$SpellFX.global_position = StageManager.get_target(player.player_id)
+	$SpellHitbox.global_position = StageManager.get_target(player.player_id)
 	$SpellFX.show()
 	$SpellFX.play("spell1")
 	$Spell2Timer.wait_time = 1.3
@@ -165,10 +160,12 @@ func _on_spell_2_timer_timeout() -> void:
 	else:
 		player.spell_2_ready = true
 
-func start_spell_2_cooldown():
+func start_spell_2_cooldown(): # 5 sec cd
 	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 3.7
+	var duration = 5.0
+	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
+	player.queue_spell_cooldown(duration, 2)
 
 func stop_spells():
 	$SpellFX.stop()

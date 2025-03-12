@@ -1,13 +1,20 @@
 [gd_scene load_steps=3 format=3 uid="uid://hwkhx5qrvn8v"]
 
-[ext_resource type="Texture2D" uid="uid://diyikeebog1im" path="res://art/player/spells/hero/hero_spell_1_icon.png" id="1_tvydd"]
+[ext_resource type="Texture2D" uid="uid://dj767ken7hpfj" path="res://art/player/spells/hero/spell_icon_1.png" id="2_8dow7"]
 [ext_resource type="Script" uid="uid://rmma7f4reg18" path="res://scripts/ui/cooldown_circle.gd" id="2_ffgkk"]
 
 [node name="CooldownCircle" type="TextureProgressBar"]
-offset_right = 819.0
-offset_bottom = 819.0
-scale = Vector2(0.05, 0.05)
-value = 60.0
+offset_right = 48.0
+offset_bottom = 48.0
+step = 0.0
+value = 100.0
 fill_mode = 4
-texture_progress = ExtResource("1_tvydd")
+texture_under = ExtResource("2_8dow7")
+texture_progress = ExtResource("2_8dow7")
+tint_under = Color(0.17, 0.17, 0.17, 1)
 script = ExtResource("2_ffgkk")
+
+[node name="Countdown" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Countdown" to="." method="_on_countdown_timeout"]

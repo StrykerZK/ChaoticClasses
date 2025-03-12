@@ -55,7 +55,7 @@ func attack(index: float):
 			$Weapon.play("attack_3")
 
 @rpc("any_peer","call_local")
-func spell_1(): # 50 dmg, 2 sec duration, 5 sec CD
+func spell_1(): # 50 dmg, 2 sec duration
 	player.in_spell_1 = true
 	player.dash_duration = 0.5
 	$SpellHitbox.damage = 50
@@ -69,13 +69,15 @@ func _on_spell_1_timer_timeout():
 	else:
 		player.spell_1_ready = true
 
-func start_spell_1_cooldown():
+func start_spell_1_cooldown(): # 5 sec CD
+	var duration = 5.0
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 5.0
+	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
+	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2(): # 20 dmg, 4 sec duration, 10 sec CD
+func spell_2(): # 20 dmg, 4 sec duration
 	player.in_spell_2 = true
 	$SpellHitbox.damage = 20
 	$SpellFX.show()
@@ -87,12 +89,10 @@ func spell_2(): # 20 dmg, 4 sec duration, 10 sec CD
 
 @rpc("any_peer","call_local")
 func spell_2_follow():
-	if player.player_id == StageManager.p1_id:
-		$SpellHitbox.global_position = $SpellHitbox.global_position.lerp(StageManager.p1_target,0.01)
-		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p1_target,0.01)
-	else:
-		$SpellHitbox.global_position = $SpellHitbox.global_position.lerp(StageManager.p2_target,0.01)
-		$SpellFX.global_position = $SpellFX.global_position.lerp(StageManager.p2_target,0.01)
+	$SpellHitbox.global_position = \
+	$SpellHitbox.global_position.lerp(StageManager.get_target(player.player_id),0.01)
+	$SpellFX.global_position = \
+	$SpellFX.global_position.lerp(StageManager.get_target(player.player_id),0.01)
 
 func _on_spell_2_timer_timeout():
 	if player.in_spell_2:
@@ -104,10 +104,12 @@ func _on_spell_2_timer_timeout():
 	else:
 		player.spell_2_ready = true
 
-func start_spell_2_cooldown():
+func start_spell_2_cooldown(): # 10 sec CD
 	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 6.0
+	var duration = 6.0
+	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
+	player.queue_spell_cooldown(duration, 2)
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time

@@ -109,10 +109,7 @@ func spawn_projectile(index: float):
 	if player.attack_index == 1.5 or player.attack_index == 2.5:
 		player.attack_index -= 0.5
 	
-	if player.player_id == StageManager.p1_id:
-		mouse_pos = StageManager.p1_target
-	else:
-		mouse_pos = StageManager.p2_target
+	mouse_pos = StageManager.get_target(player.player_id)
 	
 	var arrow = arrow_scene.instantiate()
 	main_node.add_child(arrow)
@@ -142,7 +139,7 @@ func use_attack_timer(time: float):
 	$AttackTimer.start()
 
 @rpc("any_peer","call_local")
-func spell_1(): # 30 dmg, 3 sec root, 6 sec cd
+func spell_1(): # 30 dmg, 3 sec root
 	player.in_spell_1 = true
 	player.dash_duration = 1.0
 	$Spell1Timer.wait_time = 1.2
@@ -159,13 +156,15 @@ func _on_spell_1_timer_timeout():
 	else:
 		player.spell_1_ready = true
 
-func start_spell_1_cooldown():
+func start_spell_1_cooldown(): # 5 sec cd
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 5
+	var duration = 5.0
+	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
+	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2(): # 25 dmg, 4 sec duration, 6 sec cd
+func spell_2(): # 25 dmg, 4 sec duration
 	player.in_spell_2 = true
 	$Spell2Timer.wait_time = 1
 	$Spell2Timer.start()
@@ -174,19 +173,18 @@ func _on_spell_2_timer_timeout() -> void:
 	if player.in_spell_2:
 		var spell_2_instance = spell_2_scene.instantiate()
 		spell_2_instance.player_id = player.player_id
-		if player.player_id == StageManager.p1_id:
-			spell_2_instance.position = StageManager.p1_target
-		else:
-			spell_2_instance.position = StageManager.p2_target
+		spell_2_instance.position = StageManager.get_target(player.player_id)
 		main_node.add_child(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true
 
-func start_spell_2_cooldown():
+func start_spell_2_cooldown(): # 6 sec cd
 	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 6
+	var duration = 6.0
+	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
+	player.queue_spell_cooldown(duration, 2)
 
 func stop_spells():
 	$Spell1Timer.stop()

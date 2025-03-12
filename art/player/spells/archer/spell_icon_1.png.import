@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://diyikeebog1im"
-path="res://.godot/imported/hero_spell_1_icon.png-11a700caac0cb4f7291b453912bc8874.ctex"
+uid="uid://c7x0eb8phlnvc"
+path="res://.godot/imported/spell_icon_1.png-d75acb009b257ac64f69601ddad1143f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/player/spells/hero/hero_spell_1_icon.png"
-dest_files=["res://.godot/imported/hero_spell_1_icon.png-11a700caac0cb4f7291b453912bc8874.ctex"]
+source_file="res://art/player/spells/archer/spell_icon_1.png"
+dest_files=["res://.godot/imported/spell_icon_1.png-d75acb009b257ac64f69601ddad1143f.ctex"]
 
 [params]
 

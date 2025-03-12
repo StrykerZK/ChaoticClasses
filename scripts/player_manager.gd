@@ -15,9 +15,3 @@ func create_players():
 				current_player.position = spawn.global_position
 		add_child(current_player)
 		index += 1
-
-#func spawn_players():
-#	var index = 1
-#	for spawn in get_tree().get_nodes_in_group("spawnpoints"):
-#		if spawn.name == str("Player"+str(index)+"Spawn"):
-			

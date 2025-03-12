@@ -70,24 +70,21 @@ func peer_disconnected(pid):
 				$Back.pressed.emit()
 	else: # If in Main Menu
 		if multiplayer.is_server():
-			if pid == StageManager.p1_id:
-				$PlayerPanel/PlayerList/Player1Label.text = \
-				$PlayerPanel/PlayerList/Player2Label.text
-			$PlayerPanel/PlayerList/Player2Label.text = ""
 			remove_player_information.rpc(pid)
 			if StageManager.player_count <= 1:
 				$Start.hide()
 
 func connected_to_server():
 	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id(), "base")
-	update_player_panel.rpc_id(1, $NameInput.text)
+	update_player_panel.rpc_id(1)
 
 func connection_failed():
 	pass
 
 func server_disconnected():
 	if get_tree().root.get_node("Main"):
-		pass
+		$/root/Main.queue_free()
+		get_tree().reload_current_scene()
 	else:
 		$Back.pressed.emit()
 
@@ -97,6 +94,7 @@ func remove_player_information(id):
 		StageManager.player_list.erase(id)
 	StageManager.player_count -= 1
 	StageManager.set_player_ids()
+	update_player_panel()
 
 @rpc("any_peer")
 func send_player_information(player_name, id, class_title):
@@ -121,26 +119,25 @@ func start_game():
 	get_tree().current_scene.hide()
 	get_tree().root.add_child(main_game)
 
-@rpc("any_peer", "call_local")
-func update_player_panel(player_name):
-	if $PlayerPanel/PlayerList/Player1Label.text.is_empty():
-		$PlayerPanel/PlayerList/Player1Label.text = player_name
-	else:
-		$PlayerPanel/PlayerList/Player2Label.text = player_name
-		if multiplayer.is_server():
-			$Start.show()
-	sync_info_panels.rpc()
-
-@rpc("any_peer","call_local")
-func sync_info_panels():
-	if StageManager.player_count == 0:
-		$PlayerPanel/PlayerList/Player1Label.text = ""
-		$PlayerPanel/PlayerList/Player2Label.text = ""
-	elif StageManager.player_count >= 1:
+@rpc("any_peer")
+func update_player_panel():
+	$PlayerPanel/PlayerList/Player1Label.text = ""
+	$PlayerPanel/PlayerList/Player2Label.text = ""
+	$PlayerPanel/PlayerList/Player3Label.text = ""
+	$PlayerPanel/PlayerList/Player4Label.text = ""
+	if StageManager.player_count >= 1:
 		$PlayerPanel/PlayerList/Player1Label.text = StageManager.get_player_name(StageManager.p1_id)
-		$PlayerPanel/PlayerList/Player2Label.text = ""
-		if StageManager.player_count == 2:
-			$PlayerPanel/PlayerList/Player2Label.text = StageManager.get_player_name(StageManager.p2_id)
+	if StageManager.player_count >= 2:
+		$PlayerPanel/PlayerList/Player2Label.text = StageManager.get_player_name(StageManager.p2_id)
+	if StageManager.player_count >= 3:
+		$PlayerPanel/PlayerList/Player3Label.text = StageManager.get_player_name(StageManager.p3_id)
+	if StageManager.player_count >= 4:
+		$PlayerPanel/PlayerList/Player4Label.text = StageManager.get_player_name(StageManager.p4_id)
+	
+	if multiplayer.is_server():
+		update_player_panel.rpc()
+		if StageManager.player_count >= 2:
+			$Start.show()
 
 #func exit_game(pid):
 #	multiplayer.peer_disconnected.connect(del_player)
@@ -183,7 +180,7 @@ func _on_host_pressed() -> void:
 	$IPInput.hide()
 	$PortInput.hide()
 	$PlayerPanel.show()
-	update_player_panel($NameInput.text)
+	update_player_panel()
 
 func _on_ip_input_text_changed(new_text: String) -> void:
 	pass

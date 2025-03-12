@@ -1,0 +1,117 @@
+[gd_scene load_steps=12 format=3 uid="uid://cr2uveu77qxg6"]
+
+[ext_resource type="Script" uid="uid://cc0hwn6dnylnx" path="res://scripts/ui/peer_info.gd" id="1_0klc6"]
+[ext_resource type="Texture2D" uid="uid://dnxkkg4vjs8mh" path="res://art/ui/other_player_info.png" id="1_tl451"]
+[ext_resource type="Texture2D" uid="uid://3polm4k7cxkp" path="res://art/player/sprites/base_sprite.png" id="2_ek2db"]
+[ext_resource type="Theme" uid="uid://kksj5q4w4n5r" path="res://art/ui/player_info_label.tres" id="3_e513g"]
+[ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="4_0klc6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tl451"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ek2db"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e513g"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0klc6"]
+bg_color = Color(0.929412, 0.101961, 0.137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10mhc"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvw7w"]
+bg_color = Color(0.928216, 0.180963, 0, 1)
+
+[node name="PeerInfo" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_0klc6")
+
+[node name="FalloffBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 57.0
+offset_right = 206.0
+offset_bottom = 74.0
+theme_override_styles/background = SubResource("StyleBoxFlat_tl451")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ek2db")
+max_value = 200.0
+value = 200.0
+fill_mode = 1
+show_percentage = false
+
+[node name="HPBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 57.0
+offset_right = 204.0
+offset_bottom = 74.0
+theme_override_styles/background = SubResource("StyleBoxFlat_e513g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0klc6")
+max_value = 200.0
+value = 200.0
+fill_mode = 1
+show_percentage = false
+
+[node name="ScoreBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 57.0
+offset_right = 18.0
+offset_bottom = 74.0
+theme_override_styles/background = SubResource("StyleBoxFlat_10mhc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dvw7w")
+max_value = 3.0
+step = 1.0
+fill_mode = 3
+show_percentage = false
+
+[node name="Overlay" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 264.0
+offset_bottom = 80.0
+texture = ExtResource("1_tl451")
+
+[node name="PlayerSprite" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 10.0
+offset_right = 254.0
+offset_bottom = 74.0
+texture = ExtResource("2_ek2db")
+flip_h = true
+
+[node name="PlayerName" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 184.0
+offset_bottom = 32.0
+theme = ExtResource("3_e513g")
+text = "Stryker"
+horizontal_alignment = 1
+
+[node name="PlayerClass" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 37.0
+offset_right = 184.0
+offset_bottom = 44.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("4_0klc6")
+theme_override_font_sizes/font_size = 8
+text = "Gladiator"
+horizontal_alignment = 1
+
+[node name="FalloffTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="value_changed" from="HPBar" to="." method="start_falloff"]
+[connection signal="timeout" from="FalloffTimer" to="." method="_on_falloff_timer_timeout"]

@@ -302,7 +302,7 @@ animation = &"empty"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_3xk4s")
+&"": SubResource("AnimationLibrary_3xk4s")
 }
 
 [connection signal="value_changed" from="HPBar" to="." method="start_falloff"]

@@ -7,6 +7,7 @@ var attack_1_length: float = 0.3
 var attack_2_length: float = 0.4
 @export var dash_speed: float = 0
 var last_dash_speed: float = 0
+@export var spell_direction: int
 var combo_timer = 1.0
 var type = "melee"
 
@@ -47,11 +48,26 @@ func use_attack_timer(time: float):
 
 @rpc("any_peer","call_local")
 func spell_1():
-	pass
+	player.in_spell_1 = true
+	var index = randi_range(0,2)
+	$TextFX.frame = index
+	$SpellTimer.start()
 
 @rpc("any_peer","call_local")
 func spell_2():
-	pass
+	player.in_spell_2 = true
+	var index = randi_range(1,20)
+	if index == 1:
+		$TextFX.frame = 4
+	else:
+		$TextFX.frame = 3
+	$SpellTimer.start()
+
+func _on_spell_timer_timeout():
+	player.in_spell_1 = false
+	player.spell_1_ready = true
+	player.in_spell_2 = false
+	player.spell_2_ready = true
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("slap_1_right").length

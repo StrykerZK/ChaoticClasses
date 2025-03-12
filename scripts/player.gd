@@ -62,7 +62,7 @@ var is_rooted: bool = false
 func _enter_tree() -> void:
 	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
 	#dead.connect(Callable(StageManager,"game_over"))
-	dead.connect(Callable($/root/Main/GameManager,"game_over"))
+	dead.connect(Callable($/root/Main/GameManager,"player_dead"))
 	#dead.connect(Callable($/root/Main/MainUI,"game_over"))
 	#dead.connect(Callable($/root/Main,"game_over"))
 	
@@ -91,7 +91,7 @@ func _ready() -> void:
 	dodge_speed = speed * dodge_speed_mult
 	
 	# Face players correct way
-	if player_id == 1:
+	if player_id == StageManager.p1_id or player_id == StageManager.p3_id:
 		anim_tree["parameters/idle/blend_position"] = Vector2(1,0)
 	else:
 		anim_tree["parameters/idle/blend_position"] = Vector2(-1,0)
@@ -470,21 +470,22 @@ func die():
 	
 	# Slowdown effect and zoom
 	current_class_node.get_child(0).modulate.s = 50
-	for i in players:
-		if i.player_id != player_id:
-			if !is_multiplayer_authority():
-				i.change_camera_focus(global_position)
-		i.zoom_camera(2.5)
-	Engine.time_scale = 0.1
-	use_utility_timer(0.15)
-	await $UtilityTimer.timeout
-	Engine.time_scale = 1
-	for i in players:
-		if i.player_id != player_id:
-			if !is_multiplayer_authority():
-				i.zoom_camera(1.0)
-		else:
-			i.zoom_camera(1.5)
+	if players.size() == 2:
+		for i in players:
+			if i.player_id != player_id:
+				if !is_multiplayer_authority():
+					i.change_camera_focus(global_position)
+			i.zoom_camera(2.5)
+		Engine.time_scale = 0.1
+		use_utility_timer(0.15)
+		await $UtilityTimer.timeout
+		Engine.time_scale = 1
+		for i in players:
+			if i.player_id != player_id:
+				if !is_multiplayer_authority():
+					i.zoom_camera(1.0)
+			else:
+				i.zoom_camera(1.5)
 	
 	# Yeet player across map
 	for i in players:
@@ -600,3 +601,7 @@ func change_camera_focus(target: Vector2):
 func reset_camera_focus():
 	if is_multiplayer_authority():
 		change_camera_focus(global_position)
+
+func queue_spell_cooldown(duration: float, number: int):
+	if is_multiplayer_authority():
+		$/root/Main/MainUI/MainPlayerInfo.queue_spell_cooldown(duration, number)

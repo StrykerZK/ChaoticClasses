@@ -72,7 +72,7 @@ func use_attack_timer(time: float):
 		player.can_attack = true
 
 @rpc("any_peer","call_local")
-func spell_1(): # 25 dmg, 1.3 sec duration, 5 sec cd
+func spell_1(): # 25 dmg, 1.3 sec duration
 	player.in_spell_1 = true
 	$SpellFX.show()
 	$SpellFX.play("spell1")
@@ -90,13 +90,15 @@ func _on_spell_1_timer_timeout() -> void:
 	else:
 		player.spell_1_ready = true
 
-func start_spell_1_cooldown():
+func start_spell_1_cooldown(): # 5 sec cd
 	player.in_spell_1 = false
-	$Spell1Timer.wait_time = 5
+	var duration = 5.0
+	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
+	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2(): # 80 dmg, 2.8 sec duration, 5 sec cd
+func spell_2(): # 80 dmg, 2.8 sec duration
 	player.in_spell_2 = true
 	player.dash_duration = 1.2
 	$Hitbox.damage = 80
@@ -109,10 +111,12 @@ func _on_spell_2_timer_timeout():
 	else:
 		player.spell_2_ready = true
 
-func start_spell_2_cooldown():
+func start_spell_2_cooldown(): # 5 sec cd
 	player.in_spell_2 = false
-	$Spell2Timer.wait_time = 2.2
+	var duration = 5.0
+	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
+	player.queue_spell_cooldown(duration, 2)
 
 func stop_spells():
 	$SpellFX.stop()

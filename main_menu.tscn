@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dj1u1l2gmtbga"]
+[gd_scene load_steps=17 format=3 uid="uid://dj1u1l2gmtbga"]
 
 [ext_resource type="Script" uid="uid://c7lr53wegp3rk" path="res://scripts/main_menu.gd" id="1_uioiv"]
 [ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://main.tscn" id="2_eagnm"]
@@ -11,6 +11,7 @@
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
 [ext_resource type="Script" uid="uid://c725oesf8geo1" path="res://scripts/multiplayer_manager.gd" id="8_vv6tx"]
 [ext_resource type="Theme" uid="uid://blm8hjxu2exss" path="res://art/ui/line_edit_theme.tres" id="9_58hxh"]
+[ext_resource type="Theme" uid="uid://kksj5q4w4n5r" path="res://art/ui/player_info_label.tres" id="11_j5v2v"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bdo5l"]
 texture = ExtResource("3_uwo5s")
@@ -301,33 +302,54 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_l44iw")
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerList" type="VBoxContainer" parent="PlayMenu/PlayerPanel"]
+[node name="PlayerList" type="GridContainer" parent="PlayMenu/PlayerPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -146.5
-offset_top = -19.5
-offset_right = 148.5
-offset_bottom = 19.5
+offset_left = -175.0
+offset_top = -27.0
+offset_right = 175.0
+offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 11
-alignment = 1
+theme_override_constants/h_separation = 128
+theme_override_constants/v_separation = 24
+columns = 2
 
 [node name="Player1Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
 layout_mode = 2
+theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
+vertical_alignment = 1
 
 [node name="Player2Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
 layout_mode = 2
+theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
+vertical_alignment = 1
+
+[node name="Player3Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+layout_mode = 2
+theme = ExtResource("11_j5v2v")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_kxojv")
+theme_override_font_sizes/font_size = 16
+vertical_alignment = 1
+
+[node name="Player4Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+layout_mode = 2
+theme = ExtResource("11_j5v2v")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_kxojv")
+theme_override_font_sizes/font_size = 16
+vertical_alignment = 1
 
 [connection signal="pressed" from="TitleMenu/Play" to="." method="start_game"]
 [connection signal="pressed" from="TitleMenu/Settings" to="." method="_on_settings_pressed"]
