@@ -187,10 +187,12 @@ func start_spell_2_cooldown(): # 6 sec cd
 	player.queue_spell_cooldown(duration, 2)
 
 func stop_spells():
-	$Spell1Timer.stop()
-	$Spell2Timer.stop()
-	if player.in_spell_1: start_spell_1_cooldown()
-	if player.in_spell_2: start_spell_2_cooldown()
+	if player.in_spell_1:
+		$Spell1Timer.stop()
+		start_spell_1_cooldown()
+	if player.in_spell_2:
+		$Spell2Timer.stop()
+		start_spell_2_cooldown()
 
 func get_animation_lengths():
 	release_length = anim_player.get_animation("release_right").length

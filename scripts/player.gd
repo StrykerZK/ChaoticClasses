@@ -462,8 +462,8 @@ func take_damage(incoming_dmg: float):
 func die():
 	is_dead = true
 	is_transforming = false
-	reset_systems()
 	disable_collisions()
+	reset_systems()
 	
 	# Get all player nodes
 	var players = get_tree().get_nodes_in_group("players")

@@ -138,6 +138,7 @@ func player_dead(id):
 	if players_alive == 1:
 		$SwapTimer.stop()
 		$TransformTimer.stop()
+		await get_tree().create_timer(0.1).timeout
 		var winner_id = player_manager.get_child(1).name.to_int()
 		StageManager.update_game_state.rpc("Match Over")
 		StageManager.update_scores.rpc(winner_id)
@@ -148,7 +149,7 @@ func player_dead(id):
 			clear_player.rpc(winner_id)
 			players_alive -= 1
 			# await player exited code
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.01).timeout
 			new_game.rpc()
 		else:
 			game_end.rpc()

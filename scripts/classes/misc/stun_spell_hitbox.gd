@@ -2,7 +2,7 @@ extends Area2D
 
 var player_id = 1
 var damage: float = 0
-var stun_duration: float = 3.0
+var stun_duration: float = 1
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.name == "Hurtbox":

@@ -89,7 +89,7 @@ func spell_1(): # 20 dmg, 1.5 sec stun
 	player.dash_duration = 0.3
 	$SpellHitbox.damage = 20
 	$SpellHitbox.player_id = player.player_id
-	$SpellHitbox.stun_duration = 1.5
+	$SpellHitbox.stun_duration = 1.0
 	$SpellFX.show()
 	$SpellFX.play("spell_1")
 	await $SpellFX.animation_finished
@@ -144,10 +144,12 @@ func stop_spells():
 	$Weapon.hide()
 	$SpellFX.stop()
 	$SpellFX.hide()
-	$Spell1Timer.stop()
-	$Spell2Timer.stop()
-	if player.in_spell_1: start_spell_1_cooldown()
-	if player.in_spell_2: start_spell_2_cooldown()
+	if player.in_spell_1:
+		$Spell1Timer.stop()
+		start_spell_1_cooldown()
+	if player.in_spell_2:
+		$Spell2Timer.stop()
+		start_spell_2_cooldown()
 
 func get_animation_lengths():
 	attack_1_length = anim_player.get_animation("attack_right_1").length

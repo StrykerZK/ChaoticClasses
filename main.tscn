@@ -336,7 +336,7 @@ position = Vector2(1520, 730)
 process_mode = 3
 stream = ExtResource("9_kek77")
 volume_db = -15.0
-playback_type = 1
+autoplay = true
 parameters/looping = true
 
 [editable path="World/Dummy2"]

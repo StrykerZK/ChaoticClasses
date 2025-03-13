@@ -155,9 +155,11 @@ func check_property_changes():
 func stop_spells():
 	$SpellFX.stop()
 	$SpellFX.hide()
-	$Spell1Timer.stop()
-	$Spell2Timer.stop()
-	if player.in_spell_1: start_spell_1_cooldown()
-	if player.in_spell_2: start_spell_2_cooldown()
+	if player.in_spell_1:
+		$Spell1Timer.stop()
+		start_spell_1_cooldown()
+	if player.in_spell_2:
+		$Spell2Timer.stop()
+		start_spell_2_cooldown()
 	$SpellHitbox.position = Vector2(0,0)
 	$SpellFX.position = Vector2(0,0)
