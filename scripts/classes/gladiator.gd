@@ -51,7 +51,6 @@ func attack(index: float):
 			$Weapon.play("attack_2")
 		3.0:
 			player.dash_duration = attack_3_length - 0.6
-			player.damage = player.base_damage * 2
 			$Hitbox.damage = player.damage
 			use_attack_timer(attack_3_length)
 			$Weapon.play("attack_3")
@@ -96,7 +95,7 @@ func spell_1(): # 20 dmg, 1.5 sec stun
 	$SpellFX.hide()
 	$Weapon.show()
 	$Weapon.play("spell_1")
-	$Hitbox.damage = 20
+	$Hitbox.damage = player.damage
 	$Spell1Timer.wait_time = 1.5
 	$Spell1Timer.start()
 
@@ -115,7 +114,7 @@ func start_spell_1_cooldown(): # 5 sec cd
 	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2(): # 50 dmg, 0.3 sec duration, 5 sec cd
+func spell_2(): # 40 dmg, 0.3 sec duration, 5 sec cd
 	player.in_spell_2 = true
 	$Spell2Timer.wait_time = 0.3
 	$Spell2Timer.start()
@@ -124,10 +123,10 @@ func _on_spell_2_timer_timeout():
 	if player.in_spell_2:
 		var spell_2_instance = spell_2_scene.instantiate()
 		spell_2_instance.player_id = player.player_id
-		spell_2_instance.damage = 50
+		spell_2_instance.damage = 40
 		spell_2_instance.position = global_position
 		spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.get_target(player.player_id))
-		main_node.add_child(spell_2_instance)
+		main_node.spawn(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true

@@ -112,7 +112,7 @@ func spawn_projectile(index: float):
 	mouse_pos = StageManager.get_target(player.player_id)
 	
 	var arrow = arrow_scene.instantiate()
-	main_node.add_child(arrow)
+	main_node.spawn(arrow)
 	arrow.position = $Marker2D.global_position
 	arrow.direction = arrow.position.direction_to(mouse_pos)
 	arrow.rotation = arrow.direction.angle()
@@ -148,7 +148,7 @@ func spell_1(): # 30 dmg, 3 sec root
 	spell_1_instance.position = player.global_position
 	spell_1_instance.player_id = player.player_id
 	await get_tree().create_timer(0.6).timeout
-	main_node.add_child(spell_1_instance)
+	main_node.spawn(spell_1_instance)
 
 func _on_spell_1_timer_timeout():
 	if player.in_spell_1:
@@ -174,7 +174,7 @@ func _on_spell_2_timer_timeout() -> void:
 		var spell_2_instance = spell_2_scene.instantiate()
 		spell_2_instance.player_id = player.player_id
 		spell_2_instance.position = StageManager.get_target(player.player_id)
-		main_node.add_child(spell_2_instance)
+		main_node.spawn(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true

@@ -103,3 +103,7 @@ func _on_archer_pressed() -> void:
 func _on_gladiator_pressed() -> void:
 	Callable($/root/Main/GameManager,"dev_class_change").call("gladiator")
 	$DevButtons/Gladiator.release_focus()
+
+func _on_necro_pressed() -> void:
+	Callable($/root/Main/GameManager,"dev_class_change").call("necromancer")
+	$DevButtons/Necro.release_focus()

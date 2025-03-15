@@ -555,7 +555,8 @@ func initialize_class_children():
 	anim_tree.active = true
 	anim_player = get_node(current_class + "/AnimationPlayer")
 	hitbox = get_node(current_class + "/Hitbox")
-	hitbox.player_id = player_id
+	if hitbox:
+		hitbox.player_id = player_id
 	current_type = current_class_node.type
 
 func use_utility_timer(duration: float):

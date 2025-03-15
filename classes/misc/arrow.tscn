@@ -291,5 +291,5 @@ debug_color = Color(0.999496, 0.0199766, 1.15514e-06, 0.42)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_yoix7")
+&"": SubResource("AnimationLibrary_yoix7")
 }

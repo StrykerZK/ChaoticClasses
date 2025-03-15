@@ -16,10 +16,12 @@ var player_count: int = 0
 var players_alive: int = 0
 
 var main_ui: CanvasLayer
+var main_node: Node
 
 func _ready():
 	player_manager = get_node("/root/Main/PlayerManager")
 	main_ui = get_node("/root/Main/MainUI")
+	main_node = get_parent()
 	player_count = StageManager.player_count
 	
 func _input(event: InputEvent) -> void:
@@ -132,7 +134,7 @@ func start_game():
 func player_dead(id):
 	players_alive -= 1
 	main_ui.player_dead.rpc(id)
-	get_parent().player_dead.rpc(id)
+	main_node.player_dead.rpc(id)
 	clear_player.rpc(id)
 	
 	if players_alive == 1:
@@ -148,6 +150,7 @@ func player_dead(id):
 		if StageManager.game_state != "Game Over":
 			clear_player.rpc(winner_id)
 			players_alive -= 1
+			main_node.clear_summons.rpc()
 			# await player exited code
 			await get_tree().create_timer(0.01).timeout
 			new_game.rpc()

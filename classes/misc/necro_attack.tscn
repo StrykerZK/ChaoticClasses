@@ -1,0 +1,109 @@
+[gd_scene load_steps=15 format=3 uid="uid://ck2npnf0g0jd7"]
+
+[ext_resource type="Texture2D" uid="uid://quq86bbwi0ox" path="res://art/player/spells/necromancer/necromancer_attack_sheet.png" id="1_8t67u"]
+[ext_resource type="Script" uid="uid://3qafxt4bnvix" path="res://scripts/classes/misc/necro_attack.gd" id="1_h6hkr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h6hkr"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yx7jq"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fktvg"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nax7g"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_heoax"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7f8oc"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p4b84"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sovg"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmn3q"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vx4a7"]
+atlas = ExtResource("1_8t67u")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_b732e"]
+animations = [{
+"frames": [{
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_h6hkr")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_yx7jq")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_fktvg")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_nax7g")
+}],
+"loop": false,
+"name": &"end",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_heoax")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_7f8oc")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_p4b84")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_7sovg")
+}, {
+"duration": 0.1,
+"texture": SubResource("AtlasTexture_rmn3q")
+}, {
+"duration": 0.05,
+"texture": SubResource("AtlasTexture_vx4a7")
+}],
+"loop": false,
+"name": &"start",
+"speed": 1.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2s4c0"]
+radius = 18.0
+
+[node name="necro_attack" type="Area2D"]
+collision_layer = 8
+collision_mask = 16
+monitoring = false
+script = ExtResource("1_h6hkr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_b732e")
+animation = &"start"
+frame = 5
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_2s4c0")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -1,6 +1,6 @@
 extends Projectile
 
-@export var fireball_speed: float = 300
+@export var fireball_speed: float = 500
 
 var is_spell_1: bool = false
 var center_point: Vector2 = Vector2.ZERO
@@ -13,8 +13,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_spell_1:
-		direction = direction.rotated(5.0 * delta)
-		position = center_point + direction * 70.0
+		direction = direction.rotated(6.2 * delta)
+		position = center_point + direction * 60.0
 		rotation = direction.angle() + PI/2
 	else:
 		position += velocity * delta

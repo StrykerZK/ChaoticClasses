@@ -1,1 +1,1 @@
-{"armor":[0,2,2,2,0,0],"damage":[5,23,25,23,25,15],"dodge count":[1,1,2,1,1,1],"dodge duration":[0.6,0.6,0.4,0.6,0.6,0.6],"dodge mult":[4,4,4,4,4,5],"name":["base","hero","demon","gladiator","pyromancer","archer"],"speed":[250,250,250,270,300,300]}
+{"armor":[0,2,2,2,0,0,0],"damage":[5,23,25,23,25,25,15],"dodge count":[1,1,2,1,1,1,1],"dodge duration":[0.6,0.6,0.4,0.6,0.6,0.6,0.6],"dodge mult":[4,4,4,4,4,6,5],"name":["base","hero","demon","gladiator","pyromancer","necromancer","archer"],"speed":[250,250,250,270,300,300,300]}

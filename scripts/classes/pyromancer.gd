@@ -66,7 +66,7 @@ func spawn_projectile(index: float):
 	await get_tree().create_timer(spawn_time).timeout
 	if index != 3.0:
 		var fireball = fireball_scene.instantiate()
-		main_node.add_child(fireball)
+		main_node.spawn(fireball)
 		fireball.position = $Marker2D.global_position
 		fireball.direction = fireball.position.direction_to(mouse_pos)
 		fireball.rotation = fireball.direction.angle()
@@ -79,7 +79,7 @@ func spawn_projectile(index: float):
 		var angle_step = 60 #60 / 4
 		for i in range(6):
 			var fireball = fireball_scene.instantiate()
-			main_node.add_child(fireball)
+			main_node.spawn(fireball)
 			
 			var angle_offset  = deg_to_rad(start_angle + i * angle_step)
 			
@@ -94,7 +94,7 @@ func spawn_projectile(index: float):
 			if fireball:
 				fireball.start_follow_timer()
 			
-			await get_tree().create_timer(0.01).timeout
+			await get_tree().create_timer(0.002).timeout
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -126,7 +126,7 @@ func spell_1(): # 25 dmg, 3 sec duration
 			fireball.center_point = position
 			fireball.damage = player.damage
 			fireball.player_id = player.player_id
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.08).timeout
 	start_spell_1_cooldown()
 
 func _on_spell_1_timer_timeout() -> void:
@@ -176,7 +176,7 @@ func stop_spells():
 	if player.in_spell_2:
 		$Spell2Timer.stop()
 		start_spell_2_cooldown()
-	$Hitbox.position = Vector2(0,0)
+	$SpellHitbox.position = Vector2(0,0)
 	$SpellFX.position = Vector2(0,0)
 
 func get_animation_lengths():

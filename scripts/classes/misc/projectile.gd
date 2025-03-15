@@ -10,6 +10,9 @@ var mouse_pos: Vector2 = Vector2.ZERO
 var player_id: int = 1
 var damage: float
 
+func _ready() -> void:
+	area_entered.connect(Callable(self,"_on_area_entered"))
+	body_entered.connect(Callable(self,"_on_body_entered"))
 
 func _process(delta: float) -> void:
 	position += velocity * delta
