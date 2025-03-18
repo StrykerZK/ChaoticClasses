@@ -98,6 +98,7 @@ func play_ko_effect(loser):
 	await effects.animation_finished
 	effects.queue_free()
 
+@rpc("any_peer","call_local")
 func spawn(new_node: Node):
 	$Summons.add_child(new_node)
 

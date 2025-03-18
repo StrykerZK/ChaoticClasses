@@ -2,10 +2,12 @@ extends Summon
 
 func _ready() -> void:
 	health = 60.0
+	$HPBar.max_value = health
 	damage = 40.0
 	$Hitbox.damage = damage
 	attack_range = 40.0
 	speed = 0.0
+	$Name.text = name
 	$AnimatedSprite2D.play("spawn")
 	await $AnimatedSprite2D.animation_finished
 	is_spawning = false

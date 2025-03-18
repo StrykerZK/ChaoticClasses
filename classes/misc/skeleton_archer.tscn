@@ -1,8 +1,10 @@
-[gd_scene load_steps=41 format=3 uid="uid://b2ocw1dy1c0ky"]
+[gd_scene load_steps=43 format=3 uid="uid://b2ocw1dy1c0ky"]
 
 [ext_resource type="Script" uid="uid://dy3dluolxah6l" path="res://scripts/classes/misc/skeleton_archer.gd" id="1_fjdqr"]
 [ext_resource type="Texture2D" uid="uid://dq0fhfftfqcf1" path="res://art/player/spells/necromancer/necromancer_summons.png" id="1_ujrvv"]
 [ext_resource type="PackedScene" uid="uid://c5xbmq4nkn12w" path="res://classes/misc/skeleton_arrow.tscn" id="2_1wyjc"]
+[ext_resource type="Theme" uid="uid://ck328erssbanh" path="res://art/ui/standard_hp_bar.tres" id="4_s6px5"]
+[ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="5_bw2cg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjdqr"]
 atlas = ExtResource("1_ujrvv")
@@ -310,6 +312,26 @@ autostart = true
 avoidance_enabled = true
 radius = 12.0
 max_speed = 150.0
+
+[node name="HPBar" type="ProgressBar" parent="."]
+offset_left = -14.0
+offset_top = 21.0
+offset_right = 14.0
+offset_bottom = 25.0
+theme = ExtResource("4_s6px5")
+show_percentage = false
+
+[node name="Name" type="Label" parent="."]
+offset_left = -24.0
+offset_top = -19.0
+offset_right = 26.0
+offset_bottom = -12.0
+pivot_offset = Vector2(25, 7)
+theme_override_fonts/font = ExtResource("5_bw2cg")
+theme_override_font_sizes/font_size = 8
+text = "Jeff"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="LifeTimer" to="." method="die"]

@@ -5,9 +5,11 @@ var arrow_speed: float = 500.0
 
 func _ready() -> void:
 	health = 40.0
+	$HPBar.max_value = health
 	damage = 30.0
 	attack_range = 250.0
 	speed = 0.0
+	$Name.text = name
 	$AnimatedSprite2D.play("spawn")
 	await $AnimatedSprite2D.animation_finished
 	is_spawning = false
@@ -28,7 +30,8 @@ func attack():
 	is_attacking = true
 	$AnimatedSprite2D.play("attack")
 	await get_tree().create_timer(0.8).timeout
-	spawn_projectile()
+	if !is_dead:
+		spawn_projectile()
 	await $AnimatedSprite2D.animation_finished
 	is_attacking = false
 	$AttackTimer.start()
@@ -39,7 +42,8 @@ func spawn_projectile():
 	arrow.player_id = player_id
 	arrow.speed = arrow_speed
 	arrow.position = global_position
-	arrow.direction = arrow.position.direction_to(nearest_player.global_position)
+	if is_instance_valid(nearest_player):
+		arrow.direction = arrow.position.direction_to(nearest_player.global_position)
 	arrow.rotation = arrow.direction.angle()
 	arrow.velocity = arrow.direction * arrow.speed
 	$/root/Main.spawn(arrow)

@@ -13,6 +13,7 @@ var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var combo_timer = 1.5
 var base_speed = 300
+var skull_names = ["Fred","Jeff","Bob","Max","Kevin","Skully","Edgar","Bonesy","Jim","Greg","Johnny"]
 var type = "ranged"
 
 func _ready() -> void:
@@ -69,6 +70,9 @@ func spell_1():
 	player.in_spell_1 = true
 	player.can_dodge = false
 	
+	var temp_array = skull_names
+	var index = 0
+	
 	var summon_offset: float = 40.0
 	
 	var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset)
@@ -87,24 +91,36 @@ func spell_1():
 		var top_left_summon = spell_1_scene.instantiate()
 		top_left_summon.position = top_left_pos
 		top_left_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		top_left_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(top_left_summon)
 	
 	if top_right_pos != Vector2.INF:
 		var top_right_summon = spell_1_scene.instantiate()
 		top_right_summon.position = top_right_pos
 		top_right_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		top_right_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(top_right_summon)
 	
 	if bottom_left_pos != Vector2.INF:
 		var bottom_left_summon = spell_1_scene.instantiate()
 		bottom_left_summon.position = bottom_left_pos
 		bottom_left_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		bottom_left_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(bottom_left_summon)
 	
 	if bottom_right_pos != Vector2.INF:
 		var bottom_right_summon = spell_1_scene.instantiate()
 		bottom_right_summon.position = bottom_right_pos
 		bottom_right_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		bottom_right_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(bottom_right_summon)
 	
 	await get_tree().create_timer(1.0).timeout
@@ -126,6 +142,9 @@ func spell_2():
 	player.in_spell_2 = true
 	player.can_dodge = false
 	
+	var temp_array = skull_names
+	var index = 0
+	
 	var summon_offset: float = 40.0
 	
 	var top_pos = global_position + Vector2(0, -summon_offset)
@@ -142,18 +161,27 @@ func spell_2():
 		var top_summon = spell_2_scene.instantiate()
 		top_summon.position = top_pos
 		top_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		top_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(top_summon)
 	
 	if bottom_left_pos != Vector2.INF:
 		var bottom_left_summon = spell_2_scene.instantiate()
 		bottom_left_summon.position = bottom_left_pos
 		bottom_left_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		bottom_left_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(bottom_left_summon)
 	
 	if bottom_right_pos != Vector2.INF:
 		var bottom_right_summon = spell_2_scene.instantiate()
 		bottom_right_summon.position = bottom_right_pos
 		bottom_right_summon.player_id = player.player_id
+		index = randi_range(0,temp_array.size() - 1)
+		bottom_right_summon.name = temp_array[index]
+		temp_array.remove_at(index)
 		main_node.spawn(bottom_right_summon)
 	
 	await get_tree().create_timer(1.0).timeout

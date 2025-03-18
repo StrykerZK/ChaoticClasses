@@ -15,18 +15,21 @@ var is_spawning = true
 var is_dead = false
 var attack_timer: Timer = null
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
-var navigation_path: PackedVector2Array = PackedVector2Array()
+@onready var hp_bar: ProgressBar = $HPBar
+
 
 func _ready():
 	pass
 
 func _physics_process(delta: float):
+	hp_bar.value = health
+	
 	nearest_player = get_nearest_player()
 	
-	if nearest_player:
+	if nearest_player and !is_dead and !is_spawning:
 		var distance_to_player = position.distance_to(nearest_player.global_position)
 		
-		if distance_to_player <= attack_range and can_attack and !is_dead:
+		if distance_to_player <= attack_range and can_attack:
 			attack()
 		else:
 			if !is_attacking and !is_dead:
