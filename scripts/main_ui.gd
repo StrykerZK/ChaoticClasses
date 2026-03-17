@@ -81,29 +81,29 @@ func toggle_pause():
 		$PauseMenu.hide()
 
 func _on_base_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("base")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("base")
 	$DevButtons/Base.release_focus()
 
 func _on_hero_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("hero")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("hero")
 	$DevButtons/Hero.release_focus()
 
 func _on_demon_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("demon")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("demon")
 	$DevButtons/Demon.release_focus()
 
 func _on_pyro_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("pyromancer")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("pyromancer")
 	$DevButtons/Pyro.release_focus()
 
 func _on_archer_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("archer")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("archer")
 	$DevButtons/Archer.release_focus()
 
 func _on_gladiator_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("gladiator")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("gladiator")
 	$DevButtons/Gladiator.release_focus()
 
 func _on_necro_pressed() -> void:
-	Callable($/root/Main/GameManager,"dev_class_change").call("necromancer")
+	Callable($/root/Main/Game/GameManager,"dev_class_change").call("necromancer")
 	$DevButtons/Necro.release_focus()

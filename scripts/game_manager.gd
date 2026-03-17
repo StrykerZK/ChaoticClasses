@@ -16,12 +16,12 @@ var player_count: int = 0
 var players_alive: int = 0
 
 var main_ui: CanvasLayer
-var main_node: Node
+var game_node: Node
 
 func _ready():
-	player_manager = get_node("/root/Main/PlayerManager")
-	main_ui = get_node("/root/Main/MainUI")
-	main_node = get_parent()
+	player_manager = get_node("/root/Main/Game/PlayerManager")
+	main_ui = get_node("/root/Main/Game/MainUI")
+	game_node = get_parent()
 	player_count = StageManager.player_count
 	
 func _input(event: InputEvent) -> void:
@@ -37,9 +37,9 @@ func _process(delta: float) -> void:
 
 func _on_players_connected():
 	players_alive += 1
-	if players_alive == StageManager.player_list.size():
+	if players_alive == player_count:
 		assign_players.rpc()
-		$/root/Main/MainUI.assign_players.rpc()
+		$/root/Main/Game/MainUI.assign_players.rpc()
 
 @rpc("any_peer","call_local")
 func assign_players():
@@ -71,13 +71,15 @@ func class_change():
 	player_1.class_change.rpc(class_title_1)
 	player_2.class_change.rpc(class_title_2)
 	
-	# For 3 and 4 players
+	# For 3 players
 	if player_count >= 3:
 		var class_title_3 = ClassManager.get_random_class(player_3.player_id)
 		while class_title_3 == class_title_1 and class_title_3 == class_title_2:
 			class_title_3 = ClassManager.get_random_class(player_3.player_id)
 		update_player_class.rpc(player_3.player_id, class_title_3)
 		player_3.class_change.rpc(class_title_3)
+	
+	# For 4 players
 	if player_count >= 4:
 		var class_title_4 = ClassManager.get_random_class(player_4.player_id)
 		while class_title_4 == class_title_1 and class_title_4 == class_title_2:
@@ -134,7 +136,7 @@ func start_game():
 func player_dead(id):
 	players_alive -= 1
 	main_ui.player_dead.rpc(id)
-	main_node.player_dead.rpc(id)
+	game_node.player_dead.rpc(id)
 	clear_player.rpc(id)
 	
 	if players_alive == 1:
@@ -150,7 +152,7 @@ func player_dead(id):
 		if StageManager.game_state != "Game Over":
 			clear_player.rpc(winner_id)
 			players_alive -= 1
-			main_node.clear_summons.rpc()
+			game_node.clear_summons.rpc()
 			# await player exited code
 			await get_tree().create_timer(0.01).timeout
 			new_game.rpc()
@@ -159,11 +161,12 @@ func player_dead(id):
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_player(id):
-	match id:
-		StageManager.p1_id: player_1.queue_free()
-		StageManager.p2_id: player_2.queue_free()
-		StageManager.p3_id: player_3.queue_free()
-		StageManager.p4_id: player_4.queue_free()
+	var number = StageManager.get_player_number(id)
+	match number:
+		1: player_1.queue_free()
+		2: player_2.queue_free()
+		3: player_3.queue_free()
+		4: player_4.queue_free()
 
 @rpc("any_peer","call_local","reliable")
 func new_game():
@@ -190,20 +193,22 @@ func _on_transform_timer_timeout() -> void:
 
 func dev_class_change(class_title: String):
 	var id = multiplayer.get_unique_id()
-	if id == StageManager.p1_id:
-		update_player_class.rpc(player_1.player_id, class_title)
-		player_1.class_change.rpc(class_title)
-		await player_1.child_entered_tree
-	elif id == StageManager.p2_id:
-		update_player_class.rpc(player_2.player_id, class_title)
-		player_2.class_change.rpc(class_title)
-		await player_2.child_entered_tree
-	elif id == StageManager.p3_id:
-		update_player_class.rpc(player_3.player_id, class_title)
-		player_3.class_change.rpc(class_title)
-		await player_3.child_entered_tree
-	elif id == StageManager.p4_id:
-		update_player_class.rpc(player_4.player_id, class_title)
-		player_4.class_change.rpc(class_title)
-		await player_4.child_entered_tree
+	var number = StageManager.get_player_number(id)
+	match number:
+		1:
+			update_player_class.rpc(player_1.player_id, class_title)
+			player_1.class_change.rpc(class_title)
+			await player_1.child_entered_tree
+		2:
+			update_player_class.rpc(player_2.player_id, class_title)
+			player_2.class_change.rpc(class_title)
+			await player_2.child_entered_tree
+		3:
+			update_player_class.rpc(player_3.player_id, class_title)
+			player_3.class_change.rpc(class_title)
+			await player_3.child_entered_tree
+		4:
+			update_player_class.rpc(player_4.player_id, class_title)
+			player_4.class_change.rpc(class_title)
+			await player_4.child_entered_tree
 	main_ui.class_change.rpc()

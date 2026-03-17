@@ -4,7 +4,7 @@ extends Node2D
 
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
-@onready var main_node: Node
+@onready var game_node: Node
 
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
@@ -17,7 +17,7 @@ var type = "melee"
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
-	main_node = get_tree().root.get_node("Main")
+	game_node = $/root/Main/Game
 	get_animation_lengths()
 	$SpellHitbox.player_id = player.player_id
 
@@ -126,7 +126,7 @@ func _on_spell_2_timer_timeout():
 		spell_2_instance.damage = 40
 		spell_2_instance.position = global_position
 		spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.get_target(player.player_id))
-		main_node.spawn(spell_2_instance)
+		game_node.spawn(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true

@@ -6,7 +6,7 @@ extends Node2D
 
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
-@onready var main_node: Node
+@onready var game_node: Node
 @onready var dodge_timer: Timer
 
 var attack_1_length: float = 0.3
@@ -21,7 +21,7 @@ func _ready() -> void:
 	dodge_timer = player.get_node("DodgeCooldownTimer")
 	anim_player = $AnimationPlayer
 	base_speed = player.speed
-	main_node = get_tree().root.get_node("Main")
+	game_node = $/root/Main/Game
 	
 	get_animation_lengths()
 
@@ -47,7 +47,7 @@ func spawn_attack(index: float):
 	circle.position = StageManager.get_target(player.player_id)
 	circle.damage = player.damage
 	circle.player_id = player.player_id
-	main_node.spawn(circle)
+	game_node.spawn(circle)
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -94,7 +94,7 @@ func spell_1():
 		index = randi_range(0,temp_array.size() - 1)
 		top_left_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(top_left_summon)
+		game_node.spawn(top_left_summon)
 	
 	if top_right_pos != Vector2.INF:
 		var top_right_summon = spell_1_scene.instantiate()
@@ -103,7 +103,7 @@ func spell_1():
 		index = randi_range(0,temp_array.size() - 1)
 		top_right_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(top_right_summon)
+		game_node.spawn(top_right_summon)
 	
 	if bottom_left_pos != Vector2.INF:
 		var bottom_left_summon = spell_1_scene.instantiate()
@@ -112,7 +112,7 @@ func spell_1():
 		index = randi_range(0,temp_array.size() - 1)
 		bottom_left_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(bottom_left_summon)
+		game_node.spawn(bottom_left_summon)
 	
 	if bottom_right_pos != Vector2.INF:
 		var bottom_right_summon = spell_1_scene.instantiate()
@@ -121,7 +121,7 @@ func spell_1():
 		index = randi_range(0,temp_array.size() - 1)
 		bottom_right_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(bottom_right_summon)
+		game_node.spawn(bottom_right_summon)
 	
 	await get_tree().create_timer(1.0).timeout
 	if dodge_timer.is_stopped(): player.can_dodge = true
@@ -164,7 +164,7 @@ func spell_2():
 		index = randi_range(0,temp_array.size() - 1)
 		top_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(top_summon)
+		game_node.spawn(top_summon)
 	
 	if bottom_left_pos != Vector2.INF:
 		var bottom_left_summon = spell_2_scene.instantiate()
@@ -173,7 +173,7 @@ func spell_2():
 		index = randi_range(0,temp_array.size() - 1)
 		bottom_left_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(bottom_left_summon)
+		game_node.spawn(bottom_left_summon)
 	
 	if bottom_right_pos != Vector2.INF:
 		var bottom_right_summon = spell_2_scene.instantiate()
@@ -182,7 +182,7 @@ func spell_2():
 		index = randi_range(0,temp_array.size() - 1)
 		bottom_right_summon.name = temp_array[index]
 		temp_array.remove_at(index)
-		main_node.spawn(bottom_right_summon)
+		game_node.spawn(bottom_right_summon)
 	
 	await get_tree().create_timer(1.0).timeout
 	if dodge_timer.is_stopped(): player.can_dodge = true

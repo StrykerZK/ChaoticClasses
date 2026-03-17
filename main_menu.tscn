@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://dj1u1l2gmtbga"]
 
 [ext_resource type="Script" uid="uid://c7lr53wegp3rk" path="res://scripts/main_menu.gd" id="1_uioiv"]
-[ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://main.tscn" id="2_eagnm"]
+[ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://game.tscn" id="2_eagnm"]
 [ext_resource type="Texture2D" uid="uid://cfsy2wx0gdfy1" path="res://art/ui/randombg.png" id="3_uwo5s"]
 [ext_resource type="FontFile" uid="uid://csdujbakdh57r" path="res://fonts/Supersonic Rocketship.ttf" id="4_0k4wn"]
 [ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="4_2x3gf"]

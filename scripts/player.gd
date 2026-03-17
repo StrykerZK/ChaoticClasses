@@ -60,17 +60,14 @@ var is_stunned: bool = false
 var is_rooted: bool = false
 
 func _enter_tree() -> void:
-	ready.connect(Callable($/root/Main/GameManager,"_on_players_connected"))
-	#dead.connect(Callable(StageManager,"game_over"))
-	dead.connect(Callable($/root/Main/GameManager,"player_dead"))
-	#dead.connect(Callable($/root/Main/MainUI,"game_over"))
-	#dead.connect(Callable($/root/Main,"game_over"))
+	ready.connect(Callable($/root/Main/Game/GameManager,"_on_players_connected"))
+	dead.connect(Callable($/root/Main/Game/GameManager,"player_dead"))
 	
 	player_id = int(str(name))
 	set_multiplayer_authority(player_id)
 
 func _ready() -> void:
-	player_manager = get_node("/root/Main/PlayerManager")
+	player_manager = get_node("/root/Main/Game/PlayerManager")
 	
 	change_camera_focus(Vector2(get_viewport_rect().size.x / 2,\
 	get_viewport_rect().size.y / 2))
@@ -78,8 +75,8 @@ func _ready() -> void:
 	current_class_node = get_child(0)
 	current_class = current_class_node.name
 	current_type = current_class_node.type
-	$PlayerSynchronizer.root_path = get_path()
-	$PlayerSynchronizer.set_multiplayer_authority(player_id)
+	#$PlayerSynchronizer.root_path = get_path()
+	#$PlayerSynchronizer.set_multiplayer_authority(player_id)
 	
 	hitbox = get_node("base/Hitbox")
 	hitbox.player_id = player_id
@@ -91,14 +88,14 @@ func _ready() -> void:
 	dodge_speed = speed * dodge_speed_mult
 	
 	# Face players correct way
-	if player_id == StageManager.p1_id or player_id == StageManager.p3_id:
+	if StageManager.get_player_number(player_id) == 1 or StageManager.get_player_number(player_id) == 3:
 		anim_tree["parameters/idle/blend_position"] = Vector2(1,0)
 	else:
 		anim_tree["parameters/idle/blend_position"] = Vector2(-1,0)
 	
 	# Set up
 	if is_multiplayer_authority():
-		StageManager.update_player_stats.rpc(player_id, current_health)
+		StageManager.update_player_health.rpc(player_id, current_health)
 	elif !is_multiplayer_authority():
 		$Camera.queue_free()
 
@@ -250,7 +247,7 @@ func end_dodge():
 func ghost_effect():
 	var ghost: Sprite2D = ghost_scene.instantiate()
 	var sprite: Sprite2D = current_class_node.get_child(0)
-	$/root/Main.add_child(ghost)
+	$/root/Main/Game.add_child(ghost)
 	
 	ghost.global_position = global_position
 	ghost.texture = sprite.texture
@@ -319,6 +316,10 @@ func update_animation_parameters():
 
 @rpc("any_peer","call_local")
 func class_change(class_title: String):
+	# Cancel if already in transformation
+	if is_transforming:
+		return
+	
 	# Start countdown animation
 	is_transforming = true
 	$PlayerFX.stop()
@@ -332,7 +333,7 @@ func class_change(class_title: String):
 	# Pause for transformation
 	StageManager.update_game_state.rpc("Transforming")
 	if is_multiplayer_authority(): #and multiplayer.is_server():
-		$/root/Main/GameManager.toggle_pause.rpc(0)
+		$/root/Main/Game/GameManager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
 	reset_systems()
@@ -362,7 +363,7 @@ func class_change(class_title: String):
 	initialize_class_children()
 	
 	if is_multiplayer_authority(): #and multiplayer.is_server():
-		$/root/Main/GameManager.toggle_pause.rpc(0)
+		$/root/Main/Game/GameManager.toggle_pause.rpc(0)
 	
 	is_transforming = false
 	await $PlayerFX.animation_finished
@@ -442,7 +443,7 @@ func take_damage(incoming_dmg: float):
 		var new_dmg = incoming_dmg * dmg_reduction
 		current_health -= new_dmg
 		# Update Info UI
-		StageManager.update_player_stats.rpc(player_id, current_health)
+		StageManager.update_player_health.rpc(player_id, current_health)
 	
 	# I-Frame and hit effect
 	activate_i_frame(0.5)
@@ -605,4 +606,4 @@ func reset_camera_focus():
 
 func queue_spell_cooldown(duration: float, number: int):
 	if is_multiplayer_authority():
-		$/root/Main/MainUI/MainPlayerInfo.queue_spell_cooldown(duration, number)
+		$/root/Main/Game/MainUI/MainPlayerInfo.queue_spell_cooldown(duration, number)

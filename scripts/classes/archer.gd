@@ -7,7 +7,7 @@ extends Node2D
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
 @onready var anim_tree: AnimationTree
-@onready var main_node: Node
+@onready var game_node: Node
 @onready var dodge_timer: Timer
 
 var release_length: float = 0.2
@@ -31,7 +31,7 @@ func _ready() -> void:
 	anim_player = $AnimationPlayer
 	anim_tree = $AnimationTree
 	base_speed = player.speed
-	main_node = get_tree().root.get_node("Main")
+	game_node = $/root/Main/Game
 	
 	get_animation_lengths()
 	
@@ -112,7 +112,7 @@ func spawn_projectile(index: float):
 	mouse_pos = StageManager.get_target(player.player_id)
 	
 	var arrow = arrow_scene.instantiate()
-	main_node.spawn(arrow)
+	game_node.spawn(arrow)
 	arrow.position = $Marker2D.global_position
 	arrow.direction = arrow.position.direction_to(mouse_pos)
 	arrow.rotation = arrow.direction.angle()
@@ -148,7 +148,7 @@ func spell_1(): # 30 dmg, 3 sec root
 	spell_1_instance.position = player.global_position
 	spell_1_instance.player_id = player.player_id
 	await get_tree().create_timer(0.6).timeout
-	main_node.spawn(spell_1_instance)
+	game_node.spawn(spell_1_instance)
 
 func _on_spell_1_timer_timeout():
 	if player.in_spell_1:
@@ -174,7 +174,7 @@ func _on_spell_2_timer_timeout() -> void:
 		var spell_2_instance = spell_2_scene.instantiate()
 		spell_2_instance.player_id = player.player_id
 		spell_2_instance.position = StageManager.get_target(player.player_id)
-		main_node.spawn(spell_2_instance)
+		game_node.spawn(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true
