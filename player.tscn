@@ -1893,6 +1893,7 @@ texture = ExtResource("7_nvl01")
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1513040166]
 replication_config = SubResource("SceneReplicationConfig_vnws8")
 visibility_update_mode = 1
+public_visibility = false
 
 [node name="DodgeTimer" type="Timer" parent="." unique_id=1315208162]
 one_shot = true

@@ -492,6 +492,9 @@ position = Vector2(400, 730)
 [node name="Player4Spawn" type="Marker2D" parent="PlayerManager/SpawnPoints" unique_id=1898000983 groups=["spawnpoints"]]
 position = Vector2(1520, 730)
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager" unique_id=369546601]
+spawn_path = NodePath("..")
+
 [node name="Summons" type="Node" parent="." unique_id=1356944808]
 
 [node name="BattleMusic" type="AudioStreamPlayer" parent="." unique_id=1059278272]

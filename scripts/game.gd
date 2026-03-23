@@ -7,7 +7,6 @@ var player_4: CharacterBody2D
 
 func _ready() -> void:
 	#start_game()
-	$/root/Main/MultiplayerSpawner.spawn_path = "/root/Main/Game/PlayerManager"
 	pass
 
 func assign_players():

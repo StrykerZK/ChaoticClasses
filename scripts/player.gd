@@ -67,7 +67,15 @@ func _enter_tree() -> void:
 	set_multiplayer_authority(player_id)
 
 func _ready() -> void:
-	player_manager = get_node("/root/Main/Game/PlayerManager")
+	player_manager = get_node_or_null("/root/Main/Game/PlayerManager")
+	
+	await get_tree().process_frame
+	$PlayerSynchronizer.public_visibility = true
+	$PlayerSynchronizer.process_mode = Node.PROCESS_MODE_INHERIT
+	
+	if not is_multiplayer_authority():
+		if has_node("Camera"):
+			$Camera.queue_free()
 	
 	change_camera_focus(Vector2(get_viewport_rect().size.x / 2,\
 	get_viewport_rect().size.y / 2))

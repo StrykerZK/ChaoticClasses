@@ -14,6 +14,7 @@ var player_3: CharacterBody2D
 var player_4: CharacterBody2D
 var player_count: int = 0
 var players_alive: int = 0
+var clients_ready: int = 0
 
 var main_ui: CanvasLayer
 var game_node: Node
@@ -137,9 +138,14 @@ func player_dead(id):
 	players_alive -= 1
 	main_ui.player_dead.rpc(id)
 	game_node.player_dead.rpc(id)
-	clear_player.rpc(id)
+	
+	if multiplayer.is_server():
+		await get_tree().process_frame
+		clear_player(id)
 	
 	if players_alive <= 1:
+		await get_tree().process_frame
+		await get_tree().process_frame
 		end_match.rpc()
 
 @rpc ("any_peer", "call_local", "reliable")
@@ -150,7 +156,7 @@ func end_match():
 	
 	var winner_id = 0
 	for child in player_manager.get_children():
-		if child.name != "SpawnPoints":
+		if child.name != "SpawnPoints" and child.name != "MultiplayerSpawner":
 			winner_id = child.name.to_int()
 			break
 	
@@ -171,15 +177,27 @@ func prep_new_match():
 	player_2 = null
 	player_3 = null
 	player_4 = null
+	clients_ready = 0
 	
 	for child in player_manager.get_children():
-		if child.name != "SpawnPoints":
-			child.queue_free()
+		if child.name != "SpawnPoints" and child.name != "MultiplayerSpawner":
+			var sync = child.get_node_or_null("PlayerSynchronizer")
+			if sync: sync.public_visibility = false
+			
+			if multiplayer.is_server():
+				child.queue_free()
 	
 	await get_tree().process_frame
 	await get_tree().process_frame
 	
-	if multiplayer.is_server():
+	ready_to_spawn.rpc_id(1)
+
+@rpc("any_peer","reliable")
+func ready_to_spawn():
+	if not multiplayer.is_server(): return
+	
+	clients_ready += 1
+	if clients_ready >= multiplayer.get_peers().size() + 1:
 		new_game()
 
 @rpc("any_peer", "call_local", "reliable")
@@ -188,18 +206,29 @@ func clear_player(id):
 	var p_node = null
 	
 	match number:
-		1: p_node = player_1
-		2: p_node = player_2
-		3: p_node = player_3
-		4: p_node = player_4
-	
+		1: 
+			p_node = player_1
+			player_1 = null
+		2: 
+			p_node = player_2
+			player_2 = null
+		3: 
+			p_node = player_3
+			player_3 = null
+		4: 
+			p_node = player_4
+			player_4 = null
+		
 	if is_instance_valid(p_node):
 		var sync_node = p_node.get_node_or_null("PlayerSynchronizer")
 		if sync_node:
 			sync_node.public_visibility = false
 			sync_node.process_mode = PROCESS_MODE_DISABLED
 		
-		p_node.queue_free()
+		if multiplayer.is_server():
+			p_node.queue_free()
+		else:
+			pass
 
 @rpc("any_peer","call_local","reliable")
 func new_game():
