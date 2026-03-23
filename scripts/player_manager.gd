@@ -17,9 +17,11 @@ func _ready():
 	players_loaded.connect(Callable(game_manager,"assign_players"))
 	players_loaded.connect(Callable(main_ui,"assign_players"))
 	
-	create_players()
 
 func create_players():
+	if not multiplayer.is_server():
+		return
+	
 	var index = 1
 	for i in StageManager.player_list:
 		var current_player = player_scene.instantiate()
@@ -30,4 +32,3 @@ func create_players():
 		add_child(current_player, true)
 		index += 1
 	players_loaded.emit()
-	game_node.start_game()

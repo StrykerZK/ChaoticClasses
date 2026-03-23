@@ -461,6 +461,8 @@ func take_damage(incoming_dmg: float):
 
 @rpc("any_peer","call_local","reliable")
 func die():
+	if is_dead:
+		return
 	is_dead = true
 	is_transforming = false
 	disable_collisions()

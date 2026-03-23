@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=3 uid="uid://cuw7fymmodn3b"]
+[gd_scene format=3 uid="uid://cuw7fymmodn3b"]
 
 [ext_resource type="Script" uid="uid://bnpiendf6brk1" path="res://scripts/player.gd" id="1_ostsg"]
 [ext_resource type="Texture2D" uid="uid://cl335x4ib7n4y" path="res://art/player/base_sprite_sheet.png" id="2_4omiv"]
@@ -1799,40 +1799,38 @@ animations = [{
 "speed": 2.0
 }]
 
-[node name="Player" type="CharacterBody2D" groups=["players"]]
+[node name="Player" type="CharacterBody2D" unique_id=372273083 groups=["players"]]
 process_mode = 3
 z_index = 1
 collision_layer = 2
 collision_mask = 673
 script = ExtResource("1_ostsg")
 
-[node name="base" type="Node2D" parent="."]
+[node name="base" type="Node2D" parent="." unique_id=1126067002]
 script = ExtResource("2_u12l6")
 
-[node name="Sprite2D" type="Sprite2D" parent="base"]
+[node name="Sprite2D" type="Sprite2D" parent="base" unique_id=1314858309]
 scale = Vector2(2, 2)
 texture = ExtResource("2_4omiv")
 hframes = 10
 vframes = 6
 frame = 1
 
-[node name="Hitbox" type="Area2D" parent="base"]
+[node name="Hitbox" type="Area2D" parent="base" unique_id=2106865275]
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("3_xqdpe")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="base/Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="base/Hitbox" unique_id=1963412009]
 shape = SubResource("RectangleShape2D_00hg6")
 disabled = true
 debug_color = Color(0.996078, 0, 0, 0.419608)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="base"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="base" unique_id=2040691845]
 root_node = NodePath("../..")
-libraries = {
-&"": SubResource("AnimationLibrary_lguxv")
-}
+libraries/ = SubResource("AnimationLibrary_lguxv")
 
-[node name="AnimationTree" type="AnimationTree" parent="base"]
+[node name="AnimationTree" type="AnimationTree" parent="base" unique_id=1262656296]
 root_node = NodePath("../..")
 tree_root = SubResource("AnimationNodeStateMachine_av542")
 anim_player = NodePath("../AnimationPlayer")
@@ -1843,19 +1841,19 @@ parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
 parameters/attack/blend_position = Vector2(-0.83156, 0.0353982)
-parameters/dodge/blend_position = 0
+parameters/dodge/blend_position = 0.0
 parameters/idle/blend_position = Vector2(0, 0)
 parameters/run/blend_position = Vector2(0, 0)
 parameters/spell1/blend_position = -1.09865
 parameters/spell2/blend_position = 0.137629
 
-[node name="ComboTimer" type="Timer" parent="base"]
+[node name="ComboTimer" type="Timer" parent="base" unique_id=1842554385]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="base"]
+[node name="AttackTimer" type="Timer" parent="base" unique_id=1395039644]
 one_shot = true
 
-[node name="SpellFX" type="Sprite2D" parent="base"]
+[node name="SpellFX" type="Sprite2D" parent="base" unique_id=1921539971]
 visible = false
 position = Vector2(23, -25)
 scale = Vector2(2, 2)
@@ -1863,77 +1861,78 @@ texture = ExtResource("5_b26j0")
 hframes = 2
 vframes = 2
 
-[node name="TextFX" type="Sprite2D" parent="base"]
+[node name="TextFX" type="Sprite2D" parent="base" unique_id=1313593903]
 visible = false
 position = Vector2(23, -25)
 scale = Vector2(2, 2)
 texture = ExtResource("6_n7ghd")
 hframes = 5
 
-[node name="SpellTimer" type="Timer" parent="base"]
+[node name="SpellTimer" type="Timer" parent="base" unique_id=1829557155]
 wait_time = 0.7
 
-[node name="Collisionbox" type="CollisionShape2D" parent="."]
+[node name="Collisionbox" type="CollisionShape2D" parent="." unique_id=1979779811]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_83ret")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=510942496]
 collision_layer = 16
 collision_mask = 76
 
-[node name="HurtboxCollision" type="CollisionShape2D" parent="Hurtbox"]
+[node name="HurtboxCollision" type="CollisionShape2D" parent="Hurtbox" unique_id=6468284]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_cvhqj")
 debug_color = Color(0, 1, 0.12549, 0.419608)
 
-[node name="Shadow" type="Sprite2D" parent="."]
+[node name="Shadow" type="Sprite2D" parent="." unique_id=1651702437]
 visible = false
 z_index = -1
 scale = Vector2(2, 2)
 texture = ExtResource("7_nvl01")
 
-[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1513040166]
 replication_config = SubResource("SceneReplicationConfig_vnws8")
+visibility_update_mode = 1
 
-[node name="DodgeTimer" type="Timer" parent="."]
+[node name="DodgeTimer" type="Timer" parent="." unique_id=1315208162]
 one_shot = true
 
-[node name="IFrameTimer" type="Timer" parent="."]
+[node name="IFrameTimer" type="Timer" parent="." unique_id=717229589]
 one_shot = true
 
-[node name="DodgeResetTimer" type="Timer" parent="."]
+[node name="DodgeResetTimer" type="Timer" parent="." unique_id=2115060690]
 wait_time = 2.0
 one_shot = true
 
-[node name="DodgeCooldownTimer" type="Timer" parent="."]
+[node name="DodgeCooldownTimer" type="Timer" parent="." unique_id=1373002836]
 wait_time = 1.5
 one_shot = true
 
-[node name="DebuffTimer" type="Timer" parent="."]
+[node name="DebuffTimer" type="Timer" parent="." unique_id=759781646]
 one_shot = true
 
-[node name="GhostTimer" type="Timer" parent="."]
+[node name="GhostTimer" type="Timer" parent="." unique_id=1637674594]
 wait_time = 0.03
 
-[node name="UtilityTimer" type="Timer" parent="."]
+[node name="UtilityTimer" type="Timer" parent="." unique_id=1822191549]
 one_shot = true
 
-[node name="Target" type="Marker2D" parent="."]
+[node name="Target" type="Marker2D" parent="." unique_id=1350289573]
 
-[node name="PlayerFX" type="AnimatedSprite2D" parent="."]
+[node name="PlayerFX" type="AnimatedSprite2D" parent="." unique_id=634184261]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4gxxo")
 
-[node name="HitFX" type="AnimatedSprite2D" parent="."]
+[node name="HitFX" type="AnimatedSprite2D" parent="." unique_id=316455659]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_uwrur")
 
-[node name="DebuffFX" type="AnimatedSprite2D" parent="."]
+[node name="DebuffFX" type="AnimatedSprite2D" parent="." unique_id=1903168584]
 visible = false
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_x4l17")
 
-[node name="Camera" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="." unique_id=1225597607]
 limit_left = -100
 limit_top = -100
 limit_right = 2020

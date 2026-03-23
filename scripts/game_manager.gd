@@ -139,45 +139,82 @@ func player_dead(id):
 	game_node.player_dead.rpc(id)
 	clear_player.rpc(id)
 	
-	if players_alive == 1:
-		$SwapTimer.stop()
-		$TransformTimer.stop()
-		await get_tree().create_timer(0.1).timeout
-		var winner_id = player_manager.get_child(1).name.to_int()
-		StageManager.update_game_state.rpc("Match Over")
-		StageManager.update_scores.rpc(winner_id)
-		main_ui.match_over.rpc(winner_id)
+	if players_alive <= 1:
+		end_match.rpc()
+
+@rpc ("any_peer", "call_local", "reliable")
+func end_match():
+	$SwapTimer.stop()
+	$TransformTimer.stop()
+	StageManager.update_game_state("Match Over")
+	
+	var winner_id = 0
+	for child in player_manager.get_children():
+		if child.name != "SpawnPoints":
+			winner_id = child.name.to_int()
+			break
+	
+	if winner_id != 0:
+		StageManager.update_scores(winner_id)
+		main_ui.match_over(winner_id)
+	
+	await get_tree().create_timer(6.0).timeout
 		
-		await get_tree().create_timer(6).timeout
-		if StageManager.game_state != "Game Over":
-			clear_player.rpc(winner_id)
-			players_alive -= 1
-			game_node.clear_summons.rpc()
-			# await player exited code
-			await get_tree().create_timer(0.01).timeout
-			new_game.rpc()
-		else:
-			game_end.rpc()
+	if StageManager.game_state != "Game Over":
+		prep_new_match()
+	else:
+		game_end()
+
+@rpc("any_peer","call_local", "reliable")
+func prep_new_match():
+	player_1 = null
+	player_2 = null
+	player_3 = null
+	player_4 = null
+	
+	for child in player_manager.get_children():
+		if child.name != "SpawnPoints":
+			child.queue_free()
+	
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	if multiplayer.is_server():
+		new_game()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_player(id):
 	var number = StageManager.get_player_number(id)
+	var p_node = null
+	
 	match number:
-		1: player_1.queue_free()
-		2: player_2.queue_free()
-		3: player_3.queue_free()
-		4: player_4.queue_free()
+		1: p_node = player_1
+		2: p_node = player_2
+		3: p_node = player_3
+		4: p_node = player_4
+	
+	if is_instance_valid(p_node):
+		var sync_node = p_node.get_node_or_null("PlayerSynchronizer")
+		if sync_node:
+			sync_node.public_visibility = false
+			sync_node.process_mode = PROCESS_MODE_DISABLED
+		
+		p_node.queue_free()
 
 @rpc("any_peer","call_local","reliable")
 func new_game():
 	player_manager.create_players()
+	sync_new_match.rpc()
+
+@rpc("any_peer","call_local","reliable")
+func sync_new_match():
 	assign_players()
-	update_player_class(player_1.player_id, "base")
-	update_player_class(player_2.player_id, "base")
+	if is_instance_valid(player_1): update_player_class(player_1.player_id, "base")
+	if is_instance_valid(player_2): update_player_class(player_2.player_id, "base")
 	if player_count >= 3:
-		update_player_class(player_3.player_id, "base")
+		if is_instance_valid(player_3): update_player_class(player_3.player_id, "base")
 	if player_count >= 4:
-		update_player_class(player_4.player_id, "base")
+		if is_instance_valid(player_4): update_player_class(player_4.player_id, "base")
 	get_parent().start_game()
 
 @rpc("any_peer","call_local", "reliable")

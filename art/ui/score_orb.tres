@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=40 format=3 uid="uid://bh6qkybxb52pc"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://bh6qkybxb52pc"]
 
 [ext_resource type="Texture2D" uid="uid://c2l85hrsy4uev" path="res://art/misc/score_orb_sheet.png" id="1_5qt58"]
 
