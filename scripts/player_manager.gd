@@ -43,6 +43,7 @@ func create_players():
 		index += 1
 		
 		_on_player_spawned(new_player)
+		
 
 func _on_spawn_custom(data):
 	var p = player_scene.instantiate()
@@ -53,6 +54,18 @@ func _on_spawn_custom(data):
 func _on_player_spawned(_node):
 	spawned_count += 1
 	if spawned_count >= StageManager.player_list.size():
+		sort_players()
+		
 		await get_tree().process_frame
 		players_loaded.emit()
 		spawned_count = 0
+
+func sort_players():
+	var players = []
+	for child in get_children():
+		if child.name != "SpawnPoints" and child.name != "MultiplayerSpawner":
+			players.append(child)
+	
+	for i in range(players.size()):
+		var index = 1 + StageManager.get_player_number(players[i].name.to_int())
+		move_child(players[i], index)

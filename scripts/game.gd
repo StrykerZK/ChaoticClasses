@@ -58,7 +58,7 @@ func game_end():
 	back_to_main_menu()
 
 func back_to_main_menu():
-	get_tree().current_scene.show()
+	get_tree().current_scene.show_main_menu()
 	StageManager.reset_game()
 	queue_free()
 

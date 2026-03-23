@@ -1,10 +1,14 @@
-[gd_scene load_steps=69 format=3 uid="uid://88fs20gyu218"]
+[gd_scene format=3 uid="uid://88fs20gyu218"]
 
 [ext_resource type="Texture2D" uid="uid://d3p38kbng0rd4" path="res://art/player/necromancer_sprite_sheet.png" id="1_2h5b5"]
 [ext_resource type="Script" uid="uid://dqgyojoak0mux" path="res://scripts/classes/necromancer.gd" id="1_lokwp"]
 [ext_resource type="PackedScene" uid="uid://ck2npnf0g0jd7" path="res://classes/misc/necro_attack.tscn" id="2_crbgp"]
 [ext_resource type="PackedScene" uid="uid://bjl4hrquunhl2" path="res://classes/misc/skeleton_soldier.tscn" id="3_gbiyn"]
 [ext_resource type="PackedScene" uid="uid://b2ocw1dy1c0ky" path="res://classes/misc/skeleton_archer.tscn" id="4_wnxwe"]
+[ext_resource type="Script" uid="uid://bu3llqiv1ts5u" path="res://scripts/classes/misc/hitbox.gd" id="6_ctsvy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wnxwe"]
+size = Vector2(6, 6)
 
 [sub_resource type="Animation" id="Animation_crbgp"]
 length = 0.001
@@ -612,25 +616,31 @@ states/spell2/position = Vector2(678, 17)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_6ws3w"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_133gs"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_7jw5u"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_f0t84"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_pydnt"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_g6bxm"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_tnjwo"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_cbe5o"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_h7out"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_c2s13"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_t6wvs"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_qquxf"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_rsvne"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_4hafq"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_7swd8"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_l3bqt"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_gioep"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_hy3lx"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_vmq3f"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_00mtr"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_tptsk"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_5qux2"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_3x7s1"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_uqou4")]
 graph_offset = Vector2(-42, -88)
 
-[node name="necromancer" type="Node2D"]
+[node name="necromancer" type="Node2D" unique_id=425602587]
 script = ExtResource("1_lokwp")
 attack_scene = ExtResource("2_crbgp")
 spell_1_scene = ExtResource("3_gbiyn")
 spell_2_scene = ExtResource("4_wnxwe")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=254351581]
 scale = Vector2(2, 2)
 texture = ExtResource("1_2h5b5")
 hframes = 7
 vframes = 4
 frame = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wnxwe")
-}
+[node name="Hitbox" type="Area2D" parent="." unique_id=715577507]
+script = ExtResource("6_ctsvy")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=847286856]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_wnxwe")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1417464760]
+libraries/ = SubResource("AnimationLibrary_wnxwe")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1063122736]
 tree_root = SubResource("AnimationNodeStateMachine_ctsvy")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
@@ -640,22 +650,22 @@ parameters/conditions/is_attacking = false
 parameters/conditions/is_dodging = false
 parameters/conditions/is_running = false
 parameters/attack/blend_position = Vector2(0, 0)
-parameters/dodge/blend_position = 0
+parameters/dodge/blend_position = 0.0
 parameters/idle/blend_position = Vector2(0.996584, -0.993356)
 parameters/run/blend_position = Vector2(0, 0)
-parameters/spell1/blend_position = 0
-parameters/spell2/blend_position = 0
+parameters/spell1/blend_position = 0.0
+parameters/spell2/blend_position = 0.0
 
-[node name="ComboTimer" type="Timer" parent="."]
+[node name="ComboTimer" type="Timer" parent="." unique_id=1069704503]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=394125238]
 one_shot = true
 
-[node name="Spell1Timer" type="Timer" parent="."]
+[node name="Spell1Timer" type="Timer" parent="." unique_id=1317761381]
 one_shot = true
 
-[node name="Spell2Timer" type="Timer" parent="."]
+[node name="Spell2Timer" type="Timer" parent="." unique_id=1843757803]
 one_shot = true
 
 [connection signal="timeout" from="ComboTimer" to="." method="_on_combo_timer_timeout"]

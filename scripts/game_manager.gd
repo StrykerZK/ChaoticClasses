@@ -14,7 +14,6 @@ var player_3: CharacterBody2D
 var player_4: CharacterBody2D
 var player_count: int = 0
 var players_alive: int = 0
-var clients_ready: int = 0
 
 var main_ui: CanvasLayer
 var game_node: Node
@@ -139,9 +138,8 @@ func player_dead(id):
 	main_ui.player_dead.rpc(id)
 	game_node.player_dead.rpc(id)
 	
-	if multiplayer.is_server():
-		await get_tree().process_frame
-		clear_player(id)
+	await get_tree().process_frame
+	clear_player(id)
 	
 	if players_alive <= 1:
 		await get_tree().process_frame
@@ -150,6 +148,7 @@ func player_dead(id):
 
 @rpc ("any_peer", "call_local", "reliable")
 func end_match():
+	players_alive = 0
 	$SwapTimer.stop()
 	$TransformTimer.stop()
 	StageManager.update_game_state("Match Over")
@@ -177,28 +176,13 @@ func prep_new_match():
 	player_2 = null
 	player_3 = null
 	player_4 = null
-	clients_ready = 0
 	
-	for child in player_manager.get_children():
-		if child.name != "SpawnPoints" and child.name != "MultiplayerSpawner":
-			var sync = child.get_node_or_null("PlayerSynchronizer")
-			if sync: sync.public_visibility = false
-			
-			if multiplayer.is_server():
-				child.queue_free()
+	clear_winner()
 	
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await get_tree().create_timer(1.0).timeout
 	
-	ready_to_spawn.rpc_id(1)
+	if multiplayer.is_server(): new_game()
 
-@rpc("any_peer","reliable")
-func ready_to_spawn():
-	if not multiplayer.is_server(): return
-	
-	clients_ready += 1
-	if clients_ready >= multiplayer.get_peers().size() + 1:
-		new_game()
 
 @rpc("any_peer", "call_local", "reliable")
 func clear_player(id):
@@ -226,13 +210,30 @@ func clear_player(id):
 			sync_node.process_mode = PROCESS_MODE_DISABLED
 		
 		if multiplayer.is_server():
+			await get_tree().process_frame
+			await get_tree().process_frame
 			p_node.queue_free()
 		else:
 			pass
 
+func clear_winner():
+	var temp_array = player_manager.get_children()
+	for i in temp_array:
+		if i.name != "SpawnPoints" and i.name != "MultiplayerSpawner":
+			var sync_node = i.get_node_or_null("PlayerSynchronizer")
+			if sync_node:
+				sync_node.public_visibility = false
+				sync_node.process_mode = PROCESS_MODE_DISABLED
+			
+			await get_tree().process_frame
+			await get_tree().process_frame
+			if multiplayer.is_server(): i.queue_free()
+
 @rpc("any_peer","call_local","reliable")
 func new_game():
 	player_manager.create_players()
+	await get_tree().process_frame
+	await get_tree().process_frame
 	sync_new_match.rpc()
 
 @rpc("any_peer","call_local","reliable")

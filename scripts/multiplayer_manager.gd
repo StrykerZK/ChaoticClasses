@@ -116,7 +116,7 @@ func announce_player_information():
 @rpc("call_local","reliable")
 func start_game():
 	var main_game = game_scene.instantiate()
-	get_parent().hide()
+	get_tree().current_scene.hide_main_menu()
 	$/root/Main.add_child(main_game)
 
 @rpc("any_peer")

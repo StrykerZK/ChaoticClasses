@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dj1u1l2gmtbga"]
+[gd_scene format=3 uid="uid://dj1u1l2gmtbga"]
 
 [ext_resource type="Script" uid="uid://c7lr53wegp3rk" path="res://scripts/main_menu.gd" id="1_uioiv"]
 [ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://game.tscn" id="2_eagnm"]
@@ -16,20 +16,20 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bdo5l"]
 texture = ExtResource("3_uwo5s")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h6ktl"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ptcef"]
 texture = ExtResource("5_yc51r")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ptcef"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h6ktl"]
 texture = ExtResource("5_yc51r")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l44iw"]
 texture = ExtResource("5_yc51r")
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="MainMenu" type="CanvasLayer" unique_id=879007520]
 script = ExtResource("1_uioiv")
 main_game = ExtResource("2_eagnm")
 
-[node name="Background" type="Panel" parent="."]
+[node name="Background" type="Panel" parent="." unique_id=152880893]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,7 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_bdo5l")
 
-[node name="TitleMenu" type="Control" parent="."]
+[node name="TitleMenu" type="Control" parent="." unique_id=1797728780]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -46,7 +46,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="TitleMenu"]
+[node name="Title" type="Label" parent="TitleMenu" unique_id=2094053015]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.388542
@@ -68,7 +68,7 @@ CLASSES"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Play" type="Button" parent="TitleMenu"]
+[node name="Play" type="Button" parent="TitleMenu" unique_id=140512893]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -82,18 +82,18 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_ojkxa")
-theme_override_colors/font_hover_pressed_color = Color(0.309804, 0.709804, 1, 1)
-theme_override_colors/font_hover_color = Color(0.309804, 0.709804, 1, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.309804, 0.709804, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.309804, 0.709804, 1, 1)
 theme_override_fonts/font = ExtResource("4_2x3gf")
 theme_override_font_sizes/font_size = 38
-theme_override_styles/hover_pressed = ExtResource("6_32sxr")
-theme_override_styles/hover = SubResource("StyleBoxTexture_h6ktl")
 theme_override_styles/normal = SubResource("StyleBoxTexture_ptcef")
+theme_override_styles/hover = SubResource("StyleBoxTexture_h6ktl")
+theme_override_styles/hover_pressed = ExtResource("6_32sxr")
 text = "Play"
 metadata/_edit_use_anchors_ = true
 
-[node name="Settings" type="Button" parent="TitleMenu"]
+[node name="Settings" type="Button" parent="TitleMenu" unique_id=605825868]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -110,7 +110,7 @@ theme = ExtResource("5_ojkxa")
 text = "Settings"
 metadata/_edit_use_anchors_ = true
 
-[node name="Quit" type="Button" parent="TitleMenu"]
+[node name="Quit" type="Button" parent="TitleMenu" unique_id=609949151]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -126,7 +126,7 @@ grow_vertical = 2
 theme = ExtResource("5_ojkxa")
 text = "Quit"
 
-[node name="PlayMenu" type="Control" parent="."]
+[node name="PlayMenu" type="Control" parent="." unique_id=122138632]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,7 +136,7 @@ grow_vertical = 2
 script = ExtResource("8_vv6tx")
 game_scene = ExtResource("2_eagnm")
 
-[node name="Start" type="Button" parent="PlayMenu"]
+[node name="Start" type="Button" parent="PlayMenu" unique_id=506036368]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -154,7 +154,7 @@ theme = ExtResource("5_ojkxa")
 text = "Start"
 metadata/_edit_use_anchors_ = true
 
-[node name="NameInput" type="LineEdit" parent="PlayMenu"]
+[node name="NameInput" type="LineEdit" parent="PlayMenu" unique_id=490787278]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -173,7 +173,7 @@ alignment = 1
 max_length = 12
 metadata/_edit_use_anchors_ = true
 
-[node name="HostPortInput" type="LineEdit" parent="PlayMenu"]
+[node name="HostPortInput" type="LineEdit" parent="PlayMenu" unique_id=1669397865]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.494792
@@ -191,7 +191,7 @@ placeholder_text = "Enter Port..."
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Host" type="Button" parent="PlayMenu"]
+[node name="Host" type="Button" parent="PlayMenu" unique_id=728426020]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -209,7 +209,7 @@ disabled = true
 text = "Host"
 metadata/_edit_use_anchors_ = true
 
-[node name="Join" type="Button" parent="PlayMenu"]
+[node name="Join" type="Button" parent="PlayMenu" unique_id=1146500327]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -228,7 +228,7 @@ text = "Join
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Back" type="Button" parent="PlayMenu"]
+[node name="Back" type="Button" parent="PlayMenu" unique_id=1244614552]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -246,7 +246,7 @@ text = "BACK
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="IPInput" type="LineEdit" parent="PlayMenu"]
+[node name="IPInput" type="LineEdit" parent="PlayMenu" unique_id=1277371077]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.494792
@@ -265,7 +265,7 @@ alignment = 1
 max_length = 16
 metadata/_edit_use_anchors_ = true
 
-[node name="PortInput" type="LineEdit" parent="PlayMenu"]
+[node name="PortInput" type="LineEdit" parent="PlayMenu" unique_id=1849078765]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -285,7 +285,7 @@ alignment = 1
 max_length = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerPanel" type="Panel" parent="PlayMenu"]
+[node name="PlayerPanel" type="Panel" parent="PlayMenu" unique_id=94166797]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -302,7 +302,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_l44iw")
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerList" type="GridContainer" parent="PlayMenu/PlayerPanel"]
+[node name="PlayerList" type="GridContainer" parent="PlayMenu/PlayerPanel" unique_id=1781782460]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -319,7 +319,7 @@ theme_override_constants/h_separation = 128
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="Player1Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+[node name="Player1Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=2127889132]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -327,7 +327,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player2Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+[node name="Player2Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=667762887]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -335,7 +335,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player3Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+[node name="Player3Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=886002425]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -343,7 +343,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player4Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList"]
+[node name="Player4Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=1895633038]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
