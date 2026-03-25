@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://bjl4hrquunhl2"]
+[gd_scene format=3 uid="uid://bjl4hrquunhl2"]
 
 [ext_resource type="Script" uid="uid://888q1ul7bw3j" path="res://scripts/classes/misc/skeleton_soldier.gd" id="1_mt1ab"]
 [ext_resource type="Texture2D" uid="uid://dq0fhfftfqcf1" path="res://art/player/spells/necromancer/necromancer_summons.png" id="2_8jlon"]
@@ -267,7 +267,7 @@ height = 26.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7lf1u"]
 size = Vector2(14, 20)
 
-[node name="skeleton_soldier" type="CharacterBody2D"]
+[node name="skeleton_soldier" type="CharacterBody2D" unique_id=1080296139]
 collision_layer = 512
 collision_mask = 515
 motion_mode = 1
@@ -275,52 +275,52 @@ wall_min_slide_angle = 0.0
 safe_margin = 1.0
 script = ExtResource("1_mt1ab")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=280735417]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_eyqw5")
 animation = &"attack"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1390241580]
 position = Vector2(0, 5)
 shape = SubResource("CapsuleShape2D_8jlon")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=271508871]
 collision_layer = 16
 collision_mask = 76
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=794650769]
 position = Vector2(0, 5)
 shape = SubResource("CapsuleShape2D_1kmyp")
 debug_color = Color(3.85046e-07, 0.643014, 0.307679, 0.42)
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=637438179]
 collision_layer = 8
 collision_mask = 16
 monitoring = false
 script = ExtResource("3_1kmyp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=479840565]
 position = Vector2(15, 8)
 shape = SubResource("RectangleShape2D_7lf1u")
 debug_color = Color(1, 0.0129971, 0.0109105, 0.42)
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=2059937609]
 wait_time = 0.4
 one_shot = true
 
-[node name="LifeTimer" type="Timer" parent="."]
+[node name="LifeTimer" type="Timer" parent="." unique_id=711528571]
 wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1163261509]
 avoidance_enabled = true
 radius = 12.0
 max_speed = 175.0
 debug_path_custom_color = Color(1, 0, 0, 1)
 debug_path_custom_point_size = 2.0
 
-[node name="HPBar" type="ProgressBar" parent="."]
+[node name="HPBar" type="ProgressBar" parent="." unique_id=1405751122]
 offset_left = -14.0
 offset_top = 21.0
 offset_right = 14.0
@@ -328,7 +328,7 @@ offset_bottom = 25.0
 theme = ExtResource("4_r5rik")
 show_percentage = false
 
-[node name="Name" type="Label" parent="."]
+[node name="Name" type="Label" parent="." unique_id=486071058]
 offset_left = -24.0
 offset_top = -19.0
 offset_right = 26.0
@@ -340,7 +340,6 @@ text = "Jeff"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="LifeTimer" to="." method="die"]
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]

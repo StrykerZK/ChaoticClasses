@@ -13,7 +13,7 @@ var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
 var combo_timer = 1.5
 var base_speed = 300
-var skull_names = ["Fred","Jeff","Bob","Max","Kevin","Skully","Edgar","Bonesy","Jim","Greg","Johnny"]
+var skull_names: Array = ["Fred","Jeff","Bob","Max","Kevin","Skully","Edgar","Bonesy","Jim","Greg","Johnny"]
 var type = "ranged"
 
 func _ready() -> void:
@@ -70,7 +70,7 @@ func spell_1():
 	player.in_spell_1 = true
 	player.can_dodge = false
 	
-	var temp_array = skull_names
+	var temp_array = skull_names.duplicate()
 	var index = 0
 	
 	var summon_offset: float = 40.0
@@ -142,7 +142,7 @@ func spell_2():
 	player.in_spell_2 = true
 	player.can_dodge = false
 	
-	var temp_array = skull_names
+	var temp_array = skull_names.duplicate()
 	var index = 0
 	
 	var summon_offset: float = 40.0

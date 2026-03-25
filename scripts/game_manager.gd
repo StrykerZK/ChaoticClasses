@@ -138,30 +138,31 @@ func player_dead(id):
 	main_ui.player_dead.rpc(id)
 	game_node.player_dead.rpc(id)
 	
+	var winner_id = 1
+	if players_alive == 1:
+		for p in [player_1, player_2, player_3, player_4]:
+			if is_instance_valid(p) and p.player_id != id:
+				winner_id = p.player_id
+				break
+	
 	await get_tree().process_frame
 	clear_player(id)
 	
-	if players_alive <= 1:
+	if players_alive == 1:
 		await get_tree().process_frame
-		await get_tree().process_frame
-		end_match.rpc()
+		end_match.rpc(winner_id)
 
 @rpc ("any_peer", "call_local", "reliable")
-func end_match():
+func end_match(winner_id: int):
 	players_alive = 0
 	$SwapTimer.stop()
 	$TransformTimer.stop()
 	StageManager.update_game_state("Match Over")
 	
-	var winner_id = 0
-	for child in player_manager.get_children():
-		if child.name != "SpawnPoints" and child.name != "MultiplayerSpawner":
-			winner_id = child.name.to_int()
-			break
+	await get_tree().process_frame
 	
-	if winner_id != 0:
-		StageManager.update_scores(winner_id)
-		main_ui.match_over(winner_id)
+	StageManager.update_scores(winner_id)
+	main_ui.match_over(winner_id)
 	
 	await get_tree().create_timer(6.0).timeout
 		
@@ -179,7 +180,7 @@ func prep_new_match():
 	
 	clear_winner()
 	
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(0.5).timeout
 	
 	if multiplayer.is_server(): new_game()
 

@@ -5,6 +5,7 @@ func _ready() -> void:
 	$HPBar.max_value = health
 	damage = 40.0
 	$Hitbox.damage = damage
+	$Hitbox.player_id = player_id
 	attack_range = 40.0
 	speed = 0.0
 	$Name.text = name
@@ -49,8 +50,8 @@ func _on_attack_timer_timeout() -> void:
 
 func stop_collisions():
 	$CollisionShape2D.disabled = true
-	$Hitbox/CollisionShape2D.disabled = true
-	$Hurtbox/CollisionShape2D.disabled = true
+	$Hitbox/CollisionShape2D.set_deferred("disabled", true)
+	$Hurtbox/CollisionShape2D.set_deferred("disabled", true)
 
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 	velocity = safe_velocity
