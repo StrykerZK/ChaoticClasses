@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://b2ocw1dy1c0ky"]
+[gd_scene format=3 uid="uid://b2ocw1dy1c0ky"]
 
 [ext_resource type="Script" uid="uid://dy3dluolxah6l" path="res://scripts/classes/misc/skeleton_archer.gd" id="1_fjdqr"]
 [ext_resource type="Texture2D" uid="uid://dq0fhfftfqcf1" path="res://art/player/spells/necromancer/necromancer_summons.png" id="1_ujrvv"]
@@ -275,45 +275,45 @@ height = 28.0
 radius = 12.0
 height = 28.0
 
-[node name="skeleton_archer" type="CharacterBody2D"]
+[node name="skeleton_archer" type="CharacterBody2D" unique_id=942538211 groups=["summons"]]
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_fjdqr")
 arrow_scene = ExtResource("2_1wyjc")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1286982480]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dstrn")
 animation = &"attack"
 frame = 4
 frame_progress = 1.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1936348371]
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_ujrvv")
 debug_color = Color(3.17663e-06, 0.636799, 0.400324, 0.42)
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=700067007]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=919615457]
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_fjdqr")
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=1400092618]
 wait_time = 0.2
 one_shot = true
 
-[node name="LifeTimer" type="Timer" parent="."]
+[node name="LifeTimer" type="Timer" parent="." unique_id=887016331]
 wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=641935681]
 avoidance_enabled = true
 radius = 12.0
 max_speed = 150.0
 
-[node name="HPBar" type="ProgressBar" parent="."]
+[node name="HPBar" type="ProgressBar" parent="." unique_id=2122674566]
 offset_left = -14.0
 offset_top = 21.0
 offset_right = 14.0
@@ -321,7 +321,7 @@ offset_bottom = 25.0
 theme = ExtResource("4_s6px5")
 show_percentage = false
 
-[node name="Name" type="Label" parent="."]
+[node name="Name" type="Label" parent="." unique_id=1616239127]
 offset_left = -24.0
 offset_top = -19.0
 offset_right = 26.0

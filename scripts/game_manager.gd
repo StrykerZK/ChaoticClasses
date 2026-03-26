@@ -43,13 +43,14 @@ func _on_players_connected():
 
 @rpc("any_peer","call_local")
 func assign_players():
-	var players = get_tree().get_nodes_in_group("players")
-	player_1 = players[0]
-	player_2 = players[1]
-	if players.size() >= 3:
-		player_3 = players[2]
-	if players.size() >= 4:
-		player_4 = players[3]
+	for player in get_tree().get_nodes_in_group("players"):
+		for i in StageManager.player_list:
+			if player.name.to_int() != i: continue
+			match StageManager.player_list[i].number:
+				1: player_1 = player
+				2: player_2 = player
+				3: player_3 = player
+				4: player_4 = player
 
 @rpc("any_peer")
 func class_change():	
@@ -179,6 +180,7 @@ func prep_new_match():
 	player_4 = null
 	
 	clear_winner()
+	game_node.clear_battlefield()
 	
 	await get_tree().create_timer(0.5).timeout
 	
@@ -220,7 +222,7 @@ func clear_player(id):
 func clear_winner():
 	var temp_array = player_manager.get_children()
 	for i in temp_array:
-		if i.name != "SpawnPoints" and i.name != "MultiplayerSpawner":
+		if i.name != "MultiplayerSpawner":
 			var sync_node = i.get_node_or_null("PlayerSynchronizer")
 			if sync_node:
 				sync_node.public_visibility = false

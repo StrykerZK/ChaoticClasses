@@ -5,26 +5,38 @@ var player_2: CharacterBody2D
 var player_3: CharacterBody2D
 var player_4: CharacterBody2D
 
+var world: Node
+var areaFX: AnimatedSprite2D
+
 func _ready() -> void:
-	#start_game()
-	pass
+	
+	# --- NODE ASSIGNMENT ---
+	world = get_child(0)
+	for i in world.get_children(): 
+		if i.name == "AreaFX": 
+			areaFX = i
+			break
+	
+	# --- Start of Game ---
+	if multiplayer.is_server():
+		$PlayerManager.create_players()
 
-func assign_players():
-	var players = get_tree().get_nodes_in_group("players")
-	player_1 = players[0]
-	player_2 = players[1]
-	if players.size() >= 3:
-		player_3 = players[2]
-	if players.size() >= 4:
-		player_4 = players[3]
+func assign_players(): # Assign player nodes for ref
+	for player in get_tree().get_nodes_in_group("players"):
+		for i in StageManager.player_list:
+			if player.name.to_int() != i: continue
+			match StageManager.player_list[i].number:
+				1: player_1 = player
+				2: player_2 = player
+				3: player_3 = player
+				4: player_4 = player
 
-func start_game():
+func start_game(): # Start of match effects
 	StageManager.update_game_state("Starting Game")
 	assign_players()
-	player_1.is_paused = true
-	player_2.is_paused = true
-	if StageManager.player_count >= 3: player_3.is_paused = true
-	if StageManager.player_count >= 4: player_4.is_paused = true
+	
+	pause_players()
+	invul_players(5.0)
 	
 	$MainUI.start_game()
 	
@@ -44,10 +56,7 @@ func start_game():
 	if StageManager.player_count >= 4: player_4.zoom_camera(1.5)
 	
 	await $MainUI/FX.animation_finished
-	player_1.is_paused = false
-	player_2.is_paused = false
-	if StageManager.player_count >= 3: player_3.is_paused = false
-	if StageManager.player_count >= 4: player_4.is_paused = false
+	unpause_players()
 	$GameManager.start_game()
 	StageManager.update_game_state("In Game")
 
@@ -80,8 +89,8 @@ func player_dead(id):
 			play_ko_effect(player_4)
 
 func play_ko_effect(loser):
-	var effects = $World/AreaFX.duplicate()
-	$World.add_child(effects)
+	var effects = areaFX.duplicate()
+	world.add_child(effects)
 	if loser.global_position.y <= -150: # Top
 		effects.global_position.y = -150
 	elif loser.global_position.y > 1330: # Bottom
@@ -94,7 +103,7 @@ func play_ko_effect(loser):
 		effects.global_position.x = 2070
 	else:
 		effects.global_position.x = loser.global_position.x
-	effects.global_rotation = effects.global_position.direction_to($World/MapCenter.global_position).angle()
+	effects.global_rotation = effects.global_position.direction_to(world.get_child(3).global_position).angle() # MapCenter node index 3
 	effects.show()
 	effects.play("ko")
 	await effects.animation_finished
@@ -104,8 +113,37 @@ func play_ko_effect(loser):
 func spawn(new_node: Node):
 	$Summons.add_child(new_node)
 
-@rpc("any_peer","call_local")
+func pause_players():
+	player_1.is_paused = true
+	player_2.is_paused = true
+	if StageManager.player_count >= 3: player_3.is_paused = true
+	if StageManager.player_count >= 4: player_4.is_paused = true
+
+func unpause_players():
+	player_1.is_paused = false
+	player_2.is_paused = false
+	if StageManager.player_count >= 3: player_3.is_paused = false
+	if StageManager.player_count >= 4: player_4.is_paused = false
+
+func invul_players(time: float):
+	player_1.activate_i_frame(time)
+	player_2.activate_i_frame(time)
+	if StageManager.player_count >= 3: player_3.activate_i_frame(time)
+	if StageManager.player_count >= 4: player_4.activate_i_frame(time)
+
+func clear_battlefield():
+	clear_projectiles()
+	clear_spells()
+	clear_summons()
+
+func clear_projectiles():
+	for i in get_tree().get_nodes_in_group("projectiles"):
+		i.queue_free()
+
+func clear_spells():
+	for i in get_tree().get_nodes_in_group("spells"):
+		i.queue_free()
+
 func clear_summons():
-	var summons = $Summons.get_children()
-	for i in summons:
+	for i in get_tree().get_nodes_in_group("summons"):
 		i.queue_free()

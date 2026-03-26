@@ -45,6 +45,8 @@ projectiles=""
 dummy=""
 spawnpoints=""
 players=""
+summons=""
+spells=""
 
 [input]
 

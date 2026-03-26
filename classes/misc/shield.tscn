@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b3t2nng8gwmhp"]
+[gd_scene format=3 uid="uid://b3t2nng8gwmhp"]
 
 [ext_resource type="PackedScene" uid="uid://drllpc87p44ga" path="res://utility/ghost.tscn" id="1_uu7xt"]
 [ext_resource type="Texture2D" uid="uid://c6k4o2ruj3wj8" path="res://art/player/spells/gladiator/gladiator_fx_sheet.png" id="2_uu7xt"]
@@ -92,30 +92,30 @@ animations = [{
 "speed": 18.0
 }]
 
-[node name="Shield" type="CharacterBody2D"]
+[node name="Shield" type="CharacterBody2D" unique_id=1127505672 groups=["projectiles"]]
 z_index = 2
 collision_layer = 256
 script = SubResource("GDScript_uu7xt")
 ghost_scene = ExtResource("1_uu7xt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2081548648]
 shape = SubResource("CircleShape2D_qpgrd")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=76002994]
 collision_layer = 8
 collision_mask = 16
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1891388053]
 shape = SubResource("CircleShape2D_445r4")
 debug_color = Color(0.99982, 0, 0.0999764, 0.42)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1226543870]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_durnn")
 frame = 1
 frame_progress = 0.35429
 
-[node name="LifeTimer" type="Timer" parent="."]
+[node name="LifeTimer" type="Timer" parent="." unique_id=570109783]
 wait_time = 4.0
 one_shot = true
 autostart = true
