@@ -127,6 +127,7 @@ func cycle_spectator(direction: int = 1):
 
 func last_player_dead(id: int):
 	var last_player = null
+	is_spectating = false
 	
 	for p in [player_1, player_2, player_3, player_4]:
 		if is_instance_valid(p) and p.player_id == id:
@@ -145,21 +146,15 @@ func last_player_dead(id: int):
 func play_ko_effect(loser):
 	var effects = areaFX.duplicate()
 	world.add_child(effects)
-	if loser.global_position.y <= -150: # Top
-		effects.global_position.y = -150
-	elif loser.global_position.y > 1330: # Bottom
-		effects.global_position.y = 1330
-	else:
-		effects.global_position.y = loser.global_position.y
-	if loser.global_position.x <= -150: # Left
-		effects.global_position.x = -150
-	elif loser.global_position.x > 2070: # Right
-		effects.global_position.x = 2070
-	else:
-		effects.global_position.x = loser.global_position.x
-	effects.global_rotation = effects.global_position.direction_to(mapCenter.global_position).angle()
+	var map_limits: Vector2 = MapManager.get_map_limits()
+	var fx_x = clamp(loser.global_position.x, -map_limits.x, map_limits.x)
+	var fx_y = clamp(loser.global_position.y, -map_limits.y, map_limits.y)
+	effects.global_position = Vector2(fx_x,fx_y)
+	
+	effects.global_rotation = effects.global_position.direction_to(Vector2.ZERO).angle()
 	effects.show()
 	effects.play("ko")
+	
 	await effects.animation_finished
 	effects.queue_free()
 

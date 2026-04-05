@@ -123,7 +123,6 @@ animations = [{
 script = ExtResource("1_5qsk4")
 
 [node name="MapCenter" type="Marker2D" parent="." unique_id=178862274]
-position = Vector2(960, 540)
 
 [node name="AreaFX" type="AnimatedSprite2D" parent="." unique_id=1779836636]
 visible = false
