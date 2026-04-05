@@ -10,8 +10,12 @@ var world: Node
 var areaFX: AnimatedSprite2D
 var mapCenter: Marker2D
 
+# Camera
 var camera_target: Node2D = null
 var camera_base_zoom: float = 0.7
+
+# Spectating
+var is_spectating: bool = false
 
 func _ready() -> void:
 	
@@ -27,11 +31,19 @@ func _ready() -> void:
 		$PlayerManager.create_players()
 
 func _process(_delta):
+	if is_spectating:
+		if Input.is_action_just_pressed("move_left"):
+			cycle_spectator(-1)
+		if Input.is_action_just_pressed("move_right"):
+			cycle_spectator(1)
+	
 	if is_instance_valid(camera_target):
 		$Camera.global_position = camera_target.global_position
 	else:
-		if $Camera.zoom != Vector2(camera_base_zoom, camera_base_zoom): zoom_camera(camera_base_zoom)
-		$Camera.global_position = Vector2.ZERO
+		if is_spectating: cycle_spectator()
+		else:
+			if $Camera.zoom != Vector2(camera_base_zoom, camera_base_zoom): zoom_camera(camera_base_zoom)
+			$Camera.global_position = Vector2.ZERO
 
 func assign_players(): # Assign player nodes for ref
 	for player in get_tree().get_nodes_in_group("players"):
@@ -82,6 +94,11 @@ func back_to_main_menu():
 
 @rpc("any_peer","call_local","reliable")
 func player_dead(id):
+	if !is_spectating:
+		if id == local_player.player_id: 
+			is_spectating = true
+			cycle_spectator()
+	
 	var number = StageManager.get_player_number(id)
 	match number:
 		1:
@@ -97,21 +114,33 @@ func player_dead(id):
 			await player_4.tree_exiting
 			play_ko_effect(player_4)
 
-func last_player_dead(id: int):
-	var last_player
-	match id:
-		player_1.player_id: last_player = player_1
-		player_2.player_id: last_player = player_2
-		player_3.player_id: last_player = player_3
-		player_4.player_id: last_player = player_4
+func cycle_spectator(direction: int = 1):
+	var alive_players = get_tree().get_nodes_in_group("players")
 	
-	set_camera_target(last_player)
-	zoom_camera(2.5)
-	Engine.time_scale = 0.1
-	await get_tree().create_timer(0.15).timeout
-	Engine.time_scale = 1
-	camera_target = null
-	zoom_camera(1.0)
+	if alive_players.size() <= 1: return
+	
+	var current_index = alive_players.find(camera_target)
+	
+	var next_index = (current_index + direction + alive_players.size()) % alive_players.size()
+	
+	set_camera_target(alive_players[next_index])
+
+func last_player_dead(id: int):
+	var last_player = null
+	
+	for p in [player_1, player_2, player_3, player_4]:
+		if is_instance_valid(p) and p.player_id == id:
+			last_player = p
+			break
+	
+	if is_instance_valid(last_player):
+		set_camera_target(last_player)
+		zoom_camera(2.5)
+		Engine.time_scale = 0.1
+		await get_tree().create_timer(0.15).timeout
+		Engine.time_scale = 1
+		camera_target = null
+		zoom_camera(1.0)
 
 func play_ko_effect(loser):
 	var effects = areaFX.duplicate()

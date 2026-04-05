@@ -34,5 +34,6 @@ volume_db = -15.0
 parameters/looping = true
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1873219669]
+zoom = Vector2(0.7, 0.7)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
