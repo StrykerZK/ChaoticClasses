@@ -4,22 +4,34 @@ var player_1: CharacterBody2D
 var player_2: CharacterBody2D
 var player_3: CharacterBody2D
 var player_4: CharacterBody2D
+var local_player: CharacterBody2D
 
 var world: Node
 var areaFX: AnimatedSprite2D
+var mapCenter: Marker2D
+
+var camera_target: Node2D = null
+var camera_base_zoom: float = 0.7
 
 func _ready() -> void:
 	
 	# --- NODE ASSIGNMENT ---
 	world = get_child(0)
 	for i in world.get_children(): 
-		if i.name == "AreaFX": 
-			areaFX = i
-			break
+		match i.name:
+			"AreaFX": areaFX = i
+			"MapCenter": mapCenter = i
 	
 	# --- Start of Game ---
 	if multiplayer.is_server():
 		$PlayerManager.create_players()
+
+func _process(_delta):
+	if is_instance_valid(camera_target):
+		$Camera.global_position = camera_target.global_position
+	else:
+		if $Camera.zoom != Vector2(camera_base_zoom, camera_base_zoom): zoom_camera(camera_base_zoom)
+		$Camera.global_position = Vector2.ZERO
 
 func assign_players(): # Assign player nodes for ref
 	for player in get_tree().get_nodes_in_group("players"):
@@ -30,6 +42,13 @@ func assign_players(): # Assign player nodes for ref
 				2: player_2 = player
 				3: player_3 = player
 				4: player_4 = player
+	
+	var local_id = multiplayer.get_unique_id()
+	
+	for p in [player_1, player_2, player_3, player_4]:
+		if is_instance_valid(p) and p.player_id == local_id:
+			local_player = p
+			break
 
 func start_game(): # Start of match effects
 	StageManager.update_game_state("Starting Game")
@@ -42,18 +61,8 @@ func start_game(): # Start of match effects
 	
 	await get_tree().create_timer(4).timeout
 	
-	player_1.smooth_camera("position")
-	player_2.smooth_camera("position")
-	if StageManager.player_count >= 3: player_3.smooth_camera("position")
-	if StageManager.player_count >= 4: player_4.smooth_camera("position")
-	player_1.reset_camera_focus()
-	player_2.reset_camera_focus()
-	if StageManager.player_count >= 3: player_3.reset_camera_focus()
-	if StageManager.player_count >= 4: player_4.reset_camera_focus()
-	player_1.zoom_camera(1.5)
-	player_2.zoom_camera(1.5)
-	if StageManager.player_count >= 3: player_3.zoom_camera(1.5)
-	if StageManager.player_count >= 4: player_4.zoom_camera(1.5)
+	set_camera_target(local_player)
+	zoom_camera(1.5)
 	
 	await $MainUI/FX.animation_finished
 	unpause_players()
@@ -88,6 +97,22 @@ func player_dead(id):
 			await player_4.tree_exiting
 			play_ko_effect(player_4)
 
+func last_player_dead(id: int):
+	var last_player
+	match id:
+		player_1.player_id: last_player = player_1
+		player_2.player_id: last_player = player_2
+		player_3.player_id: last_player = player_3
+		player_4.player_id: last_player = player_4
+	
+	set_camera_target(last_player)
+	zoom_camera(2.5)
+	Engine.time_scale = 0.1
+	await get_tree().create_timer(0.15).timeout
+	Engine.time_scale = 1
+	camera_target = null
+	zoom_camera(1.0)
+
 func play_ko_effect(loser):
 	var effects = areaFX.duplicate()
 	world.add_child(effects)
@@ -103,7 +128,7 @@ func play_ko_effect(loser):
 		effects.global_position.x = 2070
 	else:
 		effects.global_position.x = loser.global_position.x
-	effects.global_rotation = effects.global_position.direction_to(world.get_child(3).global_position).angle() # MapCenter node index 3
+	effects.global_rotation = effects.global_position.direction_to(mapCenter.global_position).angle()
 	effects.show()
 	effects.play("ko")
 	await effects.animation_finished
@@ -147,3 +172,23 @@ func clear_spells():
 func clear_summons():
 	for i in get_tree().get_nodes_in_group("summons"):
 		i.queue_free()
+
+func set_camera_target(new_target: Node2D):
+	camera_target = new_target
+
+func zoom_camera(amount: float, duration: float = 0.3):
+	# $Camera.zoom = Vector2(amount,amount) ORIGINAL
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_CUBIC)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property($Camera, "zoom", Vector2(amount, amount), duration)
+
+func smooth_camera(setting: String):
+	if setting == "limit":
+		$Camera.limit_smoothed = !$Camera.limit_smoothed
+	elif setting == "position":
+		$Camera.position_smoothing_enabled = !$Camera.position_smoothing_enabled
+		if $Camera.position_smoothing_enabled:
+			$Camera.position_smoothing_speed = 3
+	elif setting == "rotation":
+		$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled

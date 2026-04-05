@@ -26,6 +26,7 @@ var dodge_speed: float = 0.0
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
 @onready var player_manager: Node
+@onready var game_node: Node
 @onready var hitbox: Area2D
 
 var direction: Vector2 = Vector2.ZERO
@@ -68,17 +69,11 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	player_manager = get_node_or_null("/root/Main/Game/PlayerManager")
+	game_node = get_node_or_null("/root/Main/Game")
 	
 	await get_tree().process_frame
 	$PlayerSynchronizer.public_visibility = true
 	$PlayerSynchronizer.process_mode = Node.PROCESS_MODE_INHERIT
-	
-	if not is_multiplayer_authority():
-		if has_node("Camera"):
-			$Camera.queue_free()
-	
-	change_camera_focus(Vector2(get_viewport_rect().size.x / 2,\
-	get_viewport_rect().size.y / 2))
 	
 	current_class_node = get_child(0)
 	current_class = current_class_node.name
@@ -104,8 +99,6 @@ func _ready() -> void:
 	# Set up
 	if is_multiplayer_authority():
 		StageManager.update_player_health.rpc(player_id, current_health)
-	elif !is_multiplayer_authority():
-		$Camera.queue_free()
 
 func _process(delta: float) -> void:
 	if is_multiplayer_authority():
@@ -480,23 +473,8 @@ func die():
 	var players = get_tree().get_nodes_in_group("players")
 	
 	# Slowdown effect and zoom
-	current_class_node.get_child(0).modulate.s = 50
-	if players.size() == 2:
-		for i in players:
-			if i.player_id != player_id:
-				if !is_multiplayer_authority():
-					i.change_camera_focus(global_position)
-			i.zoom_camera(2.5)
-		Engine.time_scale = 0.1
-		use_utility_timer(0.15)
-		await $UtilityTimer.timeout
-		Engine.time_scale = 1
-		for i in players:
-			if i.player_id != player_id:
-				if !is_multiplayer_authority():
-					i.zoom_camera(1.0)
-			else:
-				i.zoom_camera(1.5)
+	current_class_node.get_child(0).modulate.s = 50 # Color change
+	if players.size() == 2: game_node.last_player_dead(player_id)
 	
 	# Yeet player across map
 	for i in players:
@@ -575,44 +553,6 @@ func use_utility_timer(duration: float):
 	$UtilityTimer.wait_time = duration
 	$UtilityTimer.start()
 
-func create_camera():
-	if $Camera:
-		return
-	var camera = Camera2D.new()
-	camera.name = "Camera"
-	camera.enabled = true
-	camera.zoom = Vector2(1.5, 1.5)
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 5
-	#camera.limit_left = 0
-	#camera.limit_top = 0
-	#camera.limit_right = get_viewport_rect().size.x
-	#camera.limit_bottom = get_viewport_rect().size.y
-	#camera.limit_smoothed = true
-	add_child(camera)
-
-func zoom_camera(amount: float):
-	if is_multiplayer_authority():
-		$Camera.zoom = Vector2(amount,amount)
-
-func smooth_camera(setting: String):
-	if is_multiplayer_authority():
-		if setting == "limit":
-			$Camera.limit_smoothed = !$Camera.limit_smoothed
-		elif setting == "position":
-			$Camera.position_smoothing_enabled = !$Camera.position_smoothing_enabled
-			if $Camera.position_smoothing_enabled:
-				$Camera.position_smoothing_speed = 3
-		elif setting == "rotation":
-			$Camera.rotation_smoothing_enabled = !$Camera.rotation_smoothing_enabled
-
-func change_camera_focus(target: Vector2):
-	if is_multiplayer_authority():
-		$Camera.global_position = target
-
-func reset_camera_focus():
-	if is_multiplayer_authority():
-		change_camera_focus(global_position)
 
 func queue_spell_cooldown(duration: float, number: int):
 	if is_multiplayer_authority():
