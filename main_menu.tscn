@@ -2,25 +2,17 @@
 
 [ext_resource type="Script" uid="uid://c7lr53wegp3rk" path="res://scripts/main_menu.gd" id="1_uioiv"]
 [ext_resource type="PackedScene" uid="uid://ggc1ugsf42y5" path="res://game.tscn" id="2_eagnm"]
-[ext_resource type="Texture2D" uid="uid://cfsy2wx0gdfy1" path="res://art/ui/randombg.png" id="3_uwo5s"]
+[ext_resource type="Texture2D" uid="uid://c57n6pflxj10q" path="res://art/ui/backgrounds/placeholder_title_screen_white.png" id="3_0k4wn"]
 [ext_resource type="FontFile" uid="uid://csdujbakdh57r" path="res://fonts/Supersonic Rocketship.ttf" id="4_0k4wn"]
-[ext_resource type="FontFile" uid="uid://x1pqyhbygjdr" path="res://fonts/dogicabold.otf" id="4_2x3gf"]
 [ext_resource type="Theme" uid="uid://ccigqb3qq002y" path="res://art/ui/button_theme.tres" id="5_ojkxa"]
 [ext_resource type="Texture2D" uid="uid://ch8jwip7mklxs" path="res://art/ui/menu_buttons.png" id="5_yc51r"]
-[ext_resource type="StyleBox" uid="uid://bjixhb1vmhjwa" path="res://art/ui/button_texture.tres" id="6_32sxr"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
 [ext_resource type="Script" uid="uid://c725oesf8geo1" path="res://scripts/multiplayer_manager.gd" id="8_vv6tx"]
 [ext_resource type="Theme" uid="uid://blm8hjxu2exss" path="res://art/ui/line_edit_theme.tres" id="9_58hxh"]
 [ext_resource type="Theme" uid="uid://kksj5q4w4n5r" path="res://art/ui/player_info_label.tres" id="11_j5v2v"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bdo5l"]
-texture = ExtResource("3_uwo5s")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ptcef"]
-texture = ExtResource("5_yc51r")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h6ktl"]
-texture = ExtResource("5_yc51r")
+texture = ExtResource("3_0k4wn")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l44iw"]
 texture = ExtResource("5_yc51r")
@@ -49,61 +41,91 @@ grow_vertical = 2
 [node name="Title" type="Label" parent="TitleMenu" unique_id=2094053015]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.388542
-anchor_top = 0.241667
-anchor_right = 0.388542
-anchor_bottom = 0.252778
+anchor_left = 0.35885417
+anchor_top = 0.2574074
+anchor_right = 0.35885417
+anchor_bottom = 0.27314815
 offset_left = -560.0
 offset_top = -150.0
 offset_right = 560.0
 offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.105676, 0.332768, 0.60645, 1)
+theme_override_colors/font_color = Color(0.24297309, 0.40528345, 1, 1)
 theme_override_constants/line_spacing = 20
 theme_override_fonts/font = ExtResource("4_0k4wn")
-theme_override_font_sizes/font_size = 160
-text = "CHAOTIC
-CLASSES"
+theme_override_font_sizes/font_size = 350
+text = "C"
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Play" type="Button" parent="TitleMenu" unique_id=140512893]
+[node name="Title2" type="Label" parent="TitleMenu" unique_id=1279428753]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.213542
-anchor_top = 0.5
-anchor_right = 0.213542
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -100.0
-offset_right = 250.0
-offset_bottom = 100.0
+anchor_left = 0.45729166
+anchor_top = 0.24166694
+anchor_right = 0.45729166
+anchor_bottom = 0.25277805
+offset_left = -560.0
+offset_top = -150.0
+offset_right = 560.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.24313726, 0.40392157, 1, 1)
+theme_override_constants/line_spacing = 20
+theme_override_fonts/font = ExtResource("4_0k4wn")
+theme_override_font_sizes/font_size = 160
+text = "HAOTIC
+LASSES"
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Singleplayer" type="Button" parent="TitleMenu" unique_id=1947664156]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 10.25
+anchor_top = 13.463889
+anchor_right = 10.25
+anchor_bottom = 13.463889
+offset_left = -19520.0
+offset_top = -14141.0
+offset_right = -19020.0
+offset_bottom = -13941.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_ojkxa")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.309804, 0.709804, 1, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.309804, 0.709804, 1, 1)
-theme_override_fonts/font = ExtResource("4_2x3gf")
-theme_override_font_sizes/font_size = 38
-theme_override_styles/normal = SubResource("StyleBoxTexture_ptcef")
-theme_override_styles/hover = SubResource("StyleBoxTexture_h6ktl")
-theme_override_styles/hover_pressed = ExtResource("6_32sxr")
-text = "Play"
+text = "Singleplayer"
+metadata/_edit_use_anchors_ = true
+
+[node name="Multiplayer" type="Button" parent="TitleMenu" unique_id=1330522179]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 10.25
+anchor_top = 17.431482
+anchor_right = 10.25
+anchor_bottom = 17.431482
+offset_left = -19520.0
+offset_top = -18296.0
+offset_right = -19020.0
+offset_bottom = -18096.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_ojkxa")
+text = "Multiplayer"
 metadata/_edit_use_anchors_ = true
 
 [node name="Settings" type="Button" parent="TitleMenu" unique_id=605825868]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
-anchor_top = 0.648148
-anchor_right = 0.213542
-anchor_bottom = 0.648148
-offset_left = -250.0
-offset_top = -100.0
-offset_right = 250.0
-offset_bottom = 100.0
+anchor_top = 0.7592593
+anchor_right = 0.21354198
+anchor_bottom = 0.7592593
+offset_left = -250.00064
+offset_top = -160.0
+offset_right = 249.99939
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_ojkxa")
@@ -118,15 +140,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -800.0
-offset_top = 220.0
+offset_top = 250.0
 offset_right = -300.0
-offset_bottom = 420.0
+offset_bottom = 450.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_ojkxa")
 text = "Quit"
 
-[node name="PlayMenu" type="Control" parent="." unique_id=122138632]
+[node name="LobbyMenu" type="Control" parent="." unique_id=122138632]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,7 +158,7 @@ grow_vertical = 2
 script = ExtResource("8_vv6tx")
 game_scene = ExtResource("2_eagnm")
 
-[node name="Start" type="Button" parent="PlayMenu" unique_id=506036368]
+[node name="Start" type="Button" parent="LobbyMenu" unique_id=506036368]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -154,7 +176,7 @@ theme = ExtResource("5_ojkxa")
 text = "Start"
 metadata/_edit_use_anchors_ = true
 
-[node name="NameInput" type="LineEdit" parent="PlayMenu" unique_id=490787278]
+[node name="NameInput" type="LineEdit" parent="LobbyMenu" unique_id=490787278]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -173,7 +195,7 @@ alignment = 1
 max_length = 12
 metadata/_edit_use_anchors_ = true
 
-[node name="HostPortInput" type="LineEdit" parent="PlayMenu" unique_id=1669397865]
+[node name="HostPortInput" type="LineEdit" parent="LobbyMenu" unique_id=1669397865]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.494792
@@ -191,7 +213,7 @@ placeholder_text = "Enter Port..."
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Host" type="Button" parent="PlayMenu" unique_id=728426020]
+[node name="Host" type="Button" parent="LobbyMenu" unique_id=728426020]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -209,7 +231,7 @@ disabled = true
 text = "Host"
 metadata/_edit_use_anchors_ = true
 
-[node name="Join" type="Button" parent="PlayMenu" unique_id=1146500327]
+[node name="Join" type="Button" parent="LobbyMenu" unique_id=1146500327]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -228,7 +250,7 @@ text = "Join
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Back" type="Button" parent="PlayMenu" unique_id=1244614552]
+[node name="Back" type="Button" parent="LobbyMenu" unique_id=1244614552]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.213542
@@ -246,7 +268,7 @@ text = "BACK
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="IPInput" type="LineEdit" parent="PlayMenu" unique_id=1277371077]
+[node name="IPInput" type="LineEdit" parent="LobbyMenu" unique_id=1277371077]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.494792
@@ -265,7 +287,7 @@ alignment = 1
 max_length = 16
 metadata/_edit_use_anchors_ = true
 
-[node name="PortInput" type="LineEdit" parent="PlayMenu" unique_id=1849078765]
+[node name="PortInput" type="LineEdit" parent="LobbyMenu" unique_id=1849078765]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -285,7 +307,7 @@ alignment = 1
 max_length = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerPanel" type="Panel" parent="PlayMenu" unique_id=94166797]
+[node name="PlayerPanel" type="Panel" parent="LobbyMenu" unique_id=94166797]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -302,7 +324,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_l44iw")
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerList" type="GridContainer" parent="PlayMenu/PlayerPanel" unique_id=1781782460]
+[node name="PlayerList" type="GridContainer" parent="LobbyMenu/PlayerPanel" unique_id=1781782460]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -319,7 +341,7 @@ theme_override_constants/h_separation = 128
 theme_override_constants/v_separation = 24
 columns = 2
 
-[node name="Player1Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=2127889132]
+[node name="Player1Label" type="Label" parent="LobbyMenu/PlayerPanel/PlayerList" unique_id=2127889132]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -327,7 +349,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player2Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=667762887]
+[node name="Player2Label" type="Label" parent="LobbyMenu/PlayerPanel/PlayerList" unique_id=667762887]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -335,7 +357,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player3Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=886002425]
+[node name="Player3Label" type="Label" parent="LobbyMenu/PlayerPanel/PlayerList" unique_id=886002425]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -343,7 +365,7 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[node name="Player4Label" type="Label" parent="PlayMenu/PlayerPanel/PlayerList" unique_id=1895633038]
+[node name="Player4Label" type="Label" parent="LobbyMenu/PlayerPanel/PlayerList" unique_id=1895633038]
 layout_mode = 2
 theme = ExtResource("11_j5v2v")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -351,13 +373,14 @@ theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
-[connection signal="pressed" from="TitleMenu/Play" to="." method="start_game"]
+[connection signal="pressed" from="TitleMenu/Singleplayer" to="." method="_on_singleplayer_pressed"]
+[connection signal="pressed" from="TitleMenu/Multiplayer" to="." method="_on_multiplayer_pressed"]
 [connection signal="pressed" from="TitleMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="TitleMenu/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="PlayMenu/Start" to="PlayMenu" method="_on_start_button_pressed"]
-[connection signal="text_changed" from="PlayMenu/NameInput" to="PlayMenu" method="_on_name_input_text_changed"]
-[connection signal="pressed" from="PlayMenu/Host" to="PlayMenu" method="_on_host_pressed"]
-[connection signal="pressed" from="PlayMenu/Join" to="PlayMenu" method="join"]
-[connection signal="pressed" from="PlayMenu/Back" to="PlayMenu" method="_on_back_pressed"]
-[connection signal="text_changed" from="PlayMenu/IPInput" to="PlayMenu" method="_on_ip_input_text_changed"]
-[connection signal="text_changed" from="PlayMenu/PortInput" to="PlayMenu" method="_on_port_input_text_changed"]
+[connection signal="pressed" from="LobbyMenu/Start" to="LobbyMenu" method="_on_start_button_pressed"]
+[connection signal="text_changed" from="LobbyMenu/NameInput" to="LobbyMenu" method="_on_name_input_text_changed"]
+[connection signal="pressed" from="LobbyMenu/Host" to="LobbyMenu" method="_on_host_pressed"]
+[connection signal="pressed" from="LobbyMenu/Join" to="LobbyMenu" method="join"]
+[connection signal="pressed" from="LobbyMenu/Back" to="LobbyMenu" method="_on_back_pressed"]
+[connection signal="text_changed" from="LobbyMenu/IPInput" to="LobbyMenu" method="_on_ip_input_text_changed"]
+[connection signal="text_changed" from="LobbyMenu/PortInput" to="LobbyMenu" method="_on_port_input_text_changed"]

@@ -438,7 +438,7 @@ func take_damage(incoming_dmg: float):
 	if incoming_dmg <= 0:
 		return
 	
-	if is_multiplayer_authority() and !is_dead: # Add this for any dmg sync errors
+	if is_multiplayer_authority() and !is_dead: # For dmg sync errors
 		# Calculate armor into damage
 		var dmg_reduction = 1 - (armor /  10)
 		var new_dmg = incoming_dmg * dmg_reduction
