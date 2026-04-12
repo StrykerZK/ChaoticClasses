@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="Chaotic Classes 4.6.1"
+config/name="Chaotic Classes 4.6"
 run/main_scene="uid://fg4bicipdem5"
 config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)

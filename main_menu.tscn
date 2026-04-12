@@ -118,7 +118,7 @@ metadata/_edit_use_anchors_ = true
 [node name="Settings" type="Button" parent="TitleMenu" unique_id=605825868]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.213542
+anchor_left = 0.21354198
 anchor_top = 0.7592593
 anchor_right = 0.21354198
 anchor_bottom = 0.7592593
