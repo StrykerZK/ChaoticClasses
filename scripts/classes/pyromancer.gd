@@ -123,7 +123,7 @@ func spell_1(): # 25 dmg, 3 sec duration
 			# Set projectile position and direction
 			fireball.is_spell_1 = true
 			fireball.direction = Vector2(1,0) # Initial direction
-			fireball.center_point = position
+			fireball.center_point = Vector2(position.x, position.y - 22)
 			fireball.damage = player.damage
 			fireball.player_id = player.player_id
 			await get_tree().create_timer(0.08).timeout

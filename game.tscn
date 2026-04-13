@@ -8,7 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://d1aj3uw0040ii" path="res://main_ui.tscn" id="7_rmtcc"]
 [ext_resource type="AudioStream" uid="uid://hvu33ywq1jl4" path="res://sounds/music/battle_music.ogg" id="9_kek77"]
 
-[node name="Game" type="Node" unique_id=779767792]
+[node name="Game" type="Node2D" unique_id=123346988]
+y_sort_enabled = true
 script = ExtResource("1_gdby6")
 
 [node name="World" parent="." unique_id=1962067651 instance=ExtResource("2_eow3j")]
@@ -17,8 +18,9 @@ script = ExtResource("1_gdby6")
 
 [node name="GameManager" parent="." unique_id=878223536 instance=ExtResource("2_t68bh")]
 
-[node name="PlayerManager" type="Node" parent="." unique_id=1389754884]
+[node name="PlayerManager" type="Node2D" parent="." unique_id=1925557263]
 process_mode = 3
+y_sort_enabled = true
 script = ExtResource("2_pwcnq")
 player_scene = ExtResource("2_lxg2x")
 

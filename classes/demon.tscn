@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=3 uid="uid://c7v831l47f44t"]
+[gd_scene format=3 uid="uid://c7v831l47f44t"]
 
 [ext_resource type="Script" uid="uid://dlyedhyqoobx2" path="res://scripts/classes/demon.gd" id="1_7go43"]
 [ext_resource type="Texture2D" uid="uid://cchusoy8573pg" path="res://art/player/demon_sprite_sheet.png" id="1_va33l"]
@@ -1418,20 +1418,21 @@ animations = [{
 "speed": 1.0
 }]
 
-[node name="demon" type="Node2D"]
+[node name="demon" type="Node2D" unique_id=764156094]
 script = ExtResource("1_7go43")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=181525179]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("1_va33l")
 hframes = 10
 vframes = 7
-frame = 2
+frame = 5
 
-[node name="Weapon" type="AnimatedSprite2D" parent="."]
+[node name="Weapon" type="AnimatedSprite2D" parent="." unique_id=409352267]
 visible = false
 z_index = -1
-position = Vector2(0, 10)
+position = Vector2(0, -12)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_tmgny")
 animation = &"attack_3"
@@ -1439,24 +1440,22 @@ frame = 2
 frame_progress = 1.0
 script = ExtResource("4_jx3kv")
 
-[node name="Hitbox" type="Area2D" parent="."]
-position = Vector2(0, 10)
+[node name="Hitbox" type="Area2D" parent="." unique_id=1010600451]
+position = Vector2(0, -12)
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("3_dywx0")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=628805263]
 position = Vector2(4, 8)
 shape = SubResource("RectangleShape2D_l6n02")
 disabled = true
 debug_color = Color(0.998664, 0, 0.135999, 0.42)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_hp21m")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1517901684]
+libraries/ = SubResource("AnimationLibrary_hp21m")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1292074080]
 tree_root = SubResource("AnimationNodeStateMachine_b38tv")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
@@ -1469,36 +1468,38 @@ parameters/attack/blend_position = Vector2(0.984057, 2.96703)
 parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
-parameters/spell1/blend_position = 0
-parameters/spell2/blend_position = 0
+parameters/spell1/blend_position = 0.0
+parameters/spell2/blend_position = 0.0
 
-[node name="ComboTimer" type="Timer" parent="."]
+[node name="ComboTimer" type="Timer" parent="." unique_id=1679663645]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=754256666]
 one_shot = true
 
-[node name="SpellFX" type="AnimatedSprite2D" parent="."]
+[node name="SpellFX" type="AnimatedSprite2D" parent="." unique_id=1206695735]
 visible = false
 z_index = -1
+position = Vector2(0, -22)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_o2t5q")
 animation = &"spell1"
 
-[node name="SpellHitbox" type="Area2D" parent="."]
+[node name="SpellHitbox" type="Area2D" parent="." unique_id=1310899955]
 visible = false
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 16
 monitoring = false
 monitorable = false
 script = ExtResource("5_4nffn")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SpellHitbox"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SpellHitbox" unique_id=720336187]
 polygon = PackedVector2Array(-160, 15, -140, -5, -130, -10, -115, -15, -100, -20, -80, -25, -45, -30, 45, -30, 80, -25, 100, -20, 115, -15, 130, -10, 140, -5, 160, 15, 160, 30, 140, 50, 130, 55, 115, 60, 100, 65, 80, 70, 45, 75, -45, 75, -80, 70, -100, 65, -115, 60, -130, 55, -140, 50, -160, 30)
 
-[node name="Spell1Timer" type="Timer" parent="."]
+[node name="Spell1Timer" type="Timer" parent="." unique_id=12140517]
 
-[node name="Spell2Timer" type="Timer" parent="."]
+[node name="Spell2Timer" type="Timer" parent="." unique_id=1449891688]
 
 [connection signal="timeout" from="ComboTimer" to="." method="_on_combo_timer_timeout"]
 [connection signal="area_entered" from="SpellHitbox" to="SpellHitbox" method="_on_area_entered"]

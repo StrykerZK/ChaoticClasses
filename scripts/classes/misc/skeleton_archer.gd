@@ -7,7 +7,7 @@ func _ready() -> void:
 	health = 40.0
 	$HPBar.max_value = health
 	damage = 30.0
-	attack_range = 250.0
+	attack_range = 300.0
 	speed = 0.0
 	$Name.text = name
 	$AnimatedSprite2D.play("spawn")

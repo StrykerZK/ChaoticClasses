@@ -623,6 +623,7 @@ spell_1_scene = ExtResource("3_gbiyn")
 spell_2_scene = ExtResource("4_wnxwe")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=254351581]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("1_2h5b5")
 hframes = 7
@@ -630,6 +631,7 @@ vframes = 4
 frame = 1
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=715577507]
+position = Vector2(0, -22)
 script = ExtResource("6_ctsvy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=847286856]

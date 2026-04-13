@@ -75,10 +75,10 @@ func spell_1():
 	
 	var summon_offset: float = 40.0
 	
-	var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset)
-	var top_right_pos = global_position + Vector2(summon_offset, -summon_offset)
-	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset)
-	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset)
+	var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset - 22)
+	var top_right_pos = global_position + Vector2(summon_offset, -summon_offset - 22)
+	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
+	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
 	
 	top_left_pos = adjust_spawn_position(top_left_pos)
 	top_right_pos = adjust_spawn_position(top_right_pos)
@@ -147,9 +147,9 @@ func spell_2():
 	
 	var summon_offset: float = 40.0
 	
-	var top_pos = global_position + Vector2(0, -summon_offset)
-	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset)
-	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset)
+	var top_pos = global_position + Vector2(0, -summon_offset - 22)
+	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
+	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
 	
 	top_pos = adjust_spawn_position(top_pos)
 	bottom_left_pos = adjust_spawn_position(bottom_left_pos)

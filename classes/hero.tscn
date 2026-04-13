@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://cxeud2sgthd17"]
+[gd_scene format=3 uid="uid://cxeud2sgthd17"]
 
 [ext_resource type="Script" uid="uid://msmnsu61jcc0" path="res://scripts/classes/hero.gd" id="1_1fpu4"]
 [ext_resource type="Texture2D" uid="uid://bdftejhyia2fb" path="res://art/player/hero_sprite_sheet.png" id="1_psyiu"]
@@ -1449,20 +1449,21 @@ animations = [{
 "speed": 1.0
 }]
 
-[node name="hero" type="Node2D"]
+[node name="hero" type="Node2D" unique_id=835207462]
 script = ExtResource("1_1fpu4")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1439457361]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("1_psyiu")
 hframes = 10
 vframes = 7
 frame = 1
 
-[node name="Weapon" type="AnimatedSprite2D" parent="."]
+[node name="Weapon" type="AnimatedSprite2D" parent="." unique_id=1425913520]
 visible = false
 z_index = -1
-position = Vector2(0, 10)
+position = Vector2(0, -12)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_rgrcm")
 animation = &"attack_1"
@@ -1470,23 +1471,21 @@ frame = 1
 frame_progress = 1.0
 script = ExtResource("4_mfh2y")
 
-[node name="Hitbox" type="Area2D" parent="."]
-position = Vector2(0, 10)
+[node name="Hitbox" type="Area2D" parent="." unique_id=1244613289]
+position = Vector2(0, -12)
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("3_4bifk")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2094051605]
 shape = SubResource("RectangleShape2D_i36nm")
 disabled = true
 debug_color = Color(0.946795, 0.23205, 0, 0.42)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_vknum")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1213600827]
+libraries/ = SubResource("AnimationLibrary_vknum")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1451056793]
 tree_root = SubResource("AnimationNodeStateMachine_2oee8")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
@@ -1502,13 +1501,13 @@ parameters/run/blend_position = Vector2(-0.614005, -0.135803)
 parameters/spell1/blend_position = -0.0366151
 parameters/spell2/blend_position = -1.0
 
-[node name="ComboTimer" type="Timer" parent="."]
+[node name="ComboTimer" type="Timer" parent="." unique_id=1886714199]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=145335172]
 one_shot = true
 
-[node name="SpellFX" type="AnimatedSprite2D" parent="."]
+[node name="SpellFX" type="AnimatedSprite2D" parent="." unique_id=1128807322]
 visible = false
 z_index = 3
 scale = Vector2(3, 3)
@@ -1516,20 +1515,21 @@ sprite_frames = SubResource("SpriteFrames_j2he3")
 animation = &"spell2start"
 offset = Vector2(0, -48)
 
-[node name="SpellHitbox" type="Area2D" parent="."]
+[node name="SpellHitbox" type="Area2D" parent="." unique_id=1642057844]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 20
 script = ExtResource("3_4bifk")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitbox" unique_id=854922046]
 shape = SubResource("CapsuleShape2D_d1d4g")
 disabled = true
 
-[node name="Spell1Timer" type="Timer" parent="."]
+[node name="Spell1Timer" type="Timer" parent="." unique_id=1524145844]
 wait_time = 5.0
 one_shot = true
 
-[node name="Spell2Timer" type="Timer" parent="."]
+[node name="Spell2Timer" type="Timer" parent="." unique_id=500567477]
 wait_time = 4.0
 one_shot = true
 

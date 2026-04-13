@@ -16,6 +16,7 @@ var camera_base_zoom: float = 0.7
 
 # Spectating
 var is_spectating: bool = false
+var match_ending: bool = false # Only for last player spectating
 
 func _ready() -> void:
 	
@@ -64,6 +65,8 @@ func assign_players(): # Assign player nodes for ref
 
 func start_game(): # Start of match effects
 	StageManager.update_game_state("Starting Game")
+	if is_spectating: is_spectating = false
+	if match_ending: match_ending = false
 	assign_players()
 	
 	pause_players()
@@ -95,9 +98,10 @@ func back_to_main_menu():
 @rpc("any_peer","call_local","reliable")
 func player_dead(id):
 	if !is_spectating:
-		if id == local_player.player_id: 
-			is_spectating = true
-			cycle_spectator()
+		if !match_ending:
+			if id == local_player.player_id: 
+				is_spectating = true
+				cycle_spectator()
 	
 	var number = StageManager.get_player_number(id)
 	match number:
@@ -128,6 +132,7 @@ func cycle_spectator(direction: int = 1):
 func last_player_dead(id: int):
 	var last_player = null
 	is_spectating = false
+	match_ending = true
 	
 	for p in [player_1, player_2, player_3, player_4]:
 		if is_instance_valid(p) and p.player_id == id:

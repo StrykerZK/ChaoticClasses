@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://dypflun7yn05e"]
+[gd_scene format=3 uid="uid://dypflun7yn05e"]
 
 [ext_resource type="Script" uid="uid://djhbayfxbc1kl" path="res://scripts/classes/pyromancer.gd" id="1_1qsv3"]
 [ext_resource type="Texture2D" uid="uid://cit7m8i11ie2n" path="res://art/player/pyromancer_sprite_sheet.png" id="2_0qbia"]
@@ -46,7 +46,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(24, -4)]
+"values": [Vector2(24, -26)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -134,7 +134,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(-18, -4), Vector2(-32, -8)]
+"values": [Vector2(-18, -26), Vector2(-32, -30)]
 }
 
 [sub_resource type="Animation" id="Animation_go7cc"]
@@ -174,7 +174,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(-9, -15), Vector2(-13, -29)]
+"values": [Vector2(-9, -37), Vector2(-13, -51)]
 }
 
 [sub_resource type="Animation" id="Animation_qyb1p"]
@@ -214,7 +214,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(-13, -33), Vector2(-13, -13)]
+"values": [Vector2(-13, -55), Vector2(-13, -35)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -290,7 +290,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(18, -4), Vector2(32, -8)]
+"values": [Vector2(18, -26), Vector2(32, -30)]
 }
 
 [sub_resource type="Animation" id="Animation_7mh68"]
@@ -330,7 +330,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(9, -15), Vector2(13, -29)]
+"values": [Vector2(9, -37), Vector2(13, -51)]
 }
 
 [sub_resource type="Animation" id="Animation_2ss87"]
@@ -370,7 +370,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Vector2(13, -33), Vector2(13, -13)]
+"values": [Vector2(13, -55), Vector2(13, -35)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -616,7 +616,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2(-1, -39)]
+"values": [Vector2(-1, -61)]
 }
 
 [sub_resource type="Animation" id="Animation_6u608"]
@@ -653,10 +653,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
+"times": PackedFloat32Array(0.20000002),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": []
+"values": [Vector2(-1, -61)]
 }
 
 [sub_resource type="Animation" id="Animation_a3oh7"]
@@ -1107,34 +1107,34 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_w2rn8"]
 radius = 94.0053
 
-[node name="pyromancer" type="Node2D"]
+[node name="pyromancer" type="Node2D" unique_id=1186445335]
 script = ExtResource("1_1qsv3")
 fireball_scene = ExtResource("2_ty1lp")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=266480493]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("2_0qbia")
 hframes = 10
 vframes = 6
 frame = 1
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=2062517817]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("4_cf2yf")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1965335981]
 position = Vector2(13, -1)
 shape = SubResource("RectangleShape2D_d2ciw")
 disabled = true
 debug_color = Color(0.946795, 0.23205, 0, 0.42)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wpyet")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=838747128]
+libraries/ = SubResource("AnimationLibrary_wpyet")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1171123074]
 tree_root = SubResource("AnimationNodeStateMachine_gyaw1")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
@@ -1148,36 +1148,38 @@ parameters/dodge/blend_position = -0.363192
 parameters/idle/blend_position = Vector2(0.324607, -0.115044)
 parameters/run/blend_position = Vector2(-0.937173, 0.817391)
 parameters/spell1/blend_position = -0.814483
-parameters/spell2/blend_position = 0
+parameters/spell2/blend_position = 0.0
 
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(24, -4)
+[node name="Marker2D" type="Marker2D" parent="." unique_id=61726548]
+position = Vector2(24, -26)
 
-[node name="SpellFX" type="AnimatedSprite2D" parent="."]
+[node name="SpellFX" type="AnimatedSprite2D" parent="." unique_id=1684303406]
 visible = false
 z_index = 3
+position = Vector2(0, -22)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_c7xvb")
 
-[node name="SpellHitbox" type="Area2D" parent="."]
+[node name="SpellHitbox" type="Area2D" parent="." unique_id=864986004]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 16
 script = ExtResource("6_hj7i8")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpellHitbox" unique_id=180511710]
 shape = SubResource("CircleShape2D_w2rn8")
 disabled = true
 
-[node name="ComboTimer" type="Timer" parent="."]
+[node name="ComboTimer" type="Timer" parent="." unique_id=427554131]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=1897504038]
 one_shot = true
 
-[node name="Spell1Timer" type="Timer" parent="."]
+[node name="Spell1Timer" type="Timer" parent="." unique_id=1861809305]
 one_shot = true
 
-[node name="Spell2Timer" type="Timer" parent="."]
+[node name="Spell2Timer" type="Timer" parent="." unique_id=1177299973]
 one_shot = true
 
 [connection signal="area_entered" from="SpellHitbox" to="SpellHitbox" method="_on_area_entered"]

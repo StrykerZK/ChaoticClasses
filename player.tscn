@@ -1343,8 +1343,8 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(-92, -70)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_83ret"]
-radius = 15.0
-height = 38.0
+radius = 2.0
+height = 18.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cvhqj"]
 radius = 15.0
@@ -1801,7 +1801,7 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" unique_id=372273083 groups=["players"]]
 process_mode = 3
-z_index = 1
+y_sort_enabled = true
 collision_layer = 2
 collision_mask = 673
 script = ExtResource("1_ostsg")
@@ -1810,6 +1810,7 @@ script = ExtResource("1_ostsg")
 script = ExtResource("2_u12l6")
 
 [node name="Sprite2D" type="Sprite2D" parent="base" unique_id=1314858309]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("2_4omiv")
 hframes = 10
@@ -1817,6 +1818,7 @@ vframes = 6
 frame = 1
 
 [node name="Hitbox" type="Area2D" parent="base" unique_id=2106865275]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("3_xqdpe")
@@ -1872,10 +1874,13 @@ hframes = 5
 wait_time = 0.7
 
 [node name="Collisionbox" type="CollisionShape2D" parent="." unique_id=1979779811]
-position = Vector2(0, 3)
+position = Vector2(3, -2)
+rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_83ret")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=510942496]
+visible = false
+position = Vector2(0, -22)
 collision_layer = 16
 collision_mask = 76
 
@@ -1885,8 +1890,8 @@ shape = SubResource("CapsuleShape2D_cvhqj")
 debug_color = Color(0, 1, 0.12549, 0.419608)
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=1651702437]
-visible = false
 z_index = -1
+position = Vector2(0, -21)
 scale = Vector2(2, 2)
 texture = ExtResource("7_nvl01")
 
@@ -1921,15 +1926,19 @@ one_shot = true
 [node name="Target" type="Marker2D" parent="." unique_id=1350289573]
 
 [node name="PlayerFX" type="AnimatedSprite2D" parent="." unique_id=634184261]
+z_index = 3
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4gxxo")
 
 [node name="HitFX" type="AnimatedSprite2D" parent="." unique_id=316455659]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_uwrur")
 
 [node name="DebuffFX" type="AnimatedSprite2D" parent="." unique_id=1903168584]
 visible = false
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_x4l17")
 

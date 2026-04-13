@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://dpn1uarsdks0w"]
+[gd_scene format=3 uid="uid://dpn1uarsdks0w"]
 
 [ext_resource type="Script" uid="uid://b1okp1w0u6kx2" path="res://scripts/classes/archer.gd" id="1_jrsw8"]
 [ext_resource type="Texture2D" uid="uid://dysv50fd30o74" path="res://art/player/archer_sprite_sheet.png" id="1_s1fos"]
@@ -46,7 +46,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -22)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -166,7 +166,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-10, 5)]
+"values": [Vector2(-10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_xx2p0"]
@@ -203,10 +203,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.4),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(10, 5)]
+"values": [Vector2(10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_dblhs"]
@@ -299,10 +299,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-10, 5)]
+"values": [Vector2(-10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_08v8j"]
@@ -339,10 +339,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(10, 5)]
+"values": [Vector2(10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_b5ox7"]
@@ -491,10 +491,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-10, 5)]
+"values": [Vector2(-10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_kshgk"]
@@ -531,10 +531,10 @@ tracks/2/path = NodePath("Marker2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(10, 5)]
+"values": [Vector2(10, -17)]
 }
 
 [sub_resource type="Animation" id="Animation_je8wm"]
@@ -1105,36 +1105,36 @@ states/spell2/position = Vector2(602, 21)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3vxuc"), "idle", "attack", SubResource("AnimationNodeStateMachineTransition_qwfho"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_kao0e"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_mc1tx"), "idle", "dodge", SubResource("AnimationNodeStateMachineTransition_ah1hg"), "dodge", "idle", SubResource("AnimationNodeStateMachineTransition_powi3"), "run", "dodge", SubResource("AnimationNodeStateMachineTransition_jniai"), "dodge", "run", SubResource("AnimationNodeStateMachineTransition_u6ihb"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_3rhy7"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_njxrp"), "attack", "run", SubResource("AnimationNodeStateMachineTransition_yk6tl"), "attack", "dodge", SubResource("AnimationNodeStateMachineTransition_4258j"), "run", "spell1", SubResource("AnimationNodeStateMachineTransition_cnpmh"), "idle", "spell1", SubResource("AnimationNodeStateMachineTransition_bg482"), "spell1", "run", SubResource("AnimationNodeStateMachineTransition_cn8vh"), "spell1", "idle", SubResource("AnimationNodeStateMachineTransition_1i5wv"), "spell1", "dodge", SubResource("AnimationNodeStateMachineTransition_vany5"), "spell1", "attack", SubResource("AnimationNodeStateMachineTransition_01dmk"), "run", "spell2", SubResource("AnimationNodeStateMachineTransition_1ul0r"), "idle", "spell2", SubResource("AnimationNodeStateMachineTransition_q02n1"), "spell1", "spell2", SubResource("AnimationNodeStateMachineTransition_0jlmq"), "spell2", "spell1", SubResource("AnimationNodeStateMachineTransition_jrvsk"), "spell2", "run", SubResource("AnimationNodeStateMachineTransition_0rhik"), "spell2", "idle", SubResource("AnimationNodeStateMachineTransition_r7750"), "spell2", "dodge", SubResource("AnimationNodeStateMachineTransition_1ep2j")]
 graph_offset = Vector2(-78, -93)
 
-[node name="archer" type="Node2D"]
+[node name="archer" type="Node2D" unique_id=32907982]
 script = ExtResource("1_jrsw8")
 arrow_scene = ExtResource("2_4rt7k")
 spell_1_scene = ExtResource("3_4nr05")
 spell_2_scene = ExtResource("3_f64dt")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=301434558]
+position = Vector2(0, -22)
 scale = Vector2(2, 2)
 texture = ExtResource("1_s1fos")
 hframes = 10
 vframes = 9
 frame = 1
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=1175054747]
+position = Vector2(0, -22)
 collision_layer = 8
 collision_mask = 84
 script = ExtResource("4_6wuos")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=561287412]
 position = Vector2(13, -1)
 shape = SubResource("RectangleShape2D_1uyvq")
 disabled = true
 debug_color = Color(0.946795, 0.23205, 0, 0.42)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wvasd")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1005942761]
+libraries/ = SubResource("AnimationLibrary_wvasd")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1002256633]
 tree_root = SubResource("AnimationNodeStateMachine_ybhgl")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/idle = false
@@ -1150,20 +1150,21 @@ parameters/run/blend_position = Vector2(0, 0)
 parameters/spell1/blend_position = 1.12042
 parameters/spell2/blend_position = -0.998373
 
-[node name="Marker2D" type="Marker2D" parent="."]
+[node name="Marker2D" type="Marker2D" parent="." unique_id=224993690]
+position = Vector2(0, -22)
 
-[node name="ChargeTimer" type="Timer" parent="."]
+[node name="ChargeTimer" type="Timer" parent="." unique_id=1011201712]
 one_shot = true
 
-[node name="ChargeAnimTimer" type="Timer" parent="."]
+[node name="ChargeAnimTimer" type="Timer" parent="." unique_id=367341512]
 one_shot = true
 
-[node name="AttackTimer" type="Timer" parent="."]
+[node name="AttackTimer" type="Timer" parent="." unique_id=188391966]
 
-[node name="Spell1Timer" type="Timer" parent="."]
+[node name="Spell1Timer" type="Timer" parent="." unique_id=1288955915]
 one_shot = true
 
-[node name="Spell2Timer" type="Timer" parent="."]
+[node name="Spell2Timer" type="Timer" parent="." unique_id=1016412000]
 one_shot = true
 
 [connection signal="timeout" from="ChargeTimer" to="." method="charge_projectile"]

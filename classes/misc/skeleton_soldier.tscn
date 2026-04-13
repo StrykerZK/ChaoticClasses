@@ -268,6 +268,7 @@ height = 26.0
 size = Vector2(14, 20)
 
 [node name="skeleton_soldier" type="CharacterBody2D" unique_id=1080296139 groups=["summons"]]
+y_sort_enabled = true
 collision_layer = 512
 collision_mask = 515
 motion_mode = 1
@@ -314,6 +315,7 @@ one_shot = true
 autostart = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1163261509]
+target_desired_distance = 30.0
 avoidance_enabled = true
 radius = 12.0
 max_speed = 175.0

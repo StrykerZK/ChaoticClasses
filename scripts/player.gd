@@ -250,7 +250,7 @@ func ghost_effect():
 	var sprite: Sprite2D = current_class_node.get_child(0)
 	$/root/Main/Game.add_child(ghost)
 	
-	ghost.global_position = global_position
+	ghost.global_position = Vector2(global_position.x, global_position.y - 22)
 	ghost.texture = sprite.texture
 	ghost.vframes = sprite.vframes
 	ghost.hframes = sprite.hframes

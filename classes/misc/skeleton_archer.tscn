@@ -276,6 +276,7 @@ radius = 12.0
 height = 28.0
 
 [node name="skeleton_archer" type="CharacterBody2D" unique_id=942538211 groups=["summons"]]
+y_sort_enabled = true
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_fjdqr")
@@ -309,6 +310,7 @@ one_shot = true
 autostart = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=641935681]
+target_desired_distance = 250.0
 avoidance_enabled = true
 radius = 12.0
 max_speed = 150.0

@@ -50,7 +50,8 @@ func get_nearest_player():
 		if player.player_id == player_id:
 			continue
 		
-		var distance = global_position.distance_to(player.global_position)
+		var player_position = Vector2(player.global_position.x, player.global_position.y - 22)
+		var distance = global_position.distance_to(player_position)
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest_player_found = player
@@ -59,11 +60,12 @@ func get_nearest_player():
 
 func move_towards_player(delta):
 	if nearest_player:
-		navigation_agent.target_position = nearest_player.global_position
+		var player_position = Vector2(nearest_player.global_position.x, nearest_player.global_position.y - 22)
+		navigation_agent.target_position = player_position
 		var next_position = navigation_agent.get_next_path_position()
 		
 		if not (is_nan(next_position.x) or is_nan(next_position.y)):
-			var direction = (next_position - position).normalized()
+			var direction = (next_position - global_position).normalized()
 			var new_velocity = direction * speed
 			
 			if navigation_agent.avoidance_enabled:

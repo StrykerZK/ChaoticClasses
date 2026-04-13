@@ -6,6 +6,7 @@
 .import/
 export.cfg
 export_presets.cfg
+extended_editor_settings.cfg
 
 # Imported translations (automatically generated from CSV files)
 *.translation
@@ -14,3 +15,7 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# OS-specific ignores
+.DS_Store
+Thumbs.db

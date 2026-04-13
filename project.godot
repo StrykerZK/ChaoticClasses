@@ -117,8 +117,11 @@ back={
 [layer_names]
 
 2d_physics/layer_1="Environment"
+2d_navigation/layer_1="Land"
 2d_physics/layer_2="Player"
+2d_navigation/layer_2="Water"
 2d_physics/layer_3="Projectile"
+2d_navigation/layer_3="Phase"
 2d_physics/layer_4="Hitbox"
 2d_physics/layer_5="Hurtbox"
 2d_physics/layer_6="Collectibles"

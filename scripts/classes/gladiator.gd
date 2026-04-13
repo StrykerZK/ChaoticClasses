@@ -124,7 +124,7 @@ func _on_spell_2_timer_timeout():
 		var spell_2_instance = spell_2_scene.instantiate()
 		spell_2_instance.player_id = player.player_id
 		spell_2_instance.damage = 40
-		spell_2_instance.position = global_position
+		spell_2_instance.position = Vector2(global_position.x, global_position.y - 22)
 		spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.get_target(player.player_id))
 		game_node.spawn(spell_2_instance)
 		start_spell_2_cooldown()

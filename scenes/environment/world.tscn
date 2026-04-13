@@ -119,7 +119,8 @@ animations = [{
 "speed": 18.0
 }]
 
-[node name="World" type="Node" unique_id=1962067651 groups=["map"]]
+[node name="World" type="Node2D" unique_id=1259658543 groups=["map"]]
+y_sort_enabled = true
 script = ExtResource("1_5qsk4")
 
 [node name="MapCenter" type="Marker2D" parent="." unique_id=178862274]
