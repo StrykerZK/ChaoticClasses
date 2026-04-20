@@ -123,6 +123,14 @@ animations = [{
 y_sort_enabled = true
 script = ExtResource("1_5qsk4")
 
+[node name="EntityContainer" type="Node2D" parent="." unique_id=292457034]
+
+[node name="Players" type="Node2D" parent="EntityContainer" unique_id=1228853726]
+
+[node name="Summons" type="Node2D" parent="EntityContainer" unique_id=546987783]
+
+[node name="Misc" type="Node2D" parent="EntityContainer" unique_id=1390861892]
+
 [node name="MapCenter" type="Marker2D" parent="." unique_id=178862274]
 
 [node name="AreaFX" type="AnimatedSprite2D" parent="." unique_id=1779836636]

@@ -6,7 +6,7 @@ var player_3: CharacterBody2D
 var player_4: CharacterBody2D
 var local_player: CharacterBody2D
 
-var world: Node
+# World's children
 var areaFX: AnimatedSprite2D
 var mapCenter: Marker2D
 
@@ -21,8 +21,7 @@ var match_ending: bool = false # Only for last player spectating
 func _ready() -> void:
 	
 	# --- NODE ASSIGNMENT ---
-	world = get_child(0)
-	for i in world.get_children(): 
+	for i in $World.get_children(): 
 		match i.name:
 			"AreaFX": areaFX = i
 			"MapCenter": mapCenter = i
@@ -150,7 +149,7 @@ func last_player_dead(id: int):
 
 func play_ko_effect(loser):
 	var effects = areaFX.duplicate()
-	world.add_child(effects)
+	$World.add_child(effects)
 	var map_limits: Vector2 = MapManager.get_map_limits()
 	var fx_x = clamp(loser.global_position.x, -map_limits.x, map_limits.x)
 	var fx_y = clamp(loser.global_position.y, -map_limits.y, map_limits.y)

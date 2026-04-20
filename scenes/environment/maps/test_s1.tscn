@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dxjiws2ai34r3" path="res://art/tiles/tilemap_32.png" id="1_psnjr"]
 [ext_resource type="Texture2D" uid="uid://d0yc6fwvttg7r" path="res://art/tiles/tree.png" id="2_etbg6"]
-[ext_resource type="PackedScene" uid="uid://dyuactdutwld2" path="res://dummy.tscn" id="2_y84k4"]
+[ext_resource type="PackedScene" uid="uid://dyuactdutwld2" path="res://scenes/misc/dummy.tscn" id="2_y84k4"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_etbg6"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)

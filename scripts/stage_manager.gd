@@ -4,6 +4,7 @@ var player_list = {}
 var player_count = 0
 
 var game_state = ""
+var is_singleplayer: bool = false
 
 func _ready():
 	pass
