@@ -3,7 +3,12 @@ extends Node
 var player_list = {}
 var player_count = 0
 
-var game_state = ""
+enum GameState {
+	MENU, LOBBY,
+	STARTING, IN_GAME, MATCH_OVER, GAME_OVER,
+	TRANSFORMING
+}
+var game_state: GameState = GameState.MENU
 var is_singleplayer: bool = false
 
 func _ready():
@@ -71,15 +76,16 @@ func update_player_health(id: int, current_health: float):
 		print("Player not found for health!")
 
 @rpc("any_peer","call_local")
-func update_game_state(state: String):
-	game_state = state
+func update_game_state(new_state: GameState):
+	game_state = new_state
+	pass
 
 @rpc("any_peer","call_local")
 func update_scores(id):
 	if player_list.has(id):
 		player_list[id].score += 1
 		if player_list[id].score == 3:
-			update_game_state("Game Over")
+			update_game_state(GameState.GAME_OVER)
 
 func remove_player_information(id):
 	if player_list.has(id):
@@ -88,7 +94,7 @@ func remove_player_information(id):
 	set_player_numbers()
 
 func reset_game():
-	game_state = ""
+	game_state = GameState.MENU
 	reset_stats()
 	reset_scores()
 

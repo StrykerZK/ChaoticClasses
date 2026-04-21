@@ -28,7 +28,7 @@ func _ready() -> void:
 	
 	# --- Start of Game ---
 	if multiplayer.is_server():
-		$PlayerManager.create_players()
+		$MultiplayerManager.create_players()
 
 func _process(_delta):
 	if is_spectating:
@@ -63,7 +63,7 @@ func assign_players(): # Assign player nodes for ref
 			break
 
 func start_game(): # Start of match effects
-	StageManager.update_game_state("Starting Game")
+	StageManager.update_game_state(StageManager.GameState.STARTING)
 	if is_spectating: is_spectating = false
 	if match_ending: match_ending = false
 	assign_players()
@@ -80,8 +80,8 @@ func start_game(): # Start of match effects
 	
 	await $MainUI/FX.animation_finished
 	unpause_players()
-	$GameManager.start_game()
-	StageManager.update_game_state("In Game")
+	$MultiplayerManager.start_game()
+	StageManager.update_game_state(StageManager.GameState.IN_GAME)
 
 func game_end():
 	$MainUI.game_end()

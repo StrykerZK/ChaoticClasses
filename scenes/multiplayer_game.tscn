@@ -3,8 +3,7 @@
 [ext_resource type="Script" uid="uid://blawyvwcuspd2" path="res://scripts/multiplayer_game.gd" id="1_0j1od"]
 [ext_resource type="PackedScene" uid="uid://by6kxrmiposwv" path="res://scenes/environment/world.tscn" id="2_q5cjx"]
 [ext_resource type="PackedScene" uid="uid://d1aj3uw0040ii" path="res://scenes/ui/main_ui.tscn" id="3_wpphm"]
-[ext_resource type="PackedScene" uid="uid://csdrehhlcjwp0" path="res://scenes/game_manager.tscn" id="4_dpahi"]
-[ext_resource type="Script" uid="uid://dyg35b1imjinh" path="res://scripts/player_manager.gd" id="5_b7rgb"]
+[ext_resource type="PackedScene" uid="uid://csdrehhlcjwp0" path="res://scenes/multiplayer_manager.tscn" id="4_dpahi"]
 [ext_resource type="PackedScene" uid="uid://cuw7fymmodn3b" path="res://scenes/player.tscn" id="6_yhdvj"]
 [ext_resource type="AudioStream" uid="uid://hvu33ywq1jl4" path="res://sounds/music/battle_music.ogg" id="7_aeh3n"]
 
@@ -16,16 +15,8 @@ script = ExtResource("1_0j1od")
 
 [node name="MainUI" parent="." unique_id=1704908220 instance=ExtResource("3_wpphm")]
 
-[node name="GameManager" parent="." unique_id=878223536 instance=ExtResource("4_dpahi")]
-
-[node name="PlayerManager" type="Node2D" parent="." unique_id=1925557263]
-process_mode = 3
-y_sort_enabled = true
-script = ExtResource("5_b7rgb")
+[node name="MultiplayerManager" parent="." unique_id=945754392 instance=ExtResource("4_dpahi")]
 player_scene = ExtResource("6_yhdvj")
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="PlayerManager" unique_id=369546601]
-spawn_path = NodePath("..")
 
 [node name="Summons" type="Node" parent="." unique_id=1356944808]
 

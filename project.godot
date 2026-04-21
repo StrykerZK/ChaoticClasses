@@ -26,6 +26,7 @@ config/icon="res://art/misc/beezee.png"
 ClassManager="*res://scripts/class_manager.gd"
 StageManager="*res://scripts/stage_manager.gd"
 MapManager="*uid://bem63lm2aecrq"
+NetworkManager="*uid://danubui37bc17"
 
 [display]
 

@@ -25,7 +25,7 @@ var dodge_speed: float = 0.0
 # Misc variables
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
-@onready var player_manager: Node
+@onready var multiplayer_manager: Node
 @onready var game_node: Node
 @onready var hitbox: Area2D
 
@@ -61,14 +61,15 @@ var is_stunned: bool = false
 var is_rooted: bool = false
 
 func _enter_tree() -> void:
-	ready.connect(Callable($/root/Main/Game/GameManager,"_on_players_connected"))
-	dead.connect(Callable($/root/Main/Game/GameManager,"player_dead"))
+	if !StageManager.is_singleplayer:
+		ready.connect(Callable($/root/Main/Game/MultiplayerGame/MultiplayerManager,"_on_players_connected"))
+		dead.connect(Callable($/root/Main/Game/MultiplayerGame/MultiplayerManager,"player_dead"))
 	
 	player_id = int(str(name))
 	set_multiplayer_authority(player_id)
 
 func _ready() -> void:
-	player_manager = get_node_or_null("/root/Main/Game/PlayerManager")
+	multiplayer_manager = get_node_or_null("/root/Main/Game/PlayerManager")
 	game_node = get_node_or_null("/root/Main/Game")
 	
 	await get_tree().process_frame

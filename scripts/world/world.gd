@@ -14,3 +14,6 @@ func load_map(map: String):
 		move_child(map_instance, 0)
 	else:
 		print("ERROR: MAP NOT FOUND")
+
+func get_player_spawner() -> MultiplayerSpawner:
+	return $EntityContainer/Players/MultiplayerSpawner

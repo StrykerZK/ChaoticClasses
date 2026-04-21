@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://csdrehhlcjwp0"]
+
+[ext_resource type="Script" uid="uid://dy7ndn8avdvl" path="res://scripts/multiplayer_manager.gd" id="1_en7kx"]
+
+[node name="MultiplayerManager" type="Node" unique_id=945754392]
+process_mode = 3
+script = ExtResource("1_en7kx")
+
+[node name="SwapTimer" type="Timer" parent="." unique_id=1735743783]
+wait_time = 10.0
+one_shot = true
+
+[node name="TransformTimer" type="Timer" parent="." unique_id=1415154039]
+wait_time = 6.0
+one_shot = true
+
+[connection signal="timeout" from="SwapTimer" to="." method="_on_swap_timer_timeout"]
+[connection signal="timeout" from="TransformTimer" to="." method="_on_transform_timer_timeout"]

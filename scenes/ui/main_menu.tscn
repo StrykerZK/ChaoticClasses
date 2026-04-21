@@ -7,7 +7,7 @@
 [ext_resource type="Theme" uid="uid://ccigqb3qq002y" path="res://art/ui/button_theme.tres" id="5_ojkxa"]
 [ext_resource type="Texture2D" uid="uid://ch8jwip7mklxs" path="res://art/ui/menu_buttons.png" id="5_yc51r"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
-[ext_resource type="Script" uid="uid://c725oesf8geo1" path="res://scripts/multiplayer_manager.gd" id="8_vv6tx"]
+[ext_resource type="Script" uid="uid://c725oesf8geo1" path="res://scripts/ui/lobby_menu.gd" id="8_vv6tx"]
 [ext_resource type="Theme" uid="uid://blm8hjxu2exss" path="res://art/ui/line_edit_theme.tres" id="9_58hxh"]
 [ext_resource type="Theme" uid="uid://kksj5q4w4n5r" path="res://art/ui/player_info_label.tres" id="11_j5v2v"]
 
