@@ -156,7 +156,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_vv6tx")
-game_scene = ExtResource("2_eagnm")
+multiplayer_game = ExtResource("2_eagnm")
 
 [node name="Start" type="Button" parent="LobbyMenu" unique_id=506036368]
 visible = false

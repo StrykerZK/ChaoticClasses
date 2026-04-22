@@ -46,7 +46,7 @@ func spawn_projectile():
 		arrow.direction = arrow.position.direction_to(nearest_player.global_position)
 	arrow.rotation = arrow.direction.angle()
 	arrow.velocity = arrow.direction * arrow.speed
-	$/root/Main/Game.spawn(arrow)
+	current_world.spawn_misc(arrow)
 
 func die():
 	is_dead = true

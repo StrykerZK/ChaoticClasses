@@ -119,11 +119,11 @@ animations = [{
 "speed": 18.0
 }]
 
-[node name="World" type="Node2D" unique_id=1259658543 groups=["map"]]
+[node name="World" type="Node2D" unique_id=1259658543 groups=["world"]]
 y_sort_enabled = true
 script = ExtResource("1_5qsk4")
 
-[node name="EntityContainer" type="Node2D" parent="." unique_id=292457034]
+[node name="EntityContainer" type="Node2D" parent="." unique_id=292457034 groups=["entity_container"]]
 y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="EntityContainer" unique_id=1228853726]
@@ -136,6 +136,7 @@ spawn_path = NodePath("..")
 y_sort_enabled = true
 
 [node name="SummonSpawner" type="MultiplayerSpawner" parent="EntityContainer/Summons" unique_id=880470229]
+unique_name_in_owner = true
 spawn_path = NodePath("..")
 
 [node name="Misc" type="Node2D" parent="EntityContainer" unique_id=1390861892]

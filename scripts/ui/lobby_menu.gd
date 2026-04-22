@@ -1,6 +1,6 @@
 extends Control
 
-@export var game_scene: PackedScene
+@export var multiplayer_game: PackedScene
 @export var default_ip = "localhost"
 @export var default_port = 51077
 
@@ -45,7 +45,7 @@ func _on_player_disconnected(pid):
 				i.queue_free()
 		if StageManager.player_count <= 1:
 			back_to_main_menu()
-			await $/root/Main/Game.tree_exited
+			await $/root/Main/Game.child_exiting_tree
 			if multiplayer.is_server():
 				_on_player_disconnected(pid)
 			else:
@@ -64,10 +64,12 @@ func connection_failed():
 	pass
 
 func server_disconnected():
-	if is_instance_valid($/root/Main/Game):
-		$/root/Main/Game.queue_free()
+	var game_node = $/root/Main/Game.get_child(0)
+	if is_instance_valid(game_node):
+		game_node.queue_free()
 	else:
-		$Back.pressed.emit()
+		#$Back.pressed.emit()
+		get_tree().reload_current_scene()
 
 @rpc("any_peer","call_local")
 func remove_player_information(id):
@@ -96,9 +98,9 @@ func announce_player_information():
 
 @rpc("call_local","reliable")
 func start_game():
-	var main_game = game_scene.instantiate()
+	var game = multiplayer_game.instantiate()
 	get_tree().current_scene.hide_main_menu()
-	$/root/Main/Game.add_child(main_game)
+	$/root/Main/Game.add_child(game)
 
 @rpc("any_peer")
 func update_player_panel():
@@ -121,7 +123,8 @@ func update_player_panel():
 
 func back_to_main_menu():
 	get_parent().show()
-	$/root/Main/Game.queue_free()
+	if is_instance_valid($/root/Main/Game.get_child(0)):
+		$/root/Main/Game.get_child(0).queue_free()
 
 func _on_start_button_pressed():
 	start_game.rpc()

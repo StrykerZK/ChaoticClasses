@@ -5,11 +5,17 @@ var player_2: CharacterBody2D
 var player_3: CharacterBody2D
 var player_4: CharacterBody2D
 
+var game_manager: Node
+
 var is_paused: bool = false
 
 func _ready() -> void:
+	# Variable setup
+	game_manager = get_tree().get_first_node_in_group("game_manager")
+	
 	$Label.hide()
 	$FX.hide()
+
 
 func _process(delta: float) -> void:
 	pass
@@ -77,34 +83,34 @@ func assign_players():
 func toggle_pause():
 	is_paused = !is_paused
 	if is_paused:
-		$PauseMenu.show()
+		if StageManager.game_state != StageManager.GameState.TRANSFORMING: $PauseMenu.show()
 	else:
 		$PauseMenu.hide()
 
 func _on_base_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("base")
+	Callable(game_manager.dev_class_change).call("base")
 	$DevButtons/Base.release_focus()
 
 func _on_hero_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("hero")
+	Callable(game_manager.dev_class_change).call("hero")
 	$DevButtons/Hero.release_focus()
 
 func _on_demon_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("demon")
+	Callable(game_manager.dev_class_change).call("demon")
 	$DevButtons/Demon.release_focus()
 
 func _on_pyro_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("pyromancer")
+	Callable(game_manager.dev_class_change).call("pyromancer")
 	$DevButtons/Pyro.release_focus()
 
 func _on_archer_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("archer")
+	Callable(game_manager.dev_class_change).call("archer")
 	$DevButtons/Archer.release_focus()
 
 func _on_gladiator_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("gladiator")
+	Callable(game_manager.dev_class_change).call("gladiator")
 	$DevButtons/Gladiator.release_focus()
 
 func _on_necro_pressed() -> void:
-	Callable($/root/Main/MultiplayerGame/MultiplayerManager,"dev_class_change").call("necromancer")
+	Callable(game_manager.dev_class_change).call("necromancer")
 	$DevButtons/Necro.release_focus()

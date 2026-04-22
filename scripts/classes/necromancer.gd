@@ -1,8 +1,8 @@
 extends Node2D
 
 @export var attack_scene: PackedScene
-@export var spell_1_scene: PackedScene
-@export var spell_2_scene: PackedScene
+var spell_1_path: String = "res://scenes/summons/skeleton_archer.tscn"
+var spell_2_path: String = "res://scenes/summons/skeleton_soldier.tscn"
 
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
@@ -21,7 +21,7 @@ func _ready() -> void:
 	dodge_timer = player.get_node("DodgeCooldownTimer")
 	anim_player = $AnimationPlayer
 	base_speed = player.speed
-	game_node = $/root/Main/Game
+	game_node = player.game_node
 	
 	get_animation_lengths()
 
@@ -47,7 +47,7 @@ func spawn_attack(index: float):
 	circle.position = StageManager.get_target(player.player_id)
 	circle.damage = player.damage
 	circle.player_id = player.player_id
-	game_node.spawn(circle)
+	player.spawn_misc(circle)
 
 func use_attack_timer(time: float):
 	$AttackTimer.wait_time = time
@@ -66,62 +66,73 @@ func use_attack_timer(time: float):
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
 @rpc("any_peer","call_local")
-func spell_1():
+func spell_1(): # Skeleton Soldiers
 	player.in_spell_1 = true
 	player.can_dodge = false
 	
-	var temp_array = skull_names.duplicate()
-	var index = 0
-	
-	var summon_offset: float = 40.0
-	
-	var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset - 22)
-	var top_right_pos = global_position + Vector2(summon_offset, -summon_offset - 22)
-	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
-	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
-	
-	top_left_pos = adjust_spawn_position(top_left_pos)
-	top_right_pos = adjust_spawn_position(top_right_pos)
-	bottom_left_pos = adjust_spawn_position(bottom_left_pos)
-	bottom_right_pos = adjust_spawn_position(bottom_right_pos)
-	
-	await get_tree().create_timer(0.3).timeout
-	
-	if top_left_pos != Vector2.INF:
-		var top_left_summon = spell_1_scene.instantiate()
-		top_left_summon.position = top_left_pos
-		top_left_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		top_left_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(top_left_summon)
-	
-	if top_right_pos != Vector2.INF:
-		var top_right_summon = spell_1_scene.instantiate()
-		top_right_summon.position = top_right_pos
-		top_right_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		top_right_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(top_right_summon)
-	
-	if bottom_left_pos != Vector2.INF:
-		var bottom_left_summon = spell_1_scene.instantiate()
-		bottom_left_summon.position = bottom_left_pos
-		bottom_left_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		bottom_left_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(bottom_left_summon)
-	
-	if bottom_right_pos != Vector2.INF:
-		var bottom_right_summon = spell_1_scene.instantiate()
-		bottom_right_summon.position = bottom_right_pos
-		bottom_right_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		bottom_right_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(bottom_right_summon)
+	if multiplayer.is_server(): # Only server will initiate skeleton spawns
+		var temp_array = skull_names.duplicate()
+		var index = 0
+		
+		var summon_offset: float = 40.0
+		
+		var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset - 22)
+		var top_right_pos = global_position + Vector2(summon_offset, -summon_offset - 22)
+		var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
+		var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
+		
+		top_left_pos = adjust_spawn_position(top_left_pos)
+		top_right_pos = adjust_spawn_position(top_right_pos)
+		bottom_left_pos = adjust_spawn_position(bottom_left_pos)
+		bottom_right_pos = adjust_spawn_position(bottom_right_pos)
+		
+		await get_tree().create_timer(0.3).timeout
+		
+		if top_left_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			
+			var data = {
+				"path": spell_1_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": top_left_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+		
+		if top_right_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_1_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": top_right_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+		
+		if bottom_left_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_1_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": bottom_left_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+		
+		if bottom_right_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_1_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": bottom_right_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+	# == END OF SERVER CODE ==
 	
 	await get_tree().create_timer(1.0).timeout
 	if dodge_timer.is_stopped(): player.can_dodge = true
@@ -142,47 +153,55 @@ func spell_2():
 	player.in_spell_2 = true
 	player.can_dodge = false
 	
-	var temp_array = skull_names.duplicate()
-	var index = 0
-	
-	var summon_offset: float = 40.0
-	
-	var top_pos = global_position + Vector2(0, -summon_offset - 22)
-	var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
-	var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
-	
-	top_pos = adjust_spawn_position(top_pos)
-	bottom_left_pos = adjust_spawn_position(bottom_left_pos)
-	bottom_right_pos = adjust_spawn_position(bottom_right_pos)
-	
-	await get_tree().create_timer(0.3).timeout
-	
-	if top_pos != Vector2.INF:
-		var top_summon = spell_2_scene.instantiate()
-		top_summon.position = top_pos
-		top_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		top_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(top_summon)
-	
-	if bottom_left_pos != Vector2.INF:
-		var bottom_left_summon = spell_2_scene.instantiate()
-		bottom_left_summon.position = bottom_left_pos
-		bottom_left_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		bottom_left_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(bottom_left_summon)
-	
-	if bottom_right_pos != Vector2.INF:
-		var bottom_right_summon = spell_2_scene.instantiate()
-		bottom_right_summon.position = bottom_right_pos
-		bottom_right_summon.player_id = player.player_id
-		index = randi_range(0,temp_array.size() - 1)
-		bottom_right_summon.name = temp_array[index]
-		temp_array.remove_at(index)
-		game_node.spawn(bottom_right_summon)
+	if multiplayer.is_server(): # Only server will initiate skeleton spawns
+		var temp_array = skull_names.duplicate()
+		var index = 0
+		
+		var summon_offset: float = 40.0
+		
+		var top_pos = global_position + Vector2(0, -summon_offset - 22)
+		var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
+		var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
+		
+		top_pos = adjust_spawn_position(top_pos)
+		bottom_left_pos = adjust_spawn_position(bottom_left_pos)
+		bottom_right_pos = adjust_spawn_position(bottom_right_pos)
+		
+		await get_tree().create_timer(0.3).timeout
+		
+		if top_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_2_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": top_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+		
+		if bottom_left_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_2_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": bottom_left_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+		
+		if bottom_right_pos != Vector2.INF:
+			index = randi_range(0,temp_array.size() - 1)
+			var data = {
+				"path": spell_2_path,
+				"name": temp_array[index],
+				"player_id": player.player_id,
+				"pos": bottom_right_pos
+			}
+			temp_array.remove_at(index)
+			player.spawn_summon(data)
+	# == END OF SERVER CODE ==
 	
 	await get_tree().create_timer(1.0).timeout
 	if dodge_timer.is_stopped(): player.can_dodge = true

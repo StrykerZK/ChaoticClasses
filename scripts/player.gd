@@ -71,7 +71,7 @@ func _enter_tree() -> void:
 	game_node = get_node_or_null("/root/Main/Game").get_child(0)
 	game_manager = get_tree().get_first_node_in_group("game_manager")
 	world_node = game_node.get_node_or_null("World")
-	entity_container = world_node.get_node_or_null("EntityContainer")
+	entity_container = get_tree().get_first_node_in_group("entity_container")
 	main_ui = game_node.get_node_or_null("MainUI")
 	
 	# Player setup
@@ -351,7 +351,7 @@ func class_change(class_title: String):
 	
 	# Pause for transformation
 	StageManager.update_game_state.rpc(StageManager.GameState.TRANSFORMING)
-	if is_multiplayer_authority(): #and multiplayer.is_server():
+	if is_multiplayer_authority() and multiplayer.is_server():
 		game_manager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
@@ -381,7 +381,7 @@ func class_change(class_title: String):
 	
 	initialize_class_children()
 	
-	if is_multiplayer_authority(): #and multiplayer.is_server():
+	if is_multiplayer_authority() and multiplayer.is_server():
 		game_manager.toggle_pause.rpc(0)
 	
 	is_transforming = false
@@ -556,6 +556,12 @@ func reset_systems():
 @rpc("any_peer","call_local")
 func toggle_pause():
 	is_paused = !is_paused
+
+func spawn_summon(data: Dictionary):
+	world_node.spawn_summon(data)
+
+func spawn_misc(misc: Node):
+	world_node.spawn_misc(misc)
 
 func initialize_class_children():
 	anim_tree = get_node(current_class + "/AnimationTree")

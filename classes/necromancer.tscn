@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://d3p38kbng0rd4" path="res://art/player/necromancer_sprite_sheet.png" id="1_2h5b5"]
 [ext_resource type="Script" uid="uid://dqgyojoak0mux" path="res://scripts/classes/necromancer.gd" id="1_lokwp"]
 [ext_resource type="PackedScene" uid="uid://ck2npnf0g0jd7" path="res://classes/misc/necro_attack.tscn" id="2_crbgp"]
-[ext_resource type="PackedScene" uid="uid://bjl4hrquunhl2" path="res://classes/misc/skeleton_soldier.tscn" id="3_gbiyn"]
-[ext_resource type="PackedScene" uid="uid://b2ocw1dy1c0ky" path="res://classes/misc/skeleton_archer.tscn" id="4_wnxwe"]
+[ext_resource type="PackedScene" uid="uid://bjl4hrquunhl2" path="res://scenes/summons/skeleton_soldier.tscn" id="3_gbiyn"]
+[ext_resource type="PackedScene" uid="uid://b2ocw1dy1c0ky" path="res://scenes/summons/skeleton_archer.tscn" id="4_wnxwe"]
 [ext_resource type="Script" uid="uid://bu3llqiv1ts5u" path="res://scripts/classes/misc/hitbox.gd" id="6_ctsvy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wnxwe"]

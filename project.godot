@@ -50,6 +50,8 @@ players=""
 summons=""
 spells=""
 game_manager=""
+entity_container=""
+world=""
 
 [input]
 

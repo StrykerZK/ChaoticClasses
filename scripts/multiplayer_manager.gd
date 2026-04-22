@@ -18,7 +18,7 @@ var player_count: int = 0
 var players_alive: int = 0
 
 # Player Spawning
-var multiplayer_spawner
+var multiplayer_spawner: MultiplayerSpawner
 var spawned_count: int = 0
 
 var main_ui: CanvasLayer
@@ -110,13 +110,15 @@ func class_change():
 	main_ui.class_change.rpc()
 
 @rpc("any_peer","call_local")
-func toggle_pause(id: int): # Use 0 as id for standard rpc calling
-	if id != 0:
-		if !is_paused:
+func toggle_pause(id: int): # id == 0 means non-player pausing
+	
+	if id != 0: # Checking if a player requested pause
+		if !is_paused: # First time pausing, store who did it
 			pause_id = id
 		else:
-			if id != pause_id:
+			if id != pause_id: # If not the player who paused previously, cancle pause req
 				return
+	
 	is_paused = !is_paused
 	get_tree().paused = !get_tree().paused
 	if is_instance_valid(player_1):
@@ -139,8 +141,9 @@ func update_player_class(id, class_title):
 		return
 
 func start_game():
-	if multiplayer.is_server():
-		$SwapTimer.start()
+	#if multiplayer.is_server():
+	#	$SwapTimer.start()
+	pass
 
 func player_dead(id):
 	players_alive -= 1

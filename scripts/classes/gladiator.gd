@@ -17,7 +17,7 @@ var type = "melee"
 func _ready() -> void:
 	player = get_parent()
 	anim_player = $AnimationPlayer
-	game_node = $/root/Main/Game
+	game_node = player.game_node
 	get_animation_lengths()
 	$SpellHitbox.player_id = player.player_id
 
@@ -126,7 +126,7 @@ func _on_spell_2_timer_timeout():
 		spell_2_instance.damage = 40
 		spell_2_instance.position = Vector2(global_position.x, global_position.y - 22)
 		spell_2_instance.velocity = spell_2_instance.position.direction_to(StageManager.get_target(player.player_id))
-		game_node.spawn(spell_2_instance)
+		player.spawn_misc(spell_2_instance)
 		start_spell_2_cooldown()
 	else:
 		player.spell_2_ready = true

@@ -21,7 +21,7 @@ func _ready() -> void:
 	dodge_timer = player.get_node("DodgeCooldownTimer")
 	anim_player = $AnimationPlayer
 	base_speed = player.speed
-	game_node = $/root/Main/Game
+	game_node = player.game_node
 	
 	get_animation_lengths()
 
@@ -66,7 +66,7 @@ func spawn_projectile(index: float):
 	await get_tree().create_timer(spawn_time).timeout
 	if index != 3.0:
 		var fireball = fireball_scene.instantiate()
-		game_node.spawn(fireball)
+		player.spawn_misc(fireball)
 		fireball.position = $Marker2D.global_position
 		fireball.direction = fireball.position.direction_to(mouse_pos)
 		fireball.rotation = fireball.direction.angle()
@@ -79,7 +79,7 @@ func spawn_projectile(index: float):
 		var angle_step = 60 #60 / 4
 		for i in range(6):
 			var fireball = fireball_scene.instantiate()
-			game_node.spawn(fireball)
+			player.spawn_misc(fireball)
 			
 			var angle_offset  = deg_to_rad(start_angle + i * angle_step)
 			

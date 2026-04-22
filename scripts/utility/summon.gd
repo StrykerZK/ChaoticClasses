@@ -17,9 +17,10 @@ var attack_timer: Timer = null
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var hp_bar: ProgressBar = $HPBar
 
+var current_world: Node2D
 
 func _ready():
-	pass
+	current_world = get_tree().get_first_node_in_group("world")
 
 func _physics_process(delta: float):
 	hp_bar.value = health
