@@ -22,7 +22,7 @@ var multiplayer_spawner
 var spawned_count: int = 0
 
 var main_ui: CanvasLayer
-var game_node: Node2D
+var game_node: Node
 var world_node: Node2D
 
 func _ready():

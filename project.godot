@@ -49,6 +49,7 @@ spawnpoints=""
 players=""
 summons=""
 spells=""
+game_manager=""
 
 [input]
 

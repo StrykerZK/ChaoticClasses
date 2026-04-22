@@ -124,13 +124,16 @@ y_sort_enabled = true
 script = ExtResource("1_5qsk4")
 
 [node name="EntityContainer" type="Node2D" parent="." unique_id=292457034]
+y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="EntityContainer" unique_id=1228853726]
+y_sort_enabled = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="EntityContainer/Players" unique_id=807933269]
 spawn_path = NodePath("..")
 
 [node name="Summons" type="Node2D" parent="EntityContainer" unique_id=546987783]
+y_sort_enabled = true
 
 [node name="SummonSpawner" type="MultiplayerSpawner" parent="EntityContainer/Summons" unique_id=880470229]
 spawn_path = NodePath("..")

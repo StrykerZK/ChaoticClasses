@@ -7,18 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://cuw7fymmodn3b" path="res://scenes/player.tscn" id="6_yhdvj"]
 [ext_resource type="AudioStream" uid="uid://hvu33ywq1jl4" path="res://sounds/music/battle_music.ogg" id="7_aeh3n"]
 
-[node name="MultiplayerGame" type="Node2D" unique_id=123346988]
-y_sort_enabled = true
+[node name="MultiplayerGame" type="Node" unique_id=416110834]
 script = ExtResource("1_0j1od")
 
 [node name="World" parent="." unique_id=1962067651 instance=ExtResource("2_q5cjx")]
 
 [node name="MainUI" parent="." unique_id=1704908220 instance=ExtResource("3_wpphm")]
 
-[node name="MultiplayerManager" parent="." unique_id=945754392 instance=ExtResource("4_dpahi")]
+[node name="MultiplayerManager" parent="." unique_id=945754392 groups=["game_manager"] instance=ExtResource("4_dpahi")]
 player_scene = ExtResource("6_yhdvj")
-
-[node name="Summons" type="Node" parent="." unique_id=1356944808]
 
 [node name="BattleMusic" type="AudioStreamPlayer" parent="." unique_id=1059278272]
 process_mode = 3

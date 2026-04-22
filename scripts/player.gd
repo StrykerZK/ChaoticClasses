@@ -22,12 +22,17 @@ var dodge_speed: float = 0.0
 @export var dash_speed: float = 0.0
 @export var dash_duration: float = 0.2
 
-# Misc variables
+# Misc Local variables
 @onready var anim_tree: AnimationTree
 @onready var anim_player: AnimationPlayer
-@onready var multiplayer_manager: Node
-@onready var game_node: Node
 @onready var hitbox: Area2D
+
+# Misc Remote variables
+@onready var game_node: Node
+@onready var game_manager: Node
+@onready var world_node: Node2D
+@onready var entity_container: Node2D
+@onready var main_ui: CanvasLayer
 
 var direction: Vector2 = Vector2.ZERO
 var last_input_direction: Vector2 = Vector2(1,0)
@@ -61,16 +66,28 @@ var is_stunned: bool = false
 var is_rooted: bool = false
 
 func _enter_tree() -> void:
-	if !StageManager.is_singleplayer:
-		ready.connect(Callable($/root/Main/Game/MultiplayerGame/MultiplayerManager,"_on_players_connected"))
-		dead.connect(Callable($/root/Main/Game/MultiplayerGame/MultiplayerManager,"player_dead"))
 	
-	player_id = int(str(name))
+	# Variable setup
+	game_node = get_node_or_null("/root/Main/Game").get_child(0)
+	game_manager = get_tree().get_first_node_in_group("game_manager")
+	world_node = game_node.get_node_or_null("World")
+	entity_container = world_node.get_node_or_null("EntityContainer")
+	main_ui = game_node.get_node_or_null("MainUI")
+	
+	# Player setup
+	if game_manager:
+		if game_manager.has_method("_on_players_connect"):
+			ready.connect(game_manager._on_players_connect)
+		if game_manager.has_method("player_dead"):
+			dead.connect(game_manager.player_dead)
+
+	if name.is_valid_int(): player_id = int(str(name))
+	else: player_id = 1 # Hard coded for testing
+	
 	set_multiplayer_authority(player_id)
 
 func _ready() -> void:
-	multiplayer_manager = get_node_or_null("/root/Main/Game/PlayerManager")
-	game_node = get_node_or_null("/root/Main/Game")
+	
 	
 	await get_tree().process_frame
 	$PlayerSynchronizer.public_visibility = true
@@ -246,10 +263,10 @@ func end_dodge():
 		$DodgeResetTimer.stop()
 		dodge_on_cooldown()
 
-func ghost_effect():
+func ghost_effect(): # For dashes
 	var ghost: Sprite2D = ghost_scene.instantiate()
 	var sprite: Sprite2D = current_class_node.get_child(0)
-	$/root/Main/Game.add_child(ghost)
+	entity_container.get_node_or_null("Misc").add_child(ghost)
 	
 	ghost.global_position = Vector2(global_position.x, global_position.y - 22)
 	ghost.texture = sprite.texture
@@ -333,9 +350,9 @@ func class_change(class_title: String):
 		return
 	
 	# Pause for transformation
-	StageManager.update_game_state.rpc("Transforming")
+	StageManager.update_game_state.rpc(StageManager.GameState.TRANSFORMING)
 	if is_multiplayer_authority(): #and multiplayer.is_server():
-		$/root/Main/Game/GameManager.toggle_pause.rpc(0)
+		game_manager.toggle_pause.rpc(0)
 	
 	# Reset variables and booleans
 	reset_systems()
@@ -365,12 +382,12 @@ func class_change(class_title: String):
 	initialize_class_children()
 	
 	if is_multiplayer_authority(): #and multiplayer.is_server():
-		$/root/Main/Game/GameManager.toggle_pause.rpc(0)
+		game_manager.toggle_pause.rpc(0)
 	
 	is_transforming = false
 	await $PlayerFX.animation_finished
 	$PlayerFX.hide()
-	StageManager.update_game_state.rpc("In Game")
+	StageManager.update_game_state.rpc(StageManager.GameState.IN_GAME)
 
 func debuff(type: String, amount: float, duration: float):
 	if duration <= 0:
@@ -557,4 +574,4 @@ func use_utility_timer(duration: float):
 
 func queue_spell_cooldown(duration: float, number: int):
 	if is_multiplayer_authority():
-		$/root/Main/Game/MainUI/MainPlayerInfo.queue_spell_cooldown(duration, number)
+		main_ui.get_node_or_null("MainPlayerInfo").queue_spell_cooldown(duration, number)
