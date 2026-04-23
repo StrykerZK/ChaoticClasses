@@ -15,12 +15,16 @@ func _ready() -> void:
 	$Host.disabled = true
 	$Join.disabled = true
 
-func join():
+func join() -> void:
 	if $IPInput.text.is_empty():
 		$IPInput.text = default_ip
 	if $PortInput.text.is_empty():
 		$PortInput.text = str(default_port)
-	NetworkManager.join($IPInput.text, int($PortInput.text))
+	var error: bool = NetworkManager.join($IPInput.text, int($PortInput.text))
+	
+	if error:
+		print("Server can't be found.")
+		return
 	
 	$Host.disabled = true
 	$Join.disabled = true
@@ -28,7 +32,7 @@ func join():
 	$NameInput.editable = false
 	$IPInput.editable = false
 	$PortInput.editable = false
-	$PlayerPanel.show()
+
 
 func _on_player_connected():
 	pass
@@ -56,12 +60,21 @@ func _on_player_disconnected(pid):
 			if StageManager.player_count <= 1:
 				$Start.hide()
 
-func connected_to_server():
+func connected_to_server() -> void:
 	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id())
 	update_player_panel.rpc_id(1)
+	$PlayerPanel.show()
 
-func connection_failed():
-	pass
+func connection_failed() -> void:
+	print("HAAAA")
+	$Host.disabled = false
+	$Join.disabled = false
+	$HostPortInput.show()
+	$NameInput.editable = true
+	$IPInput.editable = true
+	$PortInput.editable = true
+	
+	multiplayer.multiplayer_peer = null
 
 func server_disconnected():
 	var game_node = $/root/Main/Game.get_child(0)

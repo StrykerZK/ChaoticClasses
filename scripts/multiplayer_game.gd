@@ -30,7 +30,7 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		$MultiplayerManager.create_players()
 
-func _process(_delta):
+func _process(delta) -> void:
 	if is_spectating:
 		if Input.is_action_just_pressed("move_left"):
 			cycle_spectator(-1)
@@ -43,7 +43,7 @@ func _process(_delta):
 		if is_spectating: cycle_spectator()
 		else:
 			if $Camera.zoom != Vector2(camera_base_zoom, camera_base_zoom): zoom_camera(camera_base_zoom)
-			$Camera.global_position = Vector2.ZERO
+			$Camera.global_position = mapCenter.global_position
 
 func assign_players(): # Assign player nodes for ref
 	for player in get_tree().get_nodes_in_group("players"):

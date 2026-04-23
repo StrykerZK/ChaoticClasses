@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://rco0pwf3pngh"]
+
+[ext_resource type="PackedScene" uid="uid://by6kxrmiposwv" path="res://scenes/environment/world.tscn" id="1_0gdqp"]
+[ext_resource type="Script" uid="uid://sqgs5otnfmk0" path="res://scripts/singleplayer_game.gd" id="1_jxdy4"]
+[ext_resource type="PackedScene" uid="uid://d1aj3uw0040ii" path="res://scenes/ui/main_ui.tscn" id="2_xxu2g"]
+[ext_resource type="AudioStream" uid="uid://hvu33ywq1jl4" path="res://sounds/music/battle_music.ogg" id="3_p0rrt"]
+
+[node name="SingleplayerGame" type="Node" unique_id=1895431468]
+script = ExtResource("1_jxdy4")
+
+[node name="World" parent="." unique_id=1259658543 instance=ExtResource("1_0gdqp")]
+
+[node name="MainUI" parent="." unique_id=101871363 instance=ExtResource("2_xxu2g")]
+
+[node name="SingleplayerManager" type="Node" parent="." unique_id=2034926117 groups=["game_manager"]]
+
+[node name="BattleMusic" type="AudioStreamPlayer" parent="." unique_id=241807636]
+process_mode = 3
+stream = ExtResource("3_p0rrt")
+volume_db = -15.0
+parameters/looping = true
+
+[node name="Camera" type="Camera2D" parent="." unique_id=2140816549]
+zoom = Vector2(0.7, 0.7)
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
