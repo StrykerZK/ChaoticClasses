@@ -317,7 +317,7 @@ func create_players():
 		_on_player_spawned(new_player)
 		
 
-func _on_spawn_custom(data):
+func _on_spawn_custom(data: Dictionary):
 	var p = player_scene.instantiate()
 	p.name = str(data.id)
 	p.global_position = data.pos

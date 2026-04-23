@@ -4,6 +4,8 @@ extends Summon
 var arrow_speed: float = 500.0
 
 func _ready() -> void:
+	super._ready()
+	
 	health = 40.0
 	$HPBar.max_value = health
 	damage = 30.0

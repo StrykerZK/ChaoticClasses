@@ -28,6 +28,11 @@ StageManager="*res://scripts/stage_manager.gd"
 MapManager="*uid://bem63lm2aecrq"
 NetworkManager="*uid://danubui37bc17"
 
+[debug]
+
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/inferred_declaration=1
+
 [display]
 
 window/size/viewport_width=1920

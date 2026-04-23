@@ -76,8 +76,8 @@ func _enter_tree() -> void:
 	
 	# Player setup
 	if game_manager:
-		if game_manager.has_method("_on_players_connect"):
-			ready.connect(game_manager._on_players_connect)
+		if game_manager.has_method("_on_players_connected"):
+			ready.connect(game_manager._on_players_connected)
 		if game_manager.has_method("player_dead"):
 			dead.connect(game_manager.player_dead)
 

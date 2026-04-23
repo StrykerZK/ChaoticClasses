@@ -2,13 +2,19 @@ extends Node
 
 var maps_directory: String = "res://scenes/environment/maps/"
 
+# Summons
+var summon_registry: Dictionary = {
+	"skull_archer": preload("res://scenes/summons/skeleton_archer.tscn"),
+	"skull_soldier": preload("res://scenes/summons/skeleton_soldier.tscn")
+}
+
 func _ready() -> void:
 	load_map(MapManager.get_current_map())
 	
 	%SummonSpawner.spawn_function = _on_summon_custom
 
-func load_map(map: String):
-	var scene_path = MapManager.get_map_scene_path()
+func load_map(map: String) -> void:
+	var scene_path: String = MapManager.get_map_scene_path()
 	if FileAccess.file_exists(scene_path):
 		var map_scene = load(scene_path)
 		var map_instance = map_scene.instantiate()
@@ -20,16 +26,17 @@ func load_map(map: String):
 func get_player_spawner() -> MultiplayerSpawner:
 	return $EntityContainer/Players/MultiplayerSpawner
 
-func spawn_summon(summon: Node):
+func spawn_summon(data: Dictionary) -> void:
 	if !multiplayer.is_server(): return
 	
-	%SummonSpawner.spawn()
+	%SummonSpawner.spawn(data)
 
 func _on_summon_custom(data: Dictionary):
-	var summon = preload(data.path).instantiate()
-	p.name = str(data.id)
-	p.global_position = data.pos
-	return p
+	var summon = summon_registry.get(data.type).instantiate()
+	summon.name = str(data.name)
+	summon.player_id = data.player_id
+	summon.global_position = data.pos
+	return summon
 
-func spawn_misc(misc: Node):
+func spawn_misc(misc: Node) -> void:
 	$EntityContainer/Misc.add_child(misc)

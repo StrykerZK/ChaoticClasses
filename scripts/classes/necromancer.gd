@@ -1,8 +1,6 @@
 extends Node2D
 
 @export var attack_scene: PackedScene
-var spell_1_path: String = "res://scenes/summons/skeleton_archer.tscn"
-var spell_2_path: String = "res://scenes/summons/skeleton_soldier.tscn"
 
 @onready var player: CharacterBody2D
 @onready var anim_player: AnimationPlayer
@@ -11,10 +9,10 @@ var spell_2_path: String = "res://scenes/summons/skeleton_soldier.tscn"
 
 var attack_1_length: float = 0.3
 var attack_2_length: float = 0.3
-var combo_timer = 1.5
-var base_speed = 300
+var combo_timer: float = 1.5
+var base_speed: float = 300
 var skull_names: Array = ["Fred","Jeff","Bob","Max","Kevin","Skully","Edgar","Bonesy","Jim","Greg","Johnny"]
-var type = "ranged"
+var type: String = "ranged"
 
 func _ready() -> void:
 	player = get_parent()
@@ -26,7 +24,7 @@ func _ready() -> void:
 	get_animation_lengths()
 
 @rpc("any_peer","call_local")
-func attack(index: float):
+func attack(index: float) -> void:
 	player.speed = player.speed * 0.1
 	player.can_dodge = false
 	player.is_attacking = true
@@ -42,14 +40,15 @@ func attack(index: float):
 			spawn_attack(player.attack_index)
 			use_attack_timer(attack_2_length)
 
-func spawn_attack(index: float):
-	var circle = attack_scene.instantiate()
+func spawn_attack(index: float) -> void:
+	var circle: Node = attack_scene.instantiate()
 	circle.position = StageManager.get_target(player.player_id)
-	circle.damage = player.damage
+	if index == 2: circle.damage = player.damage * 2
+	else: circle.damage = player.damage
 	circle.player_id = player.player_id
 	player.spawn_misc(circle)
 
-func use_attack_timer(time: float):
+func use_attack_timer(time: float) -> void:
 	$AttackTimer.wait_time = time
 	$AttackTimer.start()
 	await $AttackTimer.timeout
@@ -66,20 +65,20 @@ func use_attack_timer(time: float):
 	if dodge_timer.is_stopped(): player.can_dodge = true
 
 @rpc("any_peer","call_local")
-func spell_1(): # Skeleton Soldiers
+func spell_1() -> void: # Skeleton Soldiers
 	player.in_spell_1 = true
 	player.can_dodge = false
 	
 	if multiplayer.is_server(): # Only server will initiate skeleton spawns
-		var temp_array = skull_names.duplicate()
-		var index = 0
+		var temp_array: Array = skull_names.duplicate()
+		var index: int = 0
 		
 		var summon_offset: float = 40.0
 		
-		var top_left_pos = global_position + Vector2(-summon_offset, -summon_offset - 22)
-		var top_right_pos = global_position + Vector2(summon_offset, -summon_offset - 22)
-		var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
-		var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
+		var top_left_pos: Vector2 = global_position + Vector2(-summon_offset, -summon_offset - 22)
+		var top_right_pos: Vector2 = global_position + Vector2(summon_offset, -summon_offset - 22)
+		var bottom_left_pos: Vector2 = global_position + Vector2(-summon_offset, summon_offset - 22)
+		var bottom_right_pos: Vector2 = global_position + Vector2(summon_offset, summon_offset - 22)
 		
 		top_left_pos = adjust_spawn_position(top_left_pos)
 		top_right_pos = adjust_spawn_position(top_right_pos)
@@ -91,8 +90,8 @@ func spell_1(): # Skeleton Soldiers
 		if top_left_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
 			
-			var data = {
-				"path": spell_1_path,
+			var data: Dictionary = {
+				"type": "skull_soldier",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": top_left_pos
@@ -102,8 +101,8 @@ func spell_1(): # Skeleton Soldiers
 		
 		if top_right_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_1_path,
+			var data: Dictionary = {
+				"type": "skull_soldier",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": top_right_pos
@@ -113,8 +112,8 @@ func spell_1(): # Skeleton Soldiers
 		
 		if bottom_left_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_1_path,
+			var data: Dictionary = {
+				"type": "skull_soldier",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": bottom_left_pos
@@ -124,8 +123,8 @@ func spell_1(): # Skeleton Soldiers
 		
 		if bottom_right_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_1_path,
+			var data: Dictionary = {
+				"type": "skull_soldier",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": bottom_right_pos
@@ -141,27 +140,27 @@ func spell_1(): # Skeleton Soldiers
 func _on_spell_1_timer_timeout() -> void:
 	player.spell_1_ready = true
 
-func start_spell_1_cooldown(): # 7 sec cd
+func start_spell_1_cooldown() -> void: # 7 sec cd
 	player.in_spell_1 = false
-	var duration = 7.0
+	var duration: float = 7.0
 	$Spell1Timer.wait_time = duration
 	$Spell1Timer.start()
 	player.queue_spell_cooldown(duration, 1)
 
 @rpc("any_peer","call_local")
-func spell_2():
+func spell_2() -> void:
 	player.in_spell_2 = true
 	player.can_dodge = false
 	
 	if multiplayer.is_server(): # Only server will initiate skeleton spawns
-		var temp_array = skull_names.duplicate()
-		var index = 0
+		var temp_array: Array = skull_names.duplicate()
+		var index: int = 0
 		
 		var summon_offset: float = 40.0
 		
-		var top_pos = global_position + Vector2(0, -summon_offset - 22)
-		var bottom_left_pos = global_position + Vector2(-summon_offset, summon_offset - 22)
-		var bottom_right_pos = global_position + Vector2(summon_offset, summon_offset - 22)
+		var top_pos: Vector2 = global_position + Vector2(0, -summon_offset - 22)
+		var bottom_left_pos: Vector2 = global_position + Vector2(-summon_offset, summon_offset - 22)
+		var bottom_right_pos: Vector2 = global_position + Vector2(summon_offset, summon_offset - 22)
 		
 		top_pos = adjust_spawn_position(top_pos)
 		bottom_left_pos = adjust_spawn_position(bottom_left_pos)
@@ -171,8 +170,8 @@ func spell_2():
 		
 		if top_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_2_path,
+			var data: Dictionary = {
+				"type": "skull_archer",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": top_pos
@@ -182,8 +181,8 @@ func spell_2():
 		
 		if bottom_left_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_2_path,
+			var data: Dictionary = {
+				"type": "skull_archer",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": bottom_left_pos
@@ -193,8 +192,8 @@ func spell_2():
 		
 		if bottom_right_pos != Vector2.INF:
 			index = randi_range(0,temp_array.size() - 1)
-			var data = {
-				"path": spell_2_path,
+			var data: Dictionary = {
+				"type": "skull_archer",
 				"name": temp_array[index],
 				"player_id": player.player_id,
 				"pos": bottom_right_pos
@@ -210,14 +209,14 @@ func spell_2():
 func _on_spell_2_timer_timeout() -> void:
 	player.spell_2_ready = true
 
-func start_spell_2_cooldown(): # 7 sec cd
+func start_spell_2_cooldown() -> void: # 7 sec cd
 	player.in_spell_2 = false
-	var duration = 7.0
+	var duration: float = 7.0
 	$Spell2Timer.wait_time = duration
 	$Spell2Timer.start()
 	player.queue_spell_cooldown(duration, 2)
 
-func stop_spells():
+func stop_spells() -> void:
 	if player.in_spell_1:
 		$Spell1Timer.stop()
 		start_spell_1_cooldown()
@@ -225,11 +224,11 @@ func stop_spells():
 		$Spell2Timer.stop()
 		start_spell_2_cooldown()
 
-func adjust_spawn_position(spawn_pos: Vector2):
+func adjust_spawn_position(spawn_pos: Vector2) -> Vector2:
 	var space_state = get_world_2d().direct_space_state
 	var query_parameters = PhysicsPointQueryParameters2D.new()
 	
-	var attempts = 0
+	var attempts: int = 0
 	while attempts < 32:
 		query_parameters.position = spawn_pos
 		var collision = space_state.intersect_point(query_parameters)
@@ -243,7 +242,7 @@ func adjust_spawn_position(spawn_pos: Vector2):
 		attempts += 1
 	return Vector2.INF # If adjustment failed
 
-func get_animation_lengths():
+func get_animation_lengths() -> void:
 	attack_1_length = anim_player.get_animation("attack_right_1").length
 	attack_2_length = anim_player.get_animation("attack_right_2").length
 
@@ -251,7 +250,7 @@ func _on_combo_timer_timeout() -> void:
 	player.attack_index = 1.0
 	player.can_attack = true
 
-func stop_systems():
+func stop_systems() -> void:
 	$ComboTimer.stop()
 	$AttackTimer.stop()
 	if !player.is_slowed and !player.is_rooted:
