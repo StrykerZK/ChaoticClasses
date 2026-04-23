@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://csdrehhlcjwp0"]
 
-[ext_resource type="Script" uid="uid://dy7ndn8avdvl" path="res://scripts/multiplayer_manager.gd" id="1_en7kx"]
+[ext_resource type="Script" uid="uid://dy7ndn8avdvl" path="res://scripts/game/multiplayer_manager.gd" id="1_en7kx"]
 
 [node name="MultiplayerManager" type="Node" unique_id=945754392]
 process_mode = 3

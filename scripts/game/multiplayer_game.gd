@@ -83,8 +83,8 @@ func start_game(): # Start of match effects
 	$MultiplayerManager.start_game()
 	StageManager.update_game_state(StageManager.GameState.IN_GAME)
 
-func game_end():
-	$MainUI.game_end()
+func end_game():
+	$MainUI.end_game()
 	
 	await $MainUI/AnimationPlayer.animation_finished
 	back_to_main_menu()
@@ -92,6 +92,7 @@ func game_end():
 func back_to_main_menu():
 	get_tree().current_scene.show_main_menu()
 	StageManager.reset_game()
+	NetworkManager.clear()
 	queue_free()
 
 @rpc("any_peer","call_local","reliable")
@@ -162,10 +163,6 @@ func play_ko_effect(loser):
 	await effects.animation_finished
 	effects.queue_free()
 
-@rpc("any_peer","call_local")
-func spawn(new_node: Node):
-	$Summons.add_child(new_node)
-
 func pause_players():
 	player_1.is_paused = true
 	player_2.is_paused = true
@@ -204,7 +201,7 @@ func clear_summons():
 func set_camera_target(new_target: Node2D):
 	camera_target = new_target
 
-func zoom_camera(amount: float, duration: float = 0.3):
+func zoom_camera(amount: float, duration: float = 0.5):
 	# $Camera.zoom = Vector2(amount,amount) ORIGINAL
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC)

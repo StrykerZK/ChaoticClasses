@@ -63,7 +63,8 @@ func get_random_class(id) -> String:
 	var class_count = get_class_count() - 1
 	var class_index = randi_range(1, class_count)
 	var class_title = get_class_title(class_index)
-	while class_title == StageManager.player_list[id].class:
+	# If the class is the same as current, keep trying
+	while class_title == StageManager.player_list[id].class: 
 		class_index = randi_range(1, class_count)
 		class_title = get_class_title(class_index)
 	return class_title

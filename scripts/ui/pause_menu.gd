@@ -12,4 +12,7 @@ func _process(delta: float) -> void:
 
 
 func _on_quit_pressed() -> void:
-	get_tree().quit()
+	var game_node = get_node_or_null("../..")
+	if is_instance_valid(game_node):
+		game_node.back_to_main_menu()
+	#get_tree().quit()

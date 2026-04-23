@@ -95,8 +95,7 @@ func remove_player_information(id):
 
 func reset_game():
 	game_state = GameState.MENU
-	reset_stats()
-	reset_scores()
+	clear_list()
 
 func reset_stats():
 	for i in player_list:

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cxxhhkr3wnybf" path="res://scripts/ui/singleplayer_menu.gd" id="5_7suek"]
 [ext_resource type="Theme" uid="uid://ccigqb3qq002y" path="res://art/ui/button_theme.tres" id="5_ojkxa"]
 [ext_resource type="Texture2D" uid="uid://ch8jwip7mklxs" path="res://art/ui/menu_buttons.png" id="5_yc51r"]
+[ext_resource type="PackedScene" uid="uid://rco0pwf3pngh" path="res://scenes/singleplayer_game.tscn" id="6_otr3d"]
 [ext_resource type="FontFile" uid="uid://bi7anf0xedoj2" path="res://fonts/dogicapixel.otf" id="8_kxojv"]
 [ext_resource type="Script" uid="uid://c725oesf8geo1" path="res://scripts/ui/lobby_menu.gd" id="8_vv6tx"]
 [ext_resource type="Theme" uid="uid://blm8hjxu2exss" path="res://art/ui/line_edit_theme.tres" id="9_58hxh"]
@@ -17,6 +18,9 @@ texture = ExtResource("3_0k4wn")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l44iw"]
 texture = ExtResource("5_yc51r")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7suek"]
+bg_color = Color(0, 0, 0, 0.7490196)
 
 [node name="MainMenu" type="CanvasLayer" unique_id=879007520]
 script = ExtResource("1_uioiv")
@@ -149,6 +153,7 @@ theme = ExtResource("5_ojkxa")
 text = "Quit"
 
 [node name="SingleplayerMenu" type="Control" parent="." unique_id=2023969373]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -156,6 +161,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_7suek")
+singleplayer_game = ExtResource("6_otr3d")
 
 [node name="Play" type="Button" parent="SingleplayerMenu" unique_id=658058393]
 layout_mode = 1
@@ -195,7 +201,7 @@ popup/item_1/disabled = true
 [node name="Back" type="Button" parent="SingleplayerMenu" unique_id=352784152]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.213542
+anchor_left = 0.21354198
 anchor_top = 0.6481481
 anchor_right = 0.21354198
 anchor_bottom = 0.6481481
@@ -211,7 +217,6 @@ text = "BACK
 metadata/_edit_use_anchors_ = true
 
 [node name="LobbyMenu" type="Control" parent="." unique_id=122138632]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -435,6 +440,41 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("8_kxojv")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
+
+[node name="MessagePanel" type="Panel" parent="LobbyMenu" unique_id=885938889]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7suek")
+
+[node name="OverlayMessage" type="Label" parent="LobbyMenu/MessagePanel" unique_id=1925006398]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -304.0
+offset_top = -44.0
+offset_right = 304.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_kxojv")
+theme_override_font_sizes/font_size = 64
+text = "Connecting..."
 
 [connection signal="pressed" from="TitleMenu/Singleplayer" to="." method="_on_singleplayer_pressed"]
 [connection signal="pressed" from="TitleMenu/Multiplayer" to="." method="_on_multiplayer_pressed"]

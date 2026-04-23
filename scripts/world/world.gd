@@ -24,7 +24,7 @@ func load_map(map: String) -> void:
 		print("ERROR: MAP NOT FOUND")
 
 func get_player_spawner() -> MultiplayerSpawner:
-	return $EntityContainer/Players/MultiplayerSpawner
+	return %PlayerSpawner
 
 func spawn_summon(data: Dictionary) -> void:
 	if !multiplayer.is_server(): return

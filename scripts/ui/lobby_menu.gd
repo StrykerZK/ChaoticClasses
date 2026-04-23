@@ -9,22 +9,21 @@ func _ready() -> void:
 	NetworkManager.player_disconnected.connect(_on_player_disconnected)
 	NetworkManager.connected_to_server.connect(connected_to_server)
 	NetworkManager.connection_failed.connect(connection_failed)
+	NetworkManager.connection_timed_out.connect(connection_failed)
 	NetworkManager.server_disconnected.connect(server_disconnected)
 	
 	$Start.hide()
 	$Host.disabled = true
 	$Join.disabled = true
+	$MessagePanel.hide()
+	$PlayerPanel.hide()
 
 func join() -> void:
 	if $IPInput.text.is_empty():
 		$IPInput.text = default_ip
 	if $PortInput.text.is_empty():
 		$PortInput.text = str(default_port)
-	var error: bool = NetworkManager.join($IPInput.text, int($PortInput.text))
-	
-	if error:
-		print("Server can't be found.")
-		return
+	NetworkManager.join($IPInput.text, int($PortInput.text))
 	
 	$Host.disabled = true
 	$Join.disabled = true
@@ -32,6 +31,9 @@ func join() -> void:
 	$NameInput.editable = false
 	$IPInput.editable = false
 	$PortInput.editable = false
+	
+	$MessagePanel.show()
+	%OverlayMessage.text = "Connecting..."
 
 
 func _on_player_connected():
@@ -64,15 +66,21 @@ func connected_to_server() -> void:
 	send_player_information.rpc_id(1, $NameInput.text, multiplayer.get_unique_id())
 	update_player_panel.rpc_id(1)
 	$PlayerPanel.show()
+	$MessagePanel.hide()
 
 func connection_failed() -> void:
-	print("HAAAA")
+	$MessagePanel.show()
+	%OverlayMessage.text = "Connection Failed"
+	
+	await get_tree().create_timer(2.0).timeout
+	
 	$Host.disabled = false
 	$Join.disabled = false
 	$HostPortInput.show()
 	$NameInput.editable = true
 	$IPInput.editable = true
 	$PortInput.editable = true
+	$MessagePanel.hide()
 	
 	multiplayer.multiplayer_peer = null
 

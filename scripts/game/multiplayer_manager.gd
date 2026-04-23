@@ -6,6 +6,8 @@ signal players_loaded
 
 var transform_time: float = 2
 
+# Internal variables
+var test_mode: bool = false
 var is_paused: bool = false
 var pause_id: int
 
@@ -18,9 +20,10 @@ var player_count: int = 0
 var players_alive: int = 0
 
 # Player Spawning
-var multiplayer_spawner: MultiplayerSpawner
+var player_spawner: MultiplayerSpawner
 var spawned_count: int = 0
 
+# Other nodes
 var main_ui: CanvasLayer
 var game_node: Node
 var world_node: Node2D
@@ -29,21 +32,26 @@ func _ready():
 	game_node = get_parent()
 	main_ui = $"../MainUI"
 	world_node = $"../World"
-	multiplayer_spawner = world_node.get_player_spawner()
+	player_spawner = world_node.get_player_spawner()
 	player_count = StageManager.player_count
 	
 	players_loaded.connect(Callable(game_node,"start_game"))
 	players_loaded.connect(Callable(self,"assign_players"))
 	players_loaded.connect(Callable(main_ui,"assign_players"))
 	
-	multiplayer_spawner.spawn_function = _on_spawn_custom
-	multiplayer_spawner.spawned.connect(_on_player_spawned)
-	
+	player_spawner.spawn_function = _on_spawn_custom
+	player_spawner.spawned.connect(_on_player_spawned)
 	
 func _input(event: InputEvent) -> void:
 	if StageManager.game_state == StageManager.GameState.IN_GAME:
 		if event.is_action_pressed("back"):
 			toggle_pause.rpc(multiplayer.get_unique_id())
+
+func start_game() -> void:
+	if test_mode:
+		if multiplayer.is_server():
+			$SwapTimer.start()
+	pass
 
 func _on_players_connected():
 	players_alive += 1
@@ -139,11 +147,6 @@ func update_player_class(id, class_title):
 	else:
 		print("Doesn't Exist")
 		return
-
-func start_game():
-	#if multiplayer.is_server():
-	#	$SwapTimer.start()
-	pass
 
 func player_dead(id):
 	players_alive -= 1
@@ -311,7 +314,7 @@ func create_players():
 			if spawn.name == str("Player" + str(index) + "Spawn"):
 				spawn_pos = spawn.global_position
 		
-		var new_player = multiplayer_spawner.spawn({"id": p_id, "pos": spawn_pos})
+		var new_player = player_spawner.spawn({"id": p_id, "pos": spawn_pos})
 		index += 1
 		
 		_on_player_spawned(new_player)

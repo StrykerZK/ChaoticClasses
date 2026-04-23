@@ -61,7 +61,7 @@ func match_over(id):
 	else:
 		$PeerInfoPanel.update_scores(id)
 
-func game_end():
+func end_game():
 	$AnimationPlayer.play("game_end")
 
 @rpc("any_peer","call_local")
